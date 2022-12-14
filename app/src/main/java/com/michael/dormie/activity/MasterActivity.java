@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.google.android.material.color.DynamicColors;
+
 import com.michael.dormie.R;
 
 public class MasterActivity extends AppCompatActivity {
