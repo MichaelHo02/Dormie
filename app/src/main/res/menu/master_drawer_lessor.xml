@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_round_chat_bubble_24"
         android:title="Chat" />
     <item
-        android:id="@+id/rental_registration"
+        android:id="@+id/rental_registration_page"
         android:checkable="true"
         android:icon="@drawable/ic_round_work_24"
         android:title="Rental Registration" />
