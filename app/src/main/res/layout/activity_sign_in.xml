@@ -72,8 +72,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
         app:startIconDrawable="@drawable/ic_baseline_person_outline_24"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/ic_baseline_circle_16">
+        app:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
