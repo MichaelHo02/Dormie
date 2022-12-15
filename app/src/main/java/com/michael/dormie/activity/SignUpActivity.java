@@ -29,6 +29,6 @@ public class SignUpActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.signInButton);
         signUpButton = findViewById(R.id.signUpButton);
 
-        signInButton.setOnClickListener(v -> finish());
+        signInButton.setOnClickListener(v -> finish()); // Return to sign in activity
     }
 }
