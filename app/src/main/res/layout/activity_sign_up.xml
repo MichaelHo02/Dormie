@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context=".activity.SignInActivity">
+    tools:context=".activity.SignUpActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -14,7 +12,7 @@
         android:layout_height="52dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Sign In"
+        android:text="Sign Up"
         android:textAppearance="?attr/textAppearanceHeadlineSmall"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,32 +78,53 @@
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPassword"
+        android:layout_width="364dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="24dp"
+        android:hint="Confirm Password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:startIconDrawable="@drawable/ic_baseline_person_outline_24"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_baseline_circle_16">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
-        android:id="@+id/signInButton"
+        android:id="@+id/signUpButton"
         android:layout_width="364dp"
         android:layout_height="48dp"
         android:layout_marginTop="40dp"
-        android:text="Sign In"
+        android:text="Sign Up"
         android:backgroundTint="#6750A4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmPassword" />
 
     <TextView
-        android:id="@+id/signUpButton"
+        android:id="@+id/signInButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="32dp"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:text="Create new account? Click here to register."
+        android:text="You already have an account? Click here to sign in."
         android:textSize="14sp"
         android:letterSpacing="0.01"
         android:textColor="#6750A4"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signInButton" />
+        app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

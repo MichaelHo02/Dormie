@@ -1,8 +1,10 @@
-package com.michael.dormie;
+package com.michael.dormie.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.michael.dormie.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -13,7 +13,14 @@
         android:theme="@style/Theme.Dormie"
         tools:targetApi="31">
         <activity
-            android:name=".SignInActivity"
+            android:name=".activity.SignUpActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.SignInActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -28,13 +35,12 @@
         <activity
             android:name=".activity.MasterActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
 
             <!-- <intent-filter> -->
