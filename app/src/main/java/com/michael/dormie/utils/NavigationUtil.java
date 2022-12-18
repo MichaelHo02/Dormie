@@ -17,6 +17,11 @@ public class NavigationUtil {
         activity.startActivityForResult(intent, reqCode);
     }
 
+    public static void navigateActivity(Activity activity, Context context, Class<?> cls , int reqCode) {
+        Intent intent = new Intent(context, cls);
+        activity.startActivityForResult(intent, reqCode);
+    }
+
     public static void navigateActivity(Fragment fragment, Context context, Class<?> cls, int reqCode) {
         Intent intent = new Intent(context, cls);
         fragment.startActivityForResult(intent, reqCode);

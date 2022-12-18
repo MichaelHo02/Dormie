@@ -7,4 +7,10 @@
     <string name="sign_up">Sign Up</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="you_already_have_an_account_click_here_to_sign_in">You already have an account? Click here to sign in.</string>
+    <string name="home">Home</string>
+    <string name="chat">Chat</string>
+    <string name="rental_registration">Rental Registration</string>
+    <string name="others">Others</string>
+    <string name="profile">Profile</string>
+    <string name="setting">Setting</string>
 </resources>

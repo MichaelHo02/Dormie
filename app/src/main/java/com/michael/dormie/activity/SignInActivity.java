@@ -2,19 +2,18 @@ package com.michael.dormie.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.michael.dormie.R;
+import com.michael.dormie.utils.NavigationUtil;
+import com.michael.dormie.utils.RequestSignal;
 
 public class SignInActivity extends AppCompatActivity {
     TextInputLayout username, password;
-    Button signInButton;
-    TextView signUpButton;
+    MaterialButton signInButton;
+    MaterialButton signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +28,21 @@ public class SignInActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.signInButton);
         signUpButton = findViewById(R.id.signUpButton);
 
-        signUpButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
-            startActivity(intent);
+        signInButton.setOnClickListener(view -> {
+            NavigationUtil.navigateActivity(
+                    this,
+                    SignInActivity.this,
+                    MasterActivity.class,
+                    RequestSignal.TEMPLATE_FORMAT
+            );
+            finish();
         });
+
+        signUpButton.setOnClickListener(view -> NavigationUtil.navigateActivity(
+                this,
+                SignInActivity.this,
+                SignUpActivity.class,
+                RequestSignal.TEMPLATE_FORMAT
+        ));
     }
 }

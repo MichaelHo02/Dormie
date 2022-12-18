@@ -66,18 +66,23 @@ public class MasterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.home_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
+                topAppBar.setTitle(R.string.home);
                 return true;
             case R.id.chat_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, chatFragment);
+                topAppBar.setTitle(R.string.chat);
                 return true;
             case R.id.rental_registration_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, rentalRegistrationFragment);
+                topAppBar.setTitle(R.string.rental_registration);
                 return true;
             case R.id.profile_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, profileFragment);
+                topAppBar.setTitle(R.string.profile);
                 return true;
             case R.id.setting_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, settingFragment);
+                topAppBar.setTitle(R.string.setting);
                 return true;
         }
         return false;
