@@ -22,7 +22,6 @@ import com.michael.dormie.utils.NavigationUtil;
 
 public class MasterActivity extends AppCompatActivity {
 
-    private MaterialToolbar topAppBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -43,16 +42,14 @@ public class MasterActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        topAppBar = findViewById(R.id.activity_master_top_bar);
         drawerLayout = findViewById(R.id.activity_master_drawer_layout);
         navigationView = findViewById(R.id.activity_master_navigation);
     }
 
     private void initUIAction() {
-        topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         navigationView.setNavigationItemSelectedListener(this::handleNavigationItemSelected);
         navigationView.setCheckedItem(R.id.home_page);
-        NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
+        handleUpdateTopAppBar(R.id.home_page);
     }
 
     private void handleNavigationOnClick(View view) {
@@ -62,26 +59,30 @@ public class MasterActivity extends AppCompatActivity {
     private boolean handleNavigationItemSelected(MenuItem item) {
         item.setChecked(true);
         drawerLayout.close();
-        switch (item.getItemId()) {
+        return handleUpdateTopAppBar(item.getItemId());
+    }
+
+    private boolean handleUpdateTopAppBar(int id) {
+        switch (id) {
             case R.id.home_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
-                topAppBar.setTitle(R.string.home);
+//                topAppBar.setTitle(R.string.home);
                 return true;
             case R.id.chat_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, chatFragment);
-                topAppBar.setTitle(R.string.chat);
+//                topAppBar.setTitle(R.string.chat);
                 return true;
             case R.id.rental_registration_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, rentalRegistrationFragment);
-                topAppBar.setTitle(R.string.rental_registration);
+//                topAppBar.setTitle(R.string.rental_registration);
                 return true;
             case R.id.profile_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, profileFragment);
-                topAppBar.setTitle(R.string.profile);
+//                topAppBar.setTitle(R.string.profile);
                 return true;
             case R.id.setting_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, settingFragment);
-                topAppBar.setTitle(R.string.setting);
+//                topAppBar.setTitle(R.string.setting);
                 return true;
         }
         return false;
