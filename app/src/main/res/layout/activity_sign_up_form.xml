@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.SignUpFormActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Create Account"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:textColor="?attr/colorOnSurface" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:tint="@color/purple_700"
+            android:src="@drawable/ic_round_account_circle_24" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <Button
+                android:id="@+id/takePhotoButton"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="27dp"
+                android:text="Take photo"
+                app:icon="@drawable/ic_baseline_photo_camera_24"/>
+
+            <Button
+                android:id="@+id/uploadPhotoButton"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginLeft="34dp"
+                android:text="Upload photo"
+                app:icon="@drawable/ic_baseline_upload_24" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/select_your"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="40dp"
+            android:text="Select your role"
+            android:layout_marginTop="43dp"
+            android:gravity="top" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="6dp">
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/lessor"
+                android:layout_width="182dp"
+                android:layout_height="wrap_content"
+                android:text="Lessor" />
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/tenant"
+                android:layout_width="182dp"
+                android:layout_height="wrap_content"
+                android:text="Tenant" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fullName"
+            android:layout_width="364dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="24dp"
+            android:hint="Full Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:startIconDrawable="@drawable/ic_baseline_person_outline_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter your full name"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dob"
+            android:layout_width="364dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="24dp"
+            android:hint="Date of Birth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:startIconDrawable="@drawable/ic_baseline_person_outline_24"
+            app:endIconMode="custom"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_baseline_calendar_month_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter your date of birth"
+                android:inputType="date"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="40dp"
+            android:text="Continue"/>
+    </LinearLayout>
+
+</ScrollView>
