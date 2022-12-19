@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -30,5 +31,11 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpButton);
 
         signInButton.setOnClickListener(v -> finish()); // Return to sign in activity
+        signUpButton.setOnClickListener(this::signUpButtonOnClick);
+    }
+
+    private void signUpButtonOnClick(View view) {
+        Intent intent = new Intent(SignUpActivity.this, SignUpFormActivity.class);
+        startActivity(intent);
     }
 }
