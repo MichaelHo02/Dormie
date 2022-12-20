@@ -37,12 +37,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter.ProfileViewHolder holder, int position) {
-        ProfileCard course = list.get(position);
-        if (course == null) {
+        ProfileCard card = list.get(position);
+        if (card == null) {
             return;
         }
-        holder.cardTitle.setText(course.getCardTitle());
-        holder.cardContent.setText(course.getCardContent());
+        holder.cardTitle.setText(card.getCardTitle());
+        holder.cardContent.setText(card.getCardContent());
     }
 
     @Override
@@ -60,19 +60,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
             cardTitle = itemView.findViewById(R.id.card_title);
             cardContent = itemView.findViewById(R.id.card_content);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(recyclerInterface != null) {
-                        int position = getAbsoluteAdapterPosition();
-
-                        if (position != RecyclerView.NO_POSITION) {
-                            recyclerInterface.onClickProfileCard(position);
-                        }
-                    }
-                }
-            });
         }
     }
 }
