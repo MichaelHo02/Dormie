@@ -14,6 +14,7 @@ public class TenantSignUpForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tenant_sign_up_form);
+        initVariables();
     }
 
     private void initVariables() {
