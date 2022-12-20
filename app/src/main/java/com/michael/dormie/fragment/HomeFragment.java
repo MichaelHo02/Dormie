@@ -2,6 +2,7 @@ package com.michael.dormie.fragment;
 
 import android.os.Bundle;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.model.Place;
@@ -31,6 +33,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private View view;
+    private MaterialToolbar topAppBar;
     private RecyclerView recyclerView;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
@@ -66,9 +69,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void initUI() {
+        topAppBar = view.findViewById(R.id.fragment_home_top_bar);
         recyclerView = view.findViewById(R.id.fragment_home_rv);
+        topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         recycleViewInit();
+
     }
+
+    private void handleNavigationOnClick(View view) {
+        DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.activity_master_drawer_layout);
+        drawerLayout.open();
+    }
+
 
     private void recycleViewInit() {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());

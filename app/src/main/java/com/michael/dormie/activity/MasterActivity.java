@@ -19,6 +19,7 @@ import com.michael.dormie.fragment.ProfileFragment;
 import com.michael.dormie.fragment.RentalRegistrationFragment;
 import com.michael.dormie.fragment.SettingFragment;
 import com.michael.dormie.utils.NavigationUtil;
+import com.michael.dormie.utils.TopAppBarUtil;
 
 public class MasterActivity extends AppCompatActivity {
 
@@ -52,10 +53,6 @@ public class MasterActivity extends AppCompatActivity {
         handleUpdateTopAppBar(R.id.home_page);
     }
 
-    private void handleNavigationOnClick(View view) {
-        drawerLayout.open();
-    }
-
     private boolean handleNavigationItemSelected(MenuItem item) {
         item.setChecked(true);
         drawerLayout.close();
@@ -66,23 +63,18 @@ public class MasterActivity extends AppCompatActivity {
         switch (id) {
             case R.id.home_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
-//                topAppBar.setTitle(R.string.home);
                 return true;
             case R.id.chat_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, chatFragment);
-//                topAppBar.setTitle(R.string.chat);
                 return true;
             case R.id.rental_registration_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, rentalRegistrationFragment);
-//                topAppBar.setTitle(R.string.rental_registration);
                 return true;
             case R.id.profile_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, profileFragment);
-//                topAppBar.setTitle(R.string.profile);
                 return true;
             case R.id.setting_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, settingFragment);
-//                topAppBar.setTitle(R.string.setting);
                 return true;
         }
         return false;

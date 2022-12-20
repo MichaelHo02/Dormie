@@ -13,11 +13,12 @@
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/activity_master_top_bar"
+            android:id="@+id/fragment_home_top_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/master_top_bar"
             app:navigationIcon="@drawable/ic_baseline_dehaze_24"
+            app:title="@string/home"
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -34,17 +35,19 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+        android:id="@+id/fragment_home_bottom_bar"
         style="@style/Widget.Material3.BottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fitsSystemWindows="true"
-        app:navigationIcon="@drawable/ic_round_person_24" />
+        app:hideOnScroll="true"
+        app:menu="@menu/home_bottom_bar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_home_float_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/bottomAppBar"
-        app:srcCompat="@drawable/ic_round_lock_24" />
+        app:layout_anchor="@id/fragment_home_bottom_bar"
+        app:srcCompat="@drawable/ic_round_add_24" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
