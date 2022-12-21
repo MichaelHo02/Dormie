@@ -31,13 +31,13 @@
                 android:id="@+id/profile_image"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center"
+                android:background="@drawable/ic_round_profile"
+                android:src="@drawable/ic_round_account_circle_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:tint="@color/purple_700"
-                android:src="@drawable/ic_round_account_circle_24"
-                android:layout_centerInParent="true"
-                android:background="@drawable/ic_round_profile"/>
+                app:tint="@color/purple_700" />
         </RelativeLayout>
 
         <LinearLayout

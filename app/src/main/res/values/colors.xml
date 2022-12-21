@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="rental_btn_disabled">#E7E0EC</color>
+    <color name="rental_btn_enabled">#EADDFF</color>
+
+    <color name="icon_background">#EADDFF</color>
+    <color name="icon_text">#21005D</color>
 </resources>

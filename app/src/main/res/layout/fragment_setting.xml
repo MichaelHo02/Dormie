@@ -22,7 +22,7 @@
             android:textColor="?attr/colorOnSurface" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_profile"
+            android:id="@+id/rcv_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
