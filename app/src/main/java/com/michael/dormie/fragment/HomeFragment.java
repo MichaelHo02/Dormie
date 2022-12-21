@@ -12,9 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.michael.dormie.R;
+import com.michael.dormie.activity.FlashScreenActivity;
+import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.model.Place;
+import com.michael.dormie.utils.NavigationUtil;
+import com.michael.dormie.utils.RequestSignal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,7 @@ public class HomeFragment extends Fragment {
     private View view;
     private MaterialToolbar topAppBar;
     private RecyclerView recyclerView;
+    private FloatingActionButton addBtn;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
 
@@ -71,9 +77,15 @@ public class HomeFragment extends Fragment {
     private void initUI() {
         topAppBar = view.findViewById(R.id.fragment_home_top_bar);
         recyclerView = view.findViewById(R.id.fragment_home_rv);
+        addBtn = view.findViewById(R.id.fragment_home_float_action);
         topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         recycleViewInit();
+        addBtn.setOnClickListener(this::handleBAddBtnOnClick);
+    }
 
+    private void handleBAddBtnOnClick(View view) {
+        Bundle bundle = new Bundle();
+        NavigationUtil.navigateActivity(this, this.requireContext(), PostCreationActivity.class, RequestSignal.TEMPLATE_FORMAT, bundle);
     }
 
     private void handleNavigationOnClick(View view) {
