@@ -5,33 +5,33 @@
         android:id="@+id/home_page"
         android:checkable="true"
         android:icon="@drawable/ic_round_home_24"
-        android:title="Home" />
+        android:title="@string/home" />
     <item
         android:id="@+id/chat_page"
         android:checkable="true"
         android:icon="@drawable/ic_round_chat_bubble_24"
-        android:title="Chat" />
+        android:title="@string/chat" />
     <item
         android:id="@+id/rental_registration_page"
         android:checkable="true"
         android:icon="@drawable/ic_round_work_24"
-        android:title="Rental Registration" />
+        android:title="@string/rental_registration" />
 
     <item
         android:id="@+id/others_item"
-        android:title="Others">
+        android:title="@string/others">
         <menu>
             <item
                 android:id="@+id/profile_page"
                 android:checkable="true"
                 android:icon="@drawable/ic_round_person_24"
-                android:title="Profile" />
+                android:title="@string/profile" />
 
             <item
                 android:id="@+id/setting_page"
                 android:checkable="true"
                 android:icon="@drawable/ic_round_settings_24"
-                android:title="Setting" />
+                android:title="@string/setting" />
         </menu>
     </item>
 </menu>
