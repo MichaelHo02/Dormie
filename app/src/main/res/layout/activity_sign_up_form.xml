@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.SignUpFormActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Create Account"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+        android:textColor="?attr/colorOnSurface" />
+
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_round_account_circle_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:tint="@color/purple_700" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/takePhotoButton"
+            style="@style/Widget.Material3.Button.TonalButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take photo"
+            app:icon="@drawable/ic_baseline_photo_camera_24" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/uploadPhotoButton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload photo"
+            app:icon="@drawable/ic_baseline_upload_24" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="40dp"
+        android:text="Select your role"
+        android:layout_marginTop="43dp"
+        android:gravity="top" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/roleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="6dp"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        android:gravity="center">
+
+        <Button
+            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/lessor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Lessor"
+            android:layout_weight="1"/>
+        <Button
+            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/tenant"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Tenant"
+            android:layout_weight="1"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fullNameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingHorizontal="24dp"
+        android:hint="Full Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:startIconDrawable="@drawable/ic_baseline_person_outline_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter your full name"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dobLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Date of birth"
+        android:paddingTop="40dp"
+        android:paddingHorizontal="24dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+        app:endIconMode="custom"
+        app:errorEnabled="true"
+        app:startIconDrawable="@drawable/ic_baseline_cake_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/continueButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Continue"/>
+
+</LinearLayout>

@@ -13,12 +13,35 @@
         android:theme="@style/Theme.Dormie"
         tools:targetApi="31">
         <activity
+            android:name=".activity.TenantSignUpForm"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.SignUpFormActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+                <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        
+        <activity
             android:name=".activity.PostCreationActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        
         <activity
             android:name=".activity.FlashScreenActivity"
             android:exported="true">
