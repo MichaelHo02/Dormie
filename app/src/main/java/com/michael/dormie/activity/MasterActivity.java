@@ -19,10 +19,10 @@ import com.michael.dormie.fragment.ProfileFragment;
 import com.michael.dormie.fragment.RentalRegistrationFragment;
 import com.michael.dormie.fragment.SettingFragment;
 import com.michael.dormie.utils.NavigationUtil;
+import com.michael.dormie.utils.TopAppBarUtil;
 
 public class MasterActivity extends AppCompatActivity {
 
-    private MaterialToolbar topAppBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -36,7 +36,6 @@ public class MasterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master);
-        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         initUI();
@@ -44,26 +43,24 @@ public class MasterActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        topAppBar = findViewById(R.id.activity_master_top_bar);
         drawerLayout = findViewById(R.id.activity_master_drawer_layout);
         navigationView = findViewById(R.id.activity_master_navigation);
     }
 
     private void initUIAction() {
-        topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         navigationView.setNavigationItemSelectedListener(this::handleNavigationItemSelected);
         navigationView.setCheckedItem(R.id.home_page);
-        NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
-    }
-
-    private void handleNavigationOnClick(View view) {
-        drawerLayout.open();
+        handleUpdateTopAppBar(R.id.home_page);
     }
 
     private boolean handleNavigationItemSelected(MenuItem item) {
         item.setChecked(true);
         drawerLayout.close();
-        switch (item.getItemId()) {
+        return handleUpdateTopAppBar(item.getItemId());
+    }
+
+    private boolean handleUpdateTopAppBar(int id) {
+        switch (id) {
             case R.id.home_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
                 return true;
