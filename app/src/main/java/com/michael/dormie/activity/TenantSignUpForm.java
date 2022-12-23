@@ -3,12 +3,12 @@ package com.michael.dormie.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.Button;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.michael.dormie.R;
 
 public class TenantSignUpForm extends AppCompatActivity {
-    Button backButton;
+    MaterialToolbar topAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class TenantSignUpForm extends AppCompatActivity {
     }
 
     private void initVariables() {
-        backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> finish());
+        topAppBar = findViewById(R.id.topAppBar);
+        topAppBar.setNavigationOnClickListener(v -> finish());
     }
 }

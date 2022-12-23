@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,34 +7,22 @@
     android:orientation="vertical"
     tools:context=".activity.TenantSignUpForm">
 
-    <LinearLayout
-        android:paddingTop="24dp"
-        android:paddingBottom="8dp"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/backButton"
-            style="?attr/materialIconButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_baseline_arrow_back_24"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <TextView
-            android:id="@+id/textView"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="What are you looking for?"
-            android:textAppearance="?attr/textAppearanceHeadlineSmall"
-            android:textColor="?attr/colorOnSurface" />
-    </LinearLayout>
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:title="What are you looking for?" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp">
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,11 +32,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="24dp"
+                android:gravity="top"
                 android:text="Type of house"
-                android:gravity="top" />
+                android:textStyle="bold" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/houseTypes"
@@ -64,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="Apartment"/>
+                    android:text="Apartment" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/villa"
@@ -80,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="House"/>
+                    android:text="House" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/townhouse"
@@ -88,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="Townhouse"/>
+                    android:text="Townhouse" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/mobile"
@@ -105,17 +93,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                app:dividerColor="#CAC4D0"/>
+                app:dividerColor="#CAC4D0" />
 
             <TextView
-                android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:gravity="top"
                 android:text="Amenities"
-                android:gravity="top" />
+                android:textStyle="bold" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/amenities"
@@ -131,7 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="Washer/Dryer"/>
+                    android:text="Washer/Dryer" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/ramp"
@@ -147,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="Garden"/>
+                    android:text="Garden" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/catsOK"
@@ -155,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="Cats OK"/>
+                    android:text="Cats OK" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/dogsOK"
@@ -180,17 +168,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                app:dividerColor="#CAC4D0"/>
+                app:dividerColor="#CAC4D0" />
 
             <TextView
-                android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:gravity="top"
                 android:text="School"
-                android:gravity="top" />
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/schoolLayout"
@@ -198,18 +186,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
+                android:hint="School"
                 android:paddingVertical="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:hint="School"
                 app:startIconDrawable="@drawable/ic_baseline_school_24">
 
                 <AutoCompleteTextView
                     android:id="@+id/school"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"/>
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.divider.MaterialDivider
@@ -217,98 +205,104 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                app:dividerColor="#CAC4D0"/>
+                app:dividerColor="#CAC4D0" />
 
             <TextView
-                android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:gravity="top"
                 android:text="Distance from school (minimum)"
-                android:gravity="top" />
+                android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/minDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
+                android:gravity="center"
                 android:paddingVertical="8dp"
-                app:singleSelection="true"
                 app:selectionRequired="true"
-                android:gravity="center">
+                app:singleSelection="true">
 
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="100m"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="100m" />
+
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="200m"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="200m" />
+
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="500m"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="500m" />
+
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="1km"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="1km" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <TextView
-                android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:gravity="top"
                 android:text="Distance from school (maximum)"
-                android:gravity="top" />
+                android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/maxDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
+                android:gravity="center"
                 android:paddingVertical="8dp"
-                app:singleSelection="true"
                 app:selectionRequired="true"
-                android:gravity="center">
+                app:singleSelection="true">
 
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="1km"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="1km" />
+
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="5km"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="5km" />
+
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="10km"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="10km" />
+
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="20km"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="20km" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.divider.MaterialDivider
@@ -316,7 +310,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                app:dividerColor="#CAC4D0"/>
+                app:dividerColor="#CAC4D0" />
 
             <Button
                 android:id="@+id/continueButton"
@@ -324,9 +318,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="48dp"
-                android:text="Continue"/>
+                android:text="Continue" />
 
         </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
