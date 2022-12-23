@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:tint="@color/purple_700" />
+        app:tint="?attr/colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,47 +70,48 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_alignParentLeft="true"
         android:layout_marginStart="40dp"
-        android:text="Select your role"
         android:layout_marginTop="43dp"
-        android:gravity="top" />
+        android:gravity="top"
+        android:text="Select your role"
+        android:textStyle="bold" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/roleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:layout_marginTop="6dp"
-        app:singleSelection="true"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
         app:selectionRequired="true"
-        android:gravity="center">
+        app:singleSelection="true">
 
         <Button
-            style="?attr/materialButtonOutlinedStyle"
             android:id="@+id/lessor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Lessor"
-            android:layout_weight="1"/>
-        <Button
             style="?attr/materialButtonOutlinedStyle"
-            android:id="@+id/tenant"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Tenant"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="Lessor" />
+
+        <Button
+            android:id="@+id/tenant"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tenant" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/fullNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="40dp"
-        android:paddingHorizontal="24dp"
         android:hint="Full Name"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
@@ -120,7 +121,7 @@
             android:id="@+id/fullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter your full name"/>
+            android:text="Enter your full name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -128,8 +129,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Date of birth"
-        android:paddingTop="40dp"
         android:paddingHorizontal="24dp"
+        android:paddingTop="40dp"
         app:counterEnabled="true"
         app:counterMaxLength="20"
         app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
@@ -152,8 +153,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
-        android:text="Continue"/>
+        android:layout_marginEnd="24dp"
+        android:text="Continue" />
 
 </LinearLayout>
