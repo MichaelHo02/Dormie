@@ -60,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:layout_marginVertical="8dp"
-                app:counterEnabled="true"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_round_email_24">
