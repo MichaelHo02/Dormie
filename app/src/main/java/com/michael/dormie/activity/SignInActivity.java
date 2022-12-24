@@ -32,8 +32,8 @@ public class SignInActivity extends AppCompatActivity {
     private GoogleSignInClient gsc;
     private FirebaseFirestore mDB;
 
-    TextInputLayout email, password;
-    MaterialButton signInButton, signInButtonGoogle, signUpButton;
+    private TextInputLayout email, password;
+    private MaterialButton signInButton, signInButtonGoogle, signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

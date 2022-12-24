@@ -118,7 +118,11 @@ public class HomeFragment extends Fragment {
                     gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            NavigationUtil.navigateActivity(HomeFragment.this, HomeFragment.this.getContext(), SignInActivity.class, 10);
+                            NavigationUtil.navigateActivity(
+                                    HomeFragment.this,
+                                    HomeFragment.this.getContext(),
+                                    SignInActivity.class,
+                                    10);
                         }
                     });
                 }
