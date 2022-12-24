@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -25,6 +27,10 @@ import com.michael.dormie.R;
 import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.RequestSignal;
+import com.michael.dormie.utils.TextInputUtil;
+import com.michael.dormie.utils.TextValidator;
+
+import java.util.Optional;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
@@ -59,13 +65,70 @@ public class SignInActivity extends AppCompatActivity {
         signInButtonGoogle = findViewById(R.id.sign_in_btn_google);
         signUpButton = findViewById(R.id.sign_up_btn);
 
+        Optional.ofNullable(email.getEditText())
+                .ifPresent(this::handleValidationEmail);
+        Optional.ofNullable(password.getEditText())
+                .ifPresent(this::handleValidationPassword);
+
         signInButton.setOnClickListener(this::signIn);
         signInButtonGoogle.setOnClickListener(this::signInWithGoogle);
         signUpButton.setOnClickListener(this::signUp);
     }
 
-    private void signIn(View view) {
+    private void handleValidationEmail(EditText editText) {
+        editText.addTextChangedListener(new TextValidator(email) {
+            @Override
+            public void validate(TextInputLayout textInputLayout, String text) {
+                TextInputUtil.basicValidation(textInputLayout, text);
+            }
+        });
+    }
 
+    private void handleValidationPassword(EditText editText) {
+        editText.addTextChangedListener(new TextValidator(password) {
+            @Override
+            public void validate(TextInputLayout textInputLayout, String text) {
+                TextInputUtil.basicValidation(textInputLayout, text);
+            }
+        });
+    }
+
+    private void signIn(View view) {
+        TextInputUtil.basicValidation(email, email.getEditText().getText().toString());
+        TextInputUtil.basicValidation(password, password.getEditText().getText().toString());
+
+        if (email.getError() != null || password.getError() != null) {
+            Log.i(TAG, "Input is not passed validation");
+            return;
+        }
+
+        String email = this.email.getEditText().getText().toString();
+        String password = this.password.getEditText().getText().toString();
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(this::handleSuccessSignInEmailPassword)
+                .addOnFailureListener(this::handleFailureSignInEmailPassword);
+    }
+
+    private void handleSuccessSignInEmailPassword(AuthResult authResult) {
+        Log.d(TAG, "signInUserWithEmail:success");
+        NavigationUtil.navigateActivity(
+                SignInActivity.this,
+                this,
+                MasterActivity.class,
+                RequestSignal.NAVIGATE_HOME);
+    }
+
+    private void handleFailureSignInEmailPassword(Exception e) {
+        Log.e(TAG, "Fail to sign up because " + e.getLocalizedMessage());
+        if (e.getLocalizedMessage().contains("email")) {
+            email.setError(e.getLocalizedMessage());
+            return;
+        }
+
+        if (e.getLocalizedMessage().contains("password")) {
+            password.setError(e.getLocalizedMessage());
+            return;
+        }
     }
 
     private void signInWithGoogle(View view) {

@@ -224,6 +224,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void handleNavigationOnExistingUser() {
-
+        Toast.makeText(this, "You already create your account!", Toast.LENGTH_SHORT).show();
+        NavigationUtil.navigateActivity(
+                this,
+                SignUpActivity.this,
+                MasterActivity.class,
+                RequestSignal.NAVIGATE_HOME
+        );
     }
 }

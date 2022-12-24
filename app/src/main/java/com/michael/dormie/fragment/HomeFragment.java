@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            Log.e("Current User", currentUser.getDisplayName());
+            Log.e("Current User", currentUser.getEmail());
         }
     }
 
