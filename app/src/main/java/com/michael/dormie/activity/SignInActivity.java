@@ -19,7 +19,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.R;
@@ -33,7 +32,7 @@ public class SignInActivity extends AppCompatActivity {
     private GoogleSignInClient gsc;
     private FirebaseFirestore mDB;
 
-    TextInputLayout username, password;
+    TextInputLayout email, password;
     MaterialButton signInButton, signInButtonGoogle, signUpButton;
 
     @Override
@@ -54,11 +53,11 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void initVariables() {
-        username = findViewById(R.id.username);
+        email = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        signInButton = findViewById(R.id.signInButton);
-        signInButtonGoogle = findViewById(R.id.signInButtonGoogle);
-        signUpButton = findViewById(R.id.signUpButton);
+        signInButton = findViewById(R.id.sign_in_btn);
+        signInButtonGoogle = findViewById(R.id.sign_in_btn_google);
+        signUpButton = findViewById(R.id.sign_up_btn);
 
         signInButton.setOnClickListener(this::signIn);
         signInButtonGoogle.setOnClickListener(this::signInWithGoogle);

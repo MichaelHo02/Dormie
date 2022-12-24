@@ -30,7 +30,6 @@
             android:paddingHorizontal="16dp">
 
             <ImageView
-                android:id="@+id/imageView2"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:layout_gravity="center"
@@ -38,7 +37,6 @@
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textView2"
                 style="@style/TextAppearance.Material3.DisplaySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,20 +51,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="8dp"
-                android:text="Find a perfect home for student."
+                android:text="@string/find_a_perfect_home_for_student"
                 android:textColor="?attr/colorSecondary"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/username"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/username"
+                android:hint="@string/email"
                 android:layout_marginVertical="8dp"
                 app:counterEnabled="true"
-                app:counterMaxLength="20"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/ic_round_person_24">
+                app:startIconDrawable="@drawable/ic_round_email_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -91,14 +88,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/signInButton"
+                android:id="@+id/sign_in_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_in" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/signInButtonGoogle"
+                android:id="@+id/sign_in_btn_google"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,7 +103,7 @@
                 android:text="@string/sign_in_with_google" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/signUpButton"
+                android:id="@+id/sign_up_btn"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
