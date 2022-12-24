@@ -14,4 +14,5 @@
     <string name="profile">Profile</string>
     <string name="setting">Setting</string>
     <string name="welcome_to_dormie">Welcome to Dormie</string>
+    <string name="sign_in_with_google">Sign In With Google</string>
 </resources>

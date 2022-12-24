@@ -12,6 +12,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.michael.dormie.R;
 
 public class SignUpActivity extends AppCompatActivity {
+
+
+
     TextInputLayout username, password, confirmPassword;
     Button signUpButton;
     TextView signInButton;

@@ -2,20 +2,34 @@ package com.michael.dormie.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.michael.dormie.R;
 import com.michael.dormie.activity.FlashScreenActivity;
 import com.michael.dormie.activity.PostCreationActivity;
+import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.utils.NavigationUtil;
@@ -44,6 +58,10 @@ public class HomeFragment extends Fragment {
     private List<Place> places;
     private PlaceAdapter placeAdapter;
 
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
+    private FirebaseAuth mAuth;
+
     public HomeFragment() {
     }
 
@@ -63,6 +81,7 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -70,8 +89,21 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this.requireActivity(), gso);
+
         initUI();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Log.e("Current User", currentUser.getDisplayName());
+        }
     }
 
     private void initUI() {
@@ -79,6 +111,20 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.fragment_home_rv);
         addBtn = view.findViewById(R.id.fragment_home_float_action);
         topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.profile_page) {
+                    gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            NavigationUtil.navigateActivity(HomeFragment.this, HomeFragment.this.getContext(), SignInActivity.class, 10);
+                        }
+                    });
+                }
+                return false;
+            }
+        });
         recycleViewInit();
         addBtn.setOnClickListener(this::handleBAddBtnOnClick);
     }
