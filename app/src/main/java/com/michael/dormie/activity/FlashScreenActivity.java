@@ -2,6 +2,7 @@ package com.michael.dormie.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,7 +16,6 @@ public class FlashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flash_screen);
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
-
         Thread thread = new Thread() {
             @Override
             public void run() {

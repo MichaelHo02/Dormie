@@ -22,6 +22,19 @@ public class TextInputUtil {
         textInputLayout.setErrorEnabled(false);
     }
 
+    public static void validateName(TextInputLayout textInputLayout, String text) {
+        if (text == null) {
+            textInputLayout.setError("No Input");
+            return;
+        }
+        if (text.trim().isEmpty()) {
+            textInputLayout.setError("Cannot be empty");
+            return;
+        }
+        textInputLayout.setError(null);
+        textInputLayout.setErrorEnabled(false);
+    }
+
     public static void validatePassword(@NonNull TextInputLayout password, @NonNull TextInputLayout confirmPassword) {
         String passwordStr = password.getEditText().getText().toString();
         String confirmPasswordStr = confirmPassword.getEditText().getText().toString();
