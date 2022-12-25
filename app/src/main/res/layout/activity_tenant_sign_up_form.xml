@@ -15,7 +15,7 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:navigationIcon="@drawable/ic_round_arrow_back_24"
             app:title="What are you looking for?" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -191,7 +191,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:startIconDrawable="@drawable/ic_baseline_school_24">
+                app:startIconDrawable="@drawable/ic_round_school_24">
 
                 <AutoCompleteTextView
                     android:id="@+id/school"

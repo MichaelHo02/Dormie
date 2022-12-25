@@ -18,4 +18,14 @@
     <string name="find_a_perfect_home_for_student">Find a perfect home for student.</string>
     <string name="email">Email</string>
     <string name="sign_up_with_google">Sign Up With Google</string>
+    <string name="create_account">Create Account</string>
+    <string name="lessor">Lessor</string>
+    <string name="tenant">Tenant</string>
+    <string name="select_your_role">Select your role</string>
+    <string name="full_name">Full Name</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="saved">Saved</string>
+    <string name="take_photo">Take photo</string>
+    <string name="upload_photo">Upload photo</string>
 </resources>
