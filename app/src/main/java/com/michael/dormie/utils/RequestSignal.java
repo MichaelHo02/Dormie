@@ -9,7 +9,8 @@ public class RequestSignal {
     public static final int ITEM_CREATION_UPLOAD_PHOTO = 40;
     public static final int ITEM_CREATION_PERMISSION_CAM = 50;
     public static final int ITEM_CREATION_TAKE_PHOTO = 60;
-
+    public static final int DOWNLOAD_SUCCESS = 200;
+    public static final int DOWNLOAD_ERROR = 500;
     private RequestSignal() {
     }
 }

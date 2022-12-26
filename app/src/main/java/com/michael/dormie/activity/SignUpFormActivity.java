@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -33,7 +32,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.michael.dormie.R;
 import com.michael.dormie.service.DownloadService;
 import com.michael.dormie.utils.DataConverter;
@@ -44,10 +42,7 @@ import com.michael.dormie.utils.TextValidator;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 public class SignUpFormActivity extends AppCompatActivity {
     private static final String TAG = "SignUpFormActivity";
@@ -76,12 +71,12 @@ public class SignUpFormActivity extends AppCompatActivity {
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             switch (resultCode) {
-                case DownloadService.DOWNLOAD_SUCCESS:
-                    Toast.makeText(SignUpFormActivity.this, "Download Song Completed", Toast.LENGTH_SHORT).show();
-                    avatar.setImageBitmap(DataConverter.convertByteArrToBitmap(resultData.getByteArray("data")));
+                case RequestSignal.DOWNLOAD_SUCCESS:
+                    Toast.makeText(SignUpFormActivity.this, "Download Avatar Complete", Toast.LENGTH_SHORT).show();
+                    avatar.setImageBitmap(DataConverter.convertByteArrToBitmap(resultData.getByteArray(DownloadService.DATA)));
                     break;
-                case DownloadService.DOWNLOAD_ERROR:
-                    Toast.makeText(SignUpFormActivity.this, "Error downloading song", Toast.LENGTH_SHORT).show();
+                case RequestSignal.DOWNLOAD_ERROR:
+                    Toast.makeText(SignUpFormActivity.this, "Error downloading avatar", Toast.LENGTH_SHORT).show();
                     break;
             }
             super.onReceiveResult(resultCode, resultData);
@@ -208,13 +203,13 @@ public class SignUpFormActivity extends AppCompatActivity {
             name.setText(user.getDisplayName());
         }
         if (user.getPhotoUrl() != null) {
-            Intent startIntent = new Intent(SignUpFormActivity.this, DownloadService.class);
             resultReceiver = new SampleResultReceiver(new Handler());
-            startIntent.putExtra("receiver", resultReceiver);
-            startIntent.putExtra("url", user.getPhotoUrl().toString());
-            startService(startIntent);
+            DownloadService.startActionFetchAvtByURL(
+                    SignUpFormActivity.this,
+                    user.getPhotoUrl().toString().replace("s96", "s560"),
+                    resultReceiver
+            );
         }
-
     }
 
     @Override
