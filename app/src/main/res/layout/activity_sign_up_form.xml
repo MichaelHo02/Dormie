@@ -40,10 +40,12 @@
                     android:src="@drawable/ic_round_account_circle_24"
                     app:tint="?attr/colorPrimary" />
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/avatar"
                     android:layout_width="140dp"
-                    android:layout_height="140dp" />
+                    android:layout_height="140dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
             </RelativeLayout>
 
             <LinearLayout

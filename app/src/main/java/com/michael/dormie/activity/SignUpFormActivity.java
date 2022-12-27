@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -32,14 +37,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.R;
 import com.michael.dormie.service.DownloadService;
 import com.michael.dormie.utils.DataConverter;
+import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.RequestSignal;
 import com.michael.dormie.utils.TextInputUtil;
 import com.michael.dormie.utils.TextValidator;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -61,10 +71,10 @@ public class SignUpFormActivity extends AppCompatActivity {
     private MaterialDatePicker materialDatePicker;
     private TextInputEditText name, dob;
 
-    private SampleResultReceiver resultReceiver = new SampleResultReceiver(new Handler());
+    private AvatarResultReceiver resultReceiver = new AvatarResultReceiver(new Handler());
 
-    private class SampleResultReceiver extends ResultReceiver {
-        public SampleResultReceiver(Handler handler) {
+    private class AvatarResultReceiver extends ResultReceiver {
+        public AvatarResultReceiver(Handler handler) {
             super(handler);
         }
 
@@ -172,22 +182,35 @@ public class SignUpFormActivity extends AppCompatActivity {
             return;
         }
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName("Jane Q. User")
-                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                .build();
+        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
 
-        user.updateProfile(profileUpdates)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d(TAG, "User profile updated");
-                    }
-                });
+        if (name.getText() != null && !name.getText().toString().isEmpty()) {
+            builder.setDisplayName(name.getText().toString());
+        }
 
-
-        Intent intent = new Intent(SignUpFormActivity.this, TenantSignUpForm.class);
-        startActivity(intent);
+        if (avatar.getDrawable() != null) {
+            StorageReference storageReference = storage.getReference();
+            StorageReference avtRef = storageReference.child(user.getUid() + "_avt.jpeg");
+            UploadTask uploadTask = avtRef.putBytes(DataConverter.convertImageToByteArr(bitmap));
+            uploadTask.continueWithTask(task -> {
+                if (!task.isSuccessful()) throw task.getException();
+                return avtRef.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    builder.setPhotoUri(downloadUri);
+                    Log.d(TAG, "Upload URI " + downloadUri);
+                    UserProfileChangeRequest profileUpdates = builder.build();
+                    user.updateProfile(profileUpdates)
+                            .addOnSuccessListener(unused -> {
+                                NavigationUtil.navigateActivity(SignUpFormActivity.this, this, TenantSignUpForm.class, RequestSignal.TEMPLATE_FORMAT);
+                            });
+                } else {
+                    // Handle failures
+                    Log.e(TAG, "Cannot get the download URI");
+                }
+            });
+        }
     }
 
     @Override
@@ -199,11 +222,11 @@ public class SignUpFormActivity extends AppCompatActivity {
             return;
         }
 
-        if (user.getDisplayName() != null) {
+        if (user.getDisplayName() != null && name.getText() == null) {
             name.setText(user.getDisplayName());
         }
-        if (user.getPhotoUrl() != null) {
-            resultReceiver = new SampleResultReceiver(new Handler());
+        if (user.getPhotoUrl() != null && avatar.getDrawable() == null) {
+            resultReceiver = new AvatarResultReceiver(new Handler());
             DownloadService.startActionFetchAvtByURL(
                     SignUpFormActivity.this,
                     user.getPhotoUrl().toString().replace("s96", "s560"),
@@ -231,12 +254,22 @@ public class SignUpFormActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == RequestSignal.ITEM_CREATION_TAKE_PHOTO) {
+            Log.d(TAG, "Put image taken from camera");
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             bitmap = photo;
             avatar.setImageBitmap(photo);
         } else if (requestCode == RequestSignal.ITEM_CREATION_UPLOAD_PHOTO) {
+            Log.d(TAG, "Put image taken from library");
             Uri selectedImg = data.getData();
-            avatar.setImageURI(selectedImg);
+
+            InputStream imageStream = null;
+            try {
+                imageStream = getContentResolver().openInputStream(selectedImg);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            bitmap = BitmapFactory.decodeStream(imageStream);
+            avatar.setImageBitmap(bitmap);
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImg);
             } catch (IOException e) {
