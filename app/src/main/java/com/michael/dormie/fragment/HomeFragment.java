@@ -16,24 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.michael.dormie.R;
-import com.michael.dormie.activity.FlashScreenActivity;
 import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.utils.NavigationUtil;
-import com.michael.dormie.utils.RequestSignal;
+import com.michael.dormie.utils.SignalCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +132,7 @@ public class HomeFragment extends Fragment {
 
     private void handleBAddBtnOnClick(View view) {
         Bundle bundle = new Bundle();
-        NavigationUtil.navigateActivity(this, this.requireContext(), PostCreationActivity.class, RequestSignal.TEMPLATE_FORMAT, bundle);
+        NavigationUtil.navigateActivity(this, this.requireContext(), PostCreationActivity.class, SignalCode.TEMPLATE_FORMAT, bundle);
     }
 
     private void handleNavigationOnClick(View view) {

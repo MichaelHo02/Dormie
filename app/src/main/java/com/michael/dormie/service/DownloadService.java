@@ -9,7 +9,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.michael.dormie.utils.DataConverter;
-import com.michael.dormie.utils.RequestSignal;
+import com.michael.dormie.utils.SignalCode;
 
 public class DownloadService extends IntentService {
     private static final String TAG = "DownloadService";
@@ -22,7 +22,7 @@ public class DownloadService extends IntentService {
     public static final String DATA = "data";
 
     public DownloadService() {
-        super("DownloadService");
+        super(TAG);
     }
 
     public static void startActionFetchAvtByURL(Context context, String param1, ResultReceiver param2) {
@@ -63,10 +63,10 @@ public class DownloadService extends IntentService {
             Bitmap bitmap = DataConverter.getImageBitmap(urlStr);
             Bundle bundle = new Bundle();
             bundle.putByteArray(DATA, DataConverter.convertImageToByteArr(bitmap));
-            receiver.send(RequestSignal.DOWNLOAD_SUCCESS, bundle);
+            receiver.send(SignalCode.DOWNLOAD_SUCCESS, bundle);
         } catch (Exception e) {
             Log.e(TAG, "Cannot fetch avt by url because " + e.getLocalizedMessage());
-            receiver.send(RequestSignal.DOWNLOAD_ERROR, null);
+            receiver.send(SignalCode.DOWNLOAD_ERROR, null);
         }
     }
 

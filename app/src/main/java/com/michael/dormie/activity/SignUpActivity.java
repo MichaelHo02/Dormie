@@ -26,7 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.R;
 import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.NavigationUtil;
-import com.michael.dormie.utils.RequestSignal;
+import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextInputUtil;
 import com.michael.dormie.utils.TextValidator;
 
@@ -129,7 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
                 SignUpActivity.this,
                 this,
                 SignUpFormActivity.class,
-                RequestSignal.NAVIGATE_SIGNUP_FORM);
+                SignalCode.NAVIGATE_SIGNUP_FORM);
     }
 
     private void handleFailureSignUpEmailPassword(Exception e) {
@@ -147,19 +147,19 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void signUpWithGoogle(View view) {
         Intent intent = gsc.getSignInIntent();
-        startActivityForResult(intent, RequestSignal.SIGN_IN_WITH_GOOGLE);
+        startActivityForResult(intent, SignalCode.SIGN_IN_WITH_GOOGLE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RequestSignal.SIGN_IN_WITH_GOOGLE) {
+        if (requestCode == SignalCode.SIGN_IN_WITH_GOOGLE) {
             GoogleSignIn.getSignedInAccountFromIntent(data)
                     .addOnSuccessListener(this::handleSuccessSignUpGoogle)
                     .addOnFailureListener(this::handleFailureSignUpGoogle);
         }
 
-        if (requestCode == RequestSignal.NAVIGATE_SIGNUP_FORM) {
+        if (requestCode == SignalCode.NAVIGATE_SIGNUP_FORM) {
             TextInputUtil.resetValidation(email);
             TextInputUtil.resetValidation(password);
             TextInputUtil.resetValidation(confirmPassword);
@@ -219,7 +219,7 @@ public class SignUpActivity extends AppCompatActivity {
                 this,
                 SignUpActivity.this,
                 SignUpFormActivity.class,
-                RequestSignal.NAVIGATE_SIGNUP_FORM
+                SignalCode.NAVIGATE_SIGNUP_FORM
         );
     }
 
@@ -229,7 +229,7 @@ public class SignUpActivity extends AppCompatActivity {
                 this,
                 SignUpActivity.this,
                 MasterActivity.class,
-                RequestSignal.NAVIGATE_HOME
+                SignalCode.NAVIGATE_HOME
         );
     }
 }

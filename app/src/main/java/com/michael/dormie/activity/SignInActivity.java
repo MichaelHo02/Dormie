@@ -1,6 +1,5 @@
 package com.michael.dormie.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.R;
 import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.NavigationUtil;
-import com.michael.dormie.utils.RequestSignal;
+import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextInputUtil;
 import com.michael.dormie.utils.TextValidator;
 
@@ -116,7 +115,7 @@ public class SignInActivity extends AppCompatActivity {
                 SignInActivity.this,
                 this,
                 MasterActivity.class,
-                RequestSignal.NAVIGATE_HOME);
+                SignalCode.NAVIGATE_HOME);
     }
 
     private void handleFailureSignInEmailPassword(Exception e) {
@@ -134,7 +133,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private void signInWithGoogle(View view) {
         Intent intent = gsc.getSignInIntent();
-        startActivityForResult(intent, RequestSignal.SIGN_IN_WITH_GOOGLE);
+        startActivityForResult(intent, SignalCode.SIGN_IN_WITH_GOOGLE);
     }
 
     private void signUp(View view) {
@@ -142,7 +141,7 @@ public class SignInActivity extends AppCompatActivity {
                 this,
                 SignInActivity.this,
                 SignUpActivity.class,
-                RequestSignal.TEMPLATE_FORMAT
+                SignalCode.TEMPLATE_FORMAT
         );
     }
 
@@ -160,7 +159,7 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RequestSignal.SIGN_IN_WITH_GOOGLE) {
+        if (requestCode == SignalCode.SIGN_IN_WITH_GOOGLE) {
             GoogleSignIn.getSignedInAccountFromIntent(data)
                     .addOnSuccessListener(this::handleSuccessSignInGoogle)
                     .addOnFailureListener(this::handleFailureSignInGoogle);
@@ -215,7 +214,7 @@ public class SignInActivity extends AppCompatActivity {
                 this,
                 SignInActivity.this,
                 SignUpFormActivity.class,
-                RequestSignal.NAVIGATE_SIGNUP_FORM
+                SignalCode.NAVIGATE_SIGNUP_FORM
         );
     }
 
@@ -224,7 +223,7 @@ public class SignInActivity extends AppCompatActivity {
                 this,
                 SignInActivity.this,
                 MasterActivity.class,
-                RequestSignal.NAVIGATE_HOME
+                SignalCode.NAVIGATE_HOME
         );
     }
 }

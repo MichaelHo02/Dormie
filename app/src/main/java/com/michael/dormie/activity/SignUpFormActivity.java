@@ -20,11 +20,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -34,16 +29,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.R;
+import com.michael.dormie.fragment.HomeFragment;
 import com.michael.dormie.service.DownloadService;
+import com.michael.dormie.service.SignUpFormService;
 import com.michael.dormie.utils.DataConverter;
 import com.michael.dormie.utils.NavigationUtil;
-import com.michael.dormie.utils.RequestSignal;
+import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextInputUtil;
 import com.michael.dormie.utils.TextValidator;
 
@@ -70,28 +64,12 @@ public class SignUpFormActivity extends AppCompatActivity {
     private TextInputLayout nameLayout, dobLayout;
     private MaterialDatePicker materialDatePicker;
     private TextInputEditText name, dob;
+    private String accountType = null;
+
+    private boolean isCompleteUpdateAccount = false;
+    private boolean isCompleteUpdateUser = false;
 
     private AvatarResultReceiver resultReceiver = new AvatarResultReceiver(new Handler());
-
-    private class AvatarResultReceiver extends ResultReceiver {
-        public AvatarResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            switch (resultCode) {
-                case RequestSignal.DOWNLOAD_SUCCESS:
-                    Toast.makeText(SignUpFormActivity.this, "Download Avatar Complete", Toast.LENGTH_SHORT).show();
-                    avatar.setImageBitmap(DataConverter.convertByteArrToBitmap(resultData.getByteArray(DownloadService.DATA)));
-                    break;
-                case RequestSignal.DOWNLOAD_ERROR:
-                    Toast.makeText(SignUpFormActivity.this, "Error downloading avatar", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-            super.onReceiveResult(resultCode, resultData);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,19 +133,34 @@ public class SignUpFormActivity extends AppCompatActivity {
         dob.setOnClickListener(this::handleOpenDatePicker);
         materialDatePicker.addOnPositiveButtonClickListener(
                 selection -> dob.setText(materialDatePicker.getHeaderText()));
+        roleButton.addOnButtonCheckedListener(this::handleGroupButtonRoleChecked);
+    }
+
+    private void handleGroupButtonRoleChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
+        Log.d(TAG, "Button group click " + materialButtonToggleGroup.toString() + " " + i + " " + b);
+        if (i == R.id.lessor_btn) {
+            accountType = "lessor";
+            Log.d(TAG, "The account type value: " + accountType);
+            return;
+        }
+        if (i == R.id.tenant_btn) {
+            accountType = "tenant";
+            Log.d(TAG, "The account type value: " + accountType);
+            return;
+        }
     }
 
     private void handleUploadPhoto(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, RequestSignal.ITEM_CREATION_UPLOAD_PHOTO);
+        startActivityForResult(intent, SignalCode.ITEM_CREATION_UPLOAD_PHOTO);
     }
 
     private void handleTakePhoto(View view) {
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, RequestSignal.ITEM_CREATION_PERMISSION_CAM);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, SignalCode.ITEM_CREATION_PERMISSION_CAM);
         } else {
             Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(camIntent, RequestSignal.ITEM_CREATION_TAKE_PHOTO);
+            startActivityForResult(camIntent, SignalCode.ITEM_CREATION_TAKE_PHOTO);
         }
     }
 
@@ -177,40 +170,29 @@ public class SignUpFormActivity extends AppCompatActivity {
 
     private void handleSavedButton(View view) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
 
-        if (user == null) {
+        String nameStr;
+        byte[] bytes;
+
+        TextInputUtil.validateName(nameLayout, name.getText().toString());
+
+        if (nameLayout.getError() != null || bitmap == null || dob.getText().toString().isEmpty() || accountType == null) {
+            Log.e(TAG, String.valueOf(nameLayout.getError() != null));
+            Log.e(TAG, String.valueOf(bitmap == null));
+            Log.e(TAG, dob.getText().toString());
+            Log.e(TAG, String.valueOf(accountType == null));
+            Log.i(TAG, "Input is not passed validation");
             return;
         }
 
-        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+        nameStr = name.getText().toString();
+        bytes = DataConverter.convertImageToByteArr(bitmap);
+        SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
+        SignUpFormService.startActionUpdateAccount(this, receiver, user.getUid(), nameStr, bytes);
 
-        if (name.getText() != null && !name.getText().toString().isEmpty()) {
-            builder.setDisplayName(name.getText().toString());
-        }
-
-        if (avatar.getDrawable() != null) {
-            StorageReference storageReference = storage.getReference();
-            StorageReference avtRef = storageReference.child(user.getUid() + "_avt.jpeg");
-            UploadTask uploadTask = avtRef.putBytes(DataConverter.convertImageToByteArr(bitmap));
-            uploadTask.continueWithTask(task -> {
-                if (!task.isSuccessful()) throw task.getException();
-                return avtRef.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
-                    builder.setPhotoUri(downloadUri);
-                    Log.d(TAG, "Upload URI " + downloadUri);
-                    UserProfileChangeRequest profileUpdates = builder.build();
-                    user.updateProfile(profileUpdates)
-                            .addOnSuccessListener(unused -> {
-                                NavigationUtil.navigateActivity(SignUpFormActivity.this, this, TenantSignUpForm.class, RequestSignal.TEMPLATE_FORMAT);
-                            });
-                } else {
-                    // Handle failures
-                    Log.e(TAG, "Cannot get the download URI");
-                }
-            });
-        }
+        String dob = this.dob.getText().toString();
+        SignUpFormService.startActionUpdateUser(this, receiver, accountType, dob);
     }
 
     @Override
@@ -238,11 +220,11 @@ public class SignUpFormActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == RequestSignal.ITEM_CREATION_PERMISSION_CAM) {
+        if (requestCode == SignalCode.ITEM_CREATION_PERMISSION_CAM) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show();
                 Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(camIntent, RequestSignal.ITEM_CREATION_TAKE_PHOTO);
+                startActivityForResult(camIntent, SignalCode.ITEM_CREATION_TAKE_PHOTO);
             } else {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
             }
@@ -253,12 +235,12 @@ public class SignUpFormActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
-        if (requestCode == RequestSignal.ITEM_CREATION_TAKE_PHOTO) {
+        if (requestCode == SignalCode.ITEM_CREATION_TAKE_PHOTO) {
             Log.d(TAG, "Put image taken from camera");
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             bitmap = photo;
             avatar.setImageBitmap(photo);
-        } else if (requestCode == RequestSignal.ITEM_CREATION_UPLOAD_PHOTO) {
+        } else if (requestCode == SignalCode.ITEM_CREATION_UPLOAD_PHOTO) {
             Log.d(TAG, "Put image taken from library");
             Uri selectedImg = data.getData();
 
@@ -277,4 +259,60 @@ public class SignUpFormActivity extends AppCompatActivity {
             }
         }
     }
+
+    private class AvatarResultReceiver extends ResultReceiver {
+        public AvatarResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            switch (resultCode) {
+                case SignalCode.DOWNLOAD_SUCCESS:
+                    Toast.makeText(SignUpFormActivity.this, "Download Avatar Complete", Toast.LENGTH_SHORT).show();
+                    avatar.setImageBitmap(DataConverter.convertByteArrToBitmap(resultData.getByteArray(DownloadService.DATA)));
+                    break;
+                case SignalCode.DOWNLOAD_ERROR:
+                    Toast.makeText(SignUpFormActivity.this, "Error downloading avatar", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            super.onReceiveResult(resultCode, resultData);
+        }
+    }
+
+    private class SubmitResultReceiver extends ResultReceiver {
+        public SubmitResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultCode == SignalCode.UPDATE_ACCOUNT_SUCCESS) {
+                isCompleteUpdateAccount = true;
+            }
+
+            if (resultCode == SignalCode.UPDATE_USER_SUCCESS) {
+                isCompleteUpdateUser = true;
+            }
+
+            if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("lessor")) {
+                NavigationUtil.navigateActivity(
+                        SignUpFormActivity.this,
+                        SignUpFormActivity.this.getBaseContext(),
+                        MasterActivity.class,
+                        SignalCode.NAVIGATE_HOME);
+                return;
+            }
+
+            if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("tenant")) {
+                NavigationUtil.navigateActivity(
+                        SignUpFormActivity.this,
+                        SignUpFormActivity.this.getBaseContext(),
+                        TenantSignUpForm.class,
+                        SignalCode.TEMPLATE_FORMAT);
+            }
+            super.onReceiveResult(resultCode, resultData);
+        }
+    }
+
 }

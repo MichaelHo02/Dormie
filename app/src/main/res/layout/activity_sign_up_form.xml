@@ -118,14 +118,14 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/full_name"
                 android:paddingVertical="16dp"
+                app:placeholderText="@string/enter_your_full_name"
                 app:startIconDrawable="@drawable/ic_round_person_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/full_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text="@string/enter_your_full_name" />
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Dormie"
         tools:targetApi="31">
         <service
+            android:name=".service.SignUpFormService"
+            android:exported="false" />
+        <service
             android:name=".service.DownloadService"
             android:exported="false" />
 
