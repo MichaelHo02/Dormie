@@ -3,7 +3,7 @@ package com.michael.dormie.recyclerview;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +43,7 @@ public class RentalRegistrationAdapter extends RecyclerView.Adapter<RentalRegist
     public class RentalRegistrationViewHolder extends RecyclerView.ViewHolder {
         private TextView cardTitle;
         private TextView cardContent;
-        private ImageButton cardButton;
+        private Button cardButton;
 
         public RentalRegistrationViewHolder(@NonNull View itemView, RentalRegistrationRecyclerInterface recyclerInterface) {
             super(itemView);

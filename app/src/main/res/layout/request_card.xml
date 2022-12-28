@@ -12,14 +12,15 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginEnd="10dp"
             android:gravity="center">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/ic_rental_icon"
-                android:backgroundTint="@color/icon_background" />
+                style="?attr/materialIconButtonFilledTonalStyle"/>
 
             <TextView
                 android:id="@+id/tenant_letter"
@@ -57,13 +58,12 @@
             android:layout_height="wrap_content"
             android:gravity="end|center_vertical">
 
-            <ImageButton
+            <Button
+                style="?attr/materialIconButtonFilledTonalStyle"
                 android:id="@+id/registration_check"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
-                android:background="@drawable/ic_circle_btn"
-                android:src="@drawable/ic_check_24"/>
+                android:layout_height="wrap_content" />
+
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
