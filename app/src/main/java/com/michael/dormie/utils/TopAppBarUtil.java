@@ -4,7 +4,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.michael.dormie.R;
 
 public class TopAppBarUtil {
-    private MaterialToolbar topAppBar;
+    private final MaterialToolbar topAppBar;
 
     public TopAppBarUtil(MaterialToolbar topAppBar) {
         this.topAppBar = topAppBar;

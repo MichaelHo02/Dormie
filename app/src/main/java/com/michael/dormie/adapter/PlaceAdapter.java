@@ -13,7 +13,7 @@ import com.michael.dormie.model.Place;
 import java.util.List;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ItemHolder> {
-    private List<Place> places;
+    private final List<Place> places;
 
     public PlaceAdapter(List<Place> places) {
         this.places = places;
