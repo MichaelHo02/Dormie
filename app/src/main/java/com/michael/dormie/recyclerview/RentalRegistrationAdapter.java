@@ -1,14 +1,16 @@
 package com.michael.dormie.recyclerview;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.michael.dormie.R;
 
 import java.util.List;
@@ -43,7 +45,7 @@ public class RentalRegistrationAdapter extends RecyclerView.Adapter<RentalRegist
     public class RentalRegistrationViewHolder extends RecyclerView.ViewHolder {
         private TextView cardTitle;
         private TextView cardContent;
-        private Button cardButton;
+        private MaterialButton cardButton;
 
         public RentalRegistrationViewHolder(@NonNull View itemView, RentalRegistrationRecyclerInterface recyclerInterface) {
             super(itemView);
@@ -52,10 +54,13 @@ public class RentalRegistrationAdapter extends RecyclerView.Adapter<RentalRegist
             cardContent = itemView.findViewById(R.id.registration_content);
             cardButton = itemView.findViewById(R.id.registration_check);
 
-            cardButton.setOnClickListener(this::handleRegistrationCheckClick);
+            cardButton.addOnCheckedChangeListener(this::handleRegistrationCheckClick);
         }
 
-        private void handleRegistrationCheckClick(View view) {
+        private void handleRegistrationCheckClick(MaterialButton materialButton, boolean isChecked) {
+
         }
+
+
     }
 }

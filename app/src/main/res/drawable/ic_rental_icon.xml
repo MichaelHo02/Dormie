@@ -4,11 +4,6 @@
 
     <corners android:radius="50dp" />
 
-    <!-- Create stroke for testing -->
-    <!--    <stroke-->
-    <!--        android:color="@color/black"-->
-    <!--        android:width="0.1dp"/>-->
-
     <size
         android:height="40dp"
         android:width="40dp" />
