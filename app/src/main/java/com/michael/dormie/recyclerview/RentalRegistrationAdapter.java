@@ -45,6 +45,7 @@ public class RentalRegistrationAdapter extends RecyclerView.Adapter<RentalRegist
     public class RentalRegistrationViewHolder extends RecyclerView.ViewHolder {
         private TextView cardTitle;
         private TextView cardContent;
+        private MaterialButton tenantLetter;
         private MaterialButton cardButton;
 
         public RentalRegistrationViewHolder(@NonNull View itemView, RentalRegistrationRecyclerInterface recyclerInterface) {
@@ -53,6 +54,9 @@ public class RentalRegistrationAdapter extends RecyclerView.Adapter<RentalRegist
             cardTitle = itemView.findViewById(R.id.registration_title);
             cardContent = itemView.findViewById(R.id.registration_content);
             cardButton = itemView.findViewById(R.id.registration_check);
+
+            tenantLetter = itemView.findViewById(R.id.tenant_letter_btn);
+            tenantLetter.setEnabled(false); // Set this one as button to take the style palette from Material Design 3
 
             cardButton.addOnCheckedChangeListener(this::handleRegistrationCheckClick);
         }
