@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class TextInputUtil {
-    public static void basicValidation(TextInputLayout textInputLayout, String text) {
+public class ValidationUtil {
+    public static void validateEmailAndPassword(TextInputLayout textInputLayout, String text) {
         if (text == null) {
             textInputLayout.setError("No Input");
             return;
@@ -22,7 +22,7 @@ public class TextInputUtil {
         textInputLayout.setErrorEnabled(false);
     }
 
-    public static void validateName(TextInputLayout textInputLayout, String text) {
+    public static void validateBasic(TextInputLayout textInputLayout, String text) {
         if (text == null) {
             textInputLayout.setError("No Input");
             return;
