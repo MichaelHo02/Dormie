@@ -172,12 +172,12 @@ public class SignUpFormActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        String nameStr;
-        byte[] bytes;
+        String nameStr = null;
+        byte[] bytes = null;
 
         TextInputUtil.validateName(nameLayout, name.getText().toString());
 
-        if (nameLayout.getError() != null || bitmap == null || dob.getText().toString().isEmpty() || accountType == null) {
+        if (nameLayout.getError() != null || dob.getText().toString().isEmpty() || accountType == null) {
             Log.e(TAG, String.valueOf(nameLayout.getError() != null));
             Log.e(TAG, String.valueOf(bitmap == null));
             Log.e(TAG, dob.getText().toString());
@@ -186,10 +186,14 @@ public class SignUpFormActivity extends AppCompatActivity {
             return;
         }
 
-        nameStr = name.getText().toString();
-        bytes = DataConverter.convertImageToByteArr(bitmap);
+        if (name.getText() != null) {
+            nameStr = name.getText().toString();
+        }
+        if (bitmap != null) {
+            bytes = DataConverter.convertImageToByteArr(bitmap);
+        }
         SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
-        SignUpFormService.startActionUpdateAccount(this, receiver, user.getUid(), nameStr, bytes);
+        SignUpFormService.startActionUpdateAccount(this, receiver, nameStr, bytes);
 
         String dob = this.dob.getText().toString();
         SignUpFormService.startActionUpdateUser(this, receiver, accountType, dob);
@@ -204,7 +208,8 @@ public class SignUpFormActivity extends AppCompatActivity {
             return;
         }
 
-        if (user.getDisplayName() != null && name.getText() == null) {
+        Log.e(TAG, String.valueOf(name.getText().toString().isEmpty()));
+        if (user.getDisplayName() != null && name.getText().toString().isEmpty()) {
             name.setText(user.getDisplayName());
         }
         if (user.getPhotoUrl() != null && avatar.getDrawable() == null) {
@@ -287,6 +292,7 @@ public class SignUpFormActivity extends AppCompatActivity {
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
+            Log.e(TAG, String.valueOf(resultCode));
             if (resultCode == SignalCode.UPDATE_ACCOUNT_SUCCESS) {
                 isCompleteUpdateAccount = true;
             }
