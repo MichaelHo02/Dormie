@@ -129,6 +129,8 @@ public class SignInActivity extends AppCompatActivity {
             password.setError(e.getLocalizedMessage());
             return;
         }
+
+        email.setError(e.getLocalizedMessage());
     }
 
     private void signInWithGoogle(View view) {
