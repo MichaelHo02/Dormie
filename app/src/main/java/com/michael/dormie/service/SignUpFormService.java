@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -127,14 +128,21 @@ public class SignUpFormService extends IntentService {
     }
 
     private void handleActionUpdateUser(ResultReceiver receiver, String role, String dob) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Log.e(TAG, "Cannot get user");
+            receiver.send(SignalCode.UPDATE_USER_ERROR, null);
+            return;
+        }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> user = new HashMap<>();
         user.put("role", role);
         user.put("dob", dob);
         db.collection("users")
-                .add(user)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                .document(currentUser.getUid())
+                .set(user, SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "DocumentSnapshot added");
                     receiver.send(SignalCode.UPDATE_USER_SUCCESS, null);
                 })
                 .addOnFailureListener(e -> {
