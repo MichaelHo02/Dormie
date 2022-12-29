@@ -27,7 +27,7 @@ import com.michael.dormie.R;
 import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
-import com.michael.dormie.utils.TextInputUtil;
+import com.michael.dormie.utils.ValidationUtil;
 import com.michael.dormie.utils.TextValidator;
 
 import java.util.Optional;
@@ -79,7 +79,7 @@ public class SignInActivity extends AppCompatActivity {
         editText.addTextChangedListener(new TextValidator(email) {
             @Override
             public void validate(TextInputLayout textInputLayout, String text) {
-                TextInputUtil.basicValidation(textInputLayout, text);
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
             }
         });
     }
@@ -88,14 +88,14 @@ public class SignInActivity extends AppCompatActivity {
         editText.addTextChangedListener(new TextValidator(password) {
             @Override
             public void validate(TextInputLayout textInputLayout, String text) {
-                TextInputUtil.basicValidation(textInputLayout, text);
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
             }
         });
     }
 
     private void signIn(View view) {
-        TextInputUtil.basicValidation(email, email.getEditText().getText().toString());
-        TextInputUtil.basicValidation(password, password.getEditText().getText().toString());
+        ValidationUtil.validateEmailAndPassword(email, email.getEditText().getText().toString());
+        ValidationUtil.validateEmailAndPassword(password, password.getEditText().getText().toString());
 
         if (email.getError() != null || password.getError() != null) {
             Log.i(TAG, "Input is not passed validation");
@@ -129,6 +129,8 @@ public class SignInActivity extends AppCompatActivity {
             password.setError(e.getLocalizedMessage());
             return;
         }
+
+        email.setError(e.getLocalizedMessage());
     }
 
     private void signInWithGoogle(View view) {

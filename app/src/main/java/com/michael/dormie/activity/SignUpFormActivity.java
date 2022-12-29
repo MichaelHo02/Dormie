@@ -25,20 +25,21 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.michael.dormie.R;
-import com.michael.dormie.fragment.HomeFragment;
 import com.michael.dormie.service.DownloadService;
 import com.michael.dormie.service.SignUpFormService;
 import com.michael.dormie.utils.DataConverter;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
-import com.michael.dormie.utils.TextInputUtil;
+import com.michael.dormie.utils.ValidationUtil;
 import com.michael.dormie.utils.TextValidator;
 
 import java.io.FileNotFoundException;
@@ -61,6 +62,7 @@ public class SignUpFormActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private MaterialButton savedButton, takePhotoButton, uploadPhotoButton;
     private MaterialButtonToggleGroup roleButton;
+    private MaterialTextView roleErrorText;
     private TextInputLayout nameLayout, dobLayout;
     private MaterialDatePicker materialDatePicker;
     private TextInputEditText name, dob;
@@ -88,6 +90,7 @@ public class SignUpFormActivity extends AppCompatActivity {
         takePhotoButton = findViewById(R.id.takePhotoButton);
         uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
         roleButton = findViewById(R.id.role_btn_group);
+        roleErrorText = findViewById(R.id.role_error_text);
         nameLayout = findViewById(R.id.full_name_layout);
         dobLayout = findViewById(R.id.dob_layout);
         name = findViewById(R.id.full_name);
@@ -122,7 +125,7 @@ public class SignUpFormActivity extends AppCompatActivity {
         name.addTextChangedListener(new TextValidator(nameLayout) {
             @Override
             public void validate(TextInputLayout textInputLayout, String text) {
-                TextInputUtil.validateName(textInputLayout, text);
+                ValidationUtil.validateBasic(textInputLayout, text);
             }
         });
 
@@ -131,13 +134,16 @@ public class SignUpFormActivity extends AppCompatActivity {
         savedButton.setOnClickListener(this::handleSavedButton);
         dobLayout.setEndIconOnClickListener(this::handleOpenDatePicker);
         dob.setOnClickListener(this::handleOpenDatePicker);
-        materialDatePicker.addOnPositiveButtonClickListener(
-                selection -> dob.setText(materialDatePicker.getHeaderText()));
+        materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+            dob.setText(materialDatePicker.getHeaderText());
+            ValidationUtil.validateBasic(dobLayout, dob.getText().toString());
+        });
         roleButton.addOnButtonCheckedListener(this::handleGroupButtonRoleChecked);
     }
 
     private void handleGroupButtonRoleChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
         Log.d(TAG, "Button group click " + materialButtonToggleGroup.toString() + " " + i + " " + b);
+        roleErrorText.setText(null);
         if (i == R.id.lessor_btn) {
             accountType = "lessor";
             Log.d(TAG, "The account type value: " + accountType);
@@ -172,12 +178,19 @@ public class SignUpFormActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        String nameStr;
-        byte[] bytes;
+        String nameStr = null;
+        byte[] bytes = null;
 
-        TextInputUtil.validateName(nameLayout, name.getText().toString());
+        ValidationUtil.validateBasic(nameLayout, name.getText().toString());
+        ValidationUtil.validateBasic(dobLayout, dob.getText().toString());
 
-        if (nameLayout.getError() != null || bitmap == null || dob.getText().toString().isEmpty() || accountType == null) {
+        if (roleButton.getCheckedButtonId() == View.NO_ID) {
+            roleErrorText.setText("Please select the account role");
+        } else {
+            roleErrorText.setText(null);
+        }
+
+        if (nameLayout.getError() != null || dob.getText().toString().isEmpty() || accountType == null) {
             Log.e(TAG, String.valueOf(nameLayout.getError() != null));
             Log.e(TAG, String.valueOf(bitmap == null));
             Log.e(TAG, dob.getText().toString());
@@ -186,10 +199,14 @@ public class SignUpFormActivity extends AppCompatActivity {
             return;
         }
 
-        nameStr = name.getText().toString();
-        bytes = DataConverter.convertImageToByteArr(bitmap);
+        if (name.getText() != null) {
+            nameStr = name.getText().toString();
+        }
+        if (bitmap != null) {
+            bytes = DataConverter.convertImageToByteArr(bitmap);
+        }
         SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
-        SignUpFormService.startActionUpdateAccount(this, receiver, user.getUid(), nameStr, bytes);
+        SignUpFormService.startActionUpdateAccount(this, receiver, nameStr, bytes);
 
         String dob = this.dob.getText().toString();
         SignUpFormService.startActionUpdateUser(this, receiver, accountType, dob);
@@ -204,7 +221,8 @@ public class SignUpFormActivity extends AppCompatActivity {
             return;
         }
 
-        if (user.getDisplayName() != null && name.getText() == null) {
+        Log.e(TAG, String.valueOf(name.getText().toString().isEmpty()));
+        if (user.getDisplayName() != null && name.getText().toString().isEmpty()) {
             name.setText(user.getDisplayName());
         }
         if (user.getPhotoUrl() != null && avatar.getDrawable() == null) {
@@ -287,6 +305,7 @@ public class SignUpFormActivity extends AppCompatActivity {
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
+            Log.e(TAG, String.valueOf(resultCode));
             if (resultCode == SignalCode.UPDATE_ACCOUNT_SUCCESS) {
                 isCompleteUpdateAccount = true;
             }

@@ -27,7 +27,7 @@ import com.michael.dormie.R;
 import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
-import com.michael.dormie.utils.TextInputUtil;
+import com.michael.dormie.utils.ValidationUtil;
 import com.michael.dormie.utils.TextValidator;
 
 import java.util.Optional;
@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
         editText.addTextChangedListener(new TextValidator(email) {
             @Override
             public void validate(TextInputLayout textInputLayout, String text) {
-                TextInputUtil.basicValidation(textInputLayout, text);
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
             }
         });
     }
@@ -91,7 +91,7 @@ public class SignUpActivity extends AppCompatActivity {
         editText.addTextChangedListener(new TextValidator(password) {
             @Override
             public void validate(TextInputLayout textInputLayout, String text) {
-                TextInputUtil.basicValidation(textInputLayout, text);
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
             }
         });
     }
@@ -100,16 +100,16 @@ public class SignUpActivity extends AppCompatActivity {
         editText.addTextChangedListener(new TextValidator(confirmPassword) {
             @Override
             public void validate(TextInputLayout textInputLayout, String text) {
-                TextInputUtil.basicValidation(textInputLayout, text);
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
             }
         });
     }
 
     private void signUp(View view) {
-        TextInputUtil.basicValidation(email, email.getEditText().getText().toString());
-        TextInputUtil.basicValidation(password, password.getEditText().getText().toString());
-        TextInputUtil.basicValidation(confirmPassword, confirmPassword.getEditText().getText().toString());
-        TextInputUtil.validatePassword(password, confirmPassword);
+        ValidationUtil.validateEmailAndPassword(email, email.getEditText().getText().toString());
+        ValidationUtil.validateEmailAndPassword(password, password.getEditText().getText().toString());
+        ValidationUtil.validateEmailAndPassword(confirmPassword, confirmPassword.getEditText().getText().toString());
+        ValidationUtil.validatePassword(password, confirmPassword);
 
         if (email.getError() != null || password.getError() != null || confirmPassword.getError() != null) {
             Log.i(TAG, "Input is not passed validation");
@@ -160,9 +160,9 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         if (requestCode == SignalCode.NAVIGATE_SIGNUP_FORM) {
-            TextInputUtil.resetValidation(email);
-            TextInputUtil.resetValidation(password);
-            TextInputUtil.resetValidation(confirmPassword);
+            ValidationUtil.resetValidation(email);
+            ValidationUtil.resetValidation(password);
+            ValidationUtil.resetValidation(confirmPassword);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user == null) return;
             user.delete()

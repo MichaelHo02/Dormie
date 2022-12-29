@@ -90,8 +90,7 @@
                 android:id="@+id/role_btn_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="16dp"
+                android:paddingVertical="8dp"
                 app:selectionRequired="true"
                 app:singleSelection="true">
 
@@ -111,6 +110,16 @@
                     android:layout_weight="1"
                     android:text="@string/tenant" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/role_error_text"
+                style="@style/TextAppearance.Material3.BodySmall"
+                android:layout_width="match_parent"
+                android:textAlignment="textStart"
+                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textColor="@color/design_default_color_error" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/full_name_layout"
