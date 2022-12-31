@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.TenantSignUpForm">
+    tools:context=".activity.TenantSignUpFormActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -44,14 +44,15 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="24dp"
                 app:chipSpacingHorizontal="16dp"
-                app:chipSpacingVertical="0dp">
+                app:chipSpacingVertical="0dp"
+                app:selectionRequired="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/apartment"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
+                    android:checked="true"
                     android:text="Apartment" />
 
                 <com.google.android.material.chip.Chip
@@ -118,7 +119,7 @@
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
+                    android:checked="true"
                     android:text="Washer/Dryer" />
 
                 <com.google.android.material.chip.Chip
@@ -228,6 +229,7 @@
                 app:singleSelection="true">
 
                 <Button
+                    android:id="@+id/one"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -235,6 +237,7 @@
                     android:text="100m" />
 
                 <Button
+                    android:id="@+id/two"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -242,6 +245,7 @@
                     android:text="200m" />
 
                 <Button
+                    android:id="@+id/three"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -249,6 +253,7 @@
                     android:text="500m" />
 
                 <Button
+                    android:id="@+id/four"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -277,6 +282,7 @@
                 app:singleSelection="true">
 
                 <Button
+                    android:id="@+id/five"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -284,6 +290,7 @@
                     android:text="1km" />
 
                 <Button
+                    android:id="@+id/six"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -291,6 +298,7 @@
                     android:text="5km" />
 
                 <Button
+                    android:id="@+id/seven"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -298,6 +306,7 @@
                     android:text="10km" />
 
                 <Button
+                    android:id="@+id/eight"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

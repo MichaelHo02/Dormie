@@ -12,9 +12,11 @@ public class SignalCode {
     public static final int DOWNLOAD_SUCCESS = 200;
     public static final int UPDATE_ACCOUNT_SUCCESS = 210;
     public static final int UPDATE_USER_SUCCESS = 220;
+    public static final int UPDATE_TENANT_SUCCESS = 230;
     public static final int DOWNLOAD_ERROR = 500;
     public static final int UPDATE_ACCOUNT_ERROR = 510;
     public static final int UPDATE_USER_ERROR = 520;
+    public static final int UPDATE_TENANT_ERROR = 530;
     private SignalCode() {
     }
 }
