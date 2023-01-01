@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -38,6 +39,8 @@ public class PostCreationActivity extends AppCompatActivity {
     private CircleIndicator3 circleIndicator3;
     private PhotoAdapter photoAdapter;
     private MaterialButton addPhoto;
+    private MaterialButton removePhoto;
+    private LinearLayout imageCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class PostCreationActivity extends AppCompatActivity {
     private void initUI() {
         topAppBar = findViewById(R.id.top_bar);
         topAppBar.setNavigationOnClickListener(view -> finish());
-
+        imageCover = findViewById(R.id.image_cover);
         photoAdapter = new PhotoAdapter(this, getPhotos());
         viewPager2 = findViewById(R.id.view_pager);
         viewPager2.setAdapter(photoAdapter);
@@ -59,6 +62,16 @@ public class PostCreationActivity extends AppCompatActivity {
 
         addPhoto = findViewById(R.id.btn_upload);
         addPhoto.setOnClickListener(this::handleAddPhoto);
+
+        removePhoto = findViewById(R.id.btn_remove);
+        removePhoto.setOnClickListener(this::handleRemovePhoto);
+    }
+
+    private void handleRemovePhoto(View view) {
+        photoAdapter.removePhoto(viewPager2.getCurrentItem());
+        if (photoAdapter.getItemCount() == 0) {
+            imageCover.setVisibility(View.VISIBLE);
+        }
     }
 
     private void handleAddPhoto(View view) {
@@ -89,6 +102,7 @@ public class PostCreationActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
             photoAdapter.addPhoto(bitmap);
             viewPager2.setCurrentItem(photoAdapter.getItemCount());
+            imageCover.setVisibility(View.GONE);
         }
     }
 }

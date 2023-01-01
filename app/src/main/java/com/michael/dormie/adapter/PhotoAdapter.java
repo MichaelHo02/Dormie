@@ -50,6 +50,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> 
         notifyItemInserted(photos.size() + 1);
     }
 
+    public void removePhoto(int position) {
+        photos.remove(position);
+        notifyItemRemoved(position);
+    }
+
     public static final class ItemHolder extends RecyclerView.ViewHolder {
         ShapeableImageView imageView;
 
