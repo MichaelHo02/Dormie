@@ -1,9 +1,11 @@
 package com.michael.dormie.model;
 
-public class Photo {
-    public int resourceId;
+import android.graphics.Bitmap;
 
-    public Photo(int resourceId) {
-        this.resourceId = resourceId;
+public class Photo {
+    public Bitmap bitmap;
+
+    public Photo(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }
