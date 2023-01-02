@@ -34,4 +34,6 @@
     <string name="submit">Submit</string>
     <string name="type_of_house">Type of house</string>
     <string name="amenities">Amenities</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="please_enter_your_university">Please enter your university</string>
 </resources>

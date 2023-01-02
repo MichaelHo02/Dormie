@@ -136,7 +136,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/address"
                     android:paddingVertical="8dp"
-                    app:endIconMode="clear_text">
+                    app:endIconDrawable="@drawable/ic_round_map_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/act_item_creation_last_name"

@@ -15,19 +15,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textfield.TextInputLayout;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.model.Photo;
+import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -41,6 +48,8 @@ public class PostCreationActivity extends AppCompatActivity {
     private MaterialButton addPhoto;
     private MaterialButton removePhoto;
     private LinearLayout imageCover;
+
+    private TextInputLayout addressLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,13 @@ public class PostCreationActivity extends AppCompatActivity {
 
         removePhoto = findViewById(R.id.btn_remove);
         removePhoto.setOnClickListener(this::handleRemovePhoto);
+
+        addressLayout = findViewById(R.id.address);
+        addressLayout.setEndIconOnClickListener(view ->
+                NavigationUtil.navigateActivity(
+                        PostCreationActivity.this,
+                        PostCreationActivity.this.getBaseContext(),
+                        MapsActivity.class, SignalCode.NAVIGATE_MAP));
     }
 
     private void handleRemovePhoto(View view) {
@@ -103,6 +119,11 @@ public class PostCreationActivity extends AppCompatActivity {
             photoAdapter.addPhoto(bitmap);
             viewPager2.setCurrentItem(photoAdapter.getItemCount());
             imageCover.setVisibility(View.GONE);
+        }
+
+        if (requestCode == SignalCode.NAVIGATE_MAP) {
+            String address = data.getStringExtra("address");
+            addressLayout.getEditText().setText(address);
         }
     }
 }
