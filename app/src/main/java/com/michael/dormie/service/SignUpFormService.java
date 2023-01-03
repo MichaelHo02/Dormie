@@ -19,6 +19,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.SignalCode;
 
 import java.util.HashMap;
@@ -28,13 +29,14 @@ public class SignUpFormService extends IntentService {
     private static final String TAG = "SignUpFormService";
     private static final String ACTION_UPDATE_ACCOUNT = "com.michael.dormie.service.action.UPDATE_ACCOUNT";
     private static final String ACTION_UPDATE_USER = "com.michael.dormie.service.action.UPDATE_USER";
+    private static final String ACTION_UPDATE_TENANT = "com.michael.dormie.service.action.ACTION_UPDATE_TENANT";
 
     private static final String EXTRA_RECEIVER = "com.michael.dormie.service.extra.RECEIVER";
     private static final String EXTRA_NAME = "com.michael.dormie.service.extra.NAME";
     private static final String EXTRA_IMG = "com.michael.dormie.service.extra.EXTRA_IMG";
     private static final String EXTRA_ROLE = "com.michael.dormie.service.extra.EXTRA_ROLE";
     private static final String EXTRA_DOB = "com.michael.dormie.service.extra.EXTRA_DOB";
-
+    private static final String EXTRA_TENANT = "com.michael.dormie.service.extra.TENANT";
 
     public static final String DATA = "data";
 
@@ -60,6 +62,14 @@ public class SignUpFormService extends IntentService {
         context.startService(intent);
     }
 
+    public static void startActionUpdateTenant(Context context, ResultReceiver param1, Tenant param2) {
+        Intent intent = new Intent(context, SignUpFormService.class);
+        intent.setAction(ACTION_UPDATE_TENANT);
+        intent.putExtra(EXTRA_RECEIVER, param1);
+        intent.putExtra(EXTRA_TENANT, param2);
+        context.startService(intent);
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -74,6 +84,10 @@ public class SignUpFormService extends IntentService {
                 final String param2 = intent.getStringExtra(EXTRA_ROLE);
                 final String param3 = intent.getStringExtra(EXTRA_DOB);
                 handleActionUpdateUser(param1, param2, param3);
+            } else if (ACTION_UPDATE_TENANT.equals(action)) {
+                final ResultReceiver param1 = intent.getParcelableExtra(EXTRA_RECEIVER);
+                final Tenant param2 = (Tenant) intent.getSerializableExtra(EXTRA_TENANT);
+                handleActionUpdateTenant(param1, param2);
             }
         }
     }
@@ -148,6 +162,28 @@ public class SignUpFormService extends IntentService {
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);
                     receiver.send(SignalCode.UPDATE_USER_ERROR, null);
+                });
+    }
+
+    private void handleActionUpdateTenant(ResultReceiver receiver, Tenant tenant) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Log.e(TAG, "Cannot get user");
+            receiver.send(SignalCode.UPDATE_USER_ERROR, null);
+            return;
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("tenants")
+                .document(currentUser.getUid())
+                .set(tenant, SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "DocumentSnapshot added");
+                    receiver.send(SignalCode.UPDATE_TENANT_SUCCESS, null);
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error adding document", e);
+                    receiver.send(SignalCode.UPDATE_TENANT_ERROR, null);
                 });
     }
 }
