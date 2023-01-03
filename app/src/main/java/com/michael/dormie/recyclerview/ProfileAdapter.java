@@ -14,11 +14,9 @@ import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
 
-    private final ProfileRecyclerInterface recyclerInterface;
     private List<ProfileCard> list;
 
-    public ProfileAdapter(ProfileRecyclerInterface recyclerInterface, List<ProfileCard> list) {
-        this.recyclerInterface = recyclerInterface;
+    public ProfileAdapter(List<ProfileCard> list) {
         this.list = list;
     }
 
@@ -26,7 +24,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     @Override
     public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_card, parent, false);
-        return new ProfileViewHolder(view, recyclerInterface);
+        return new ProfileViewHolder(view);
     }
 
 
@@ -55,11 +53,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
         private TextView cardTitle;
         private TextView cardContent;
 
-        public ProfileViewHolder(@NonNull View itemView, ProfileRecyclerInterface recyclerInterface) {
+        public ProfileViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            cardTitle = itemView.findViewById(R.id.card_title);
-            cardContent = itemView.findViewById(R.id.card_content);
+            cardTitle = itemView.findViewById(R.id.profile_card_content);
+            cardContent = itemView.findViewById(R.id.profile_card_content);
         }
     }
 }

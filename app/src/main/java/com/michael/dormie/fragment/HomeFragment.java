@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment {
                             NavigationUtil.navigateActivity(
                                     HomeFragment.this,
                                     HomeFragment.this.getContext(),
-                                    SignInActivity.class,
+                                    ProfileFragment.class,
                                     10);
                         }
                     });

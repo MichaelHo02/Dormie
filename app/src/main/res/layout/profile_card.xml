@@ -23,13 +23,13 @@
             android:paddingLeft="5dp">
 
             <TextView
-                android:id="@+id/card_title"
+                android:id="@+id/profile_card_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
                 style="@style/TextAppearance.Material3.TitleMedium"/>
             <TextView
-                android:id="@+id/card_content"
+                android:id="@+id/profile_card_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Content"
