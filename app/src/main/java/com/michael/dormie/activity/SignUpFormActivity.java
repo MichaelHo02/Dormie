@@ -25,7 +25,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
@@ -327,7 +326,7 @@ public class SignUpFormActivity extends AppCompatActivity {
                 NavigationUtil.navigateActivity(
                         SignUpFormActivity.this,
                         SignUpFormActivity.this.getBaseContext(),
-                        TenantSignUpForm.class,
+                        TenantSignUpFormActivity.class,
                         SignalCode.TEMPLATE_FORMAT);
             }
             super.onReceiveResult(resultCode, resultData);
