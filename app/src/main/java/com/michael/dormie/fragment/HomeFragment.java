@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
                             NavigationUtil.navigateActivity(
                                     HomeFragment.this,
                                     HomeFragment.this.getContext(),
-                                    MasterActivity.class,
+                                    SignInActivity.class,
                                     10);
                         }
                     });

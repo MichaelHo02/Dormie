@@ -1,5 +1,6 @@
 package com.michael.dormie.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,19 +19,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.michael.dormie.R;
-import com.michael.dormie.activity.MasterActivity;
 import com.michael.dormie.activity.SignInActivity;
+import com.michael.dormie.activity.SignUpActivity;
 import com.michael.dormie.recyclerview.ProfileAdapter;
 import com.michael.dormie.recyclerview.ProfileCard;
 import com.michael.dormie.utils.NavigationUtil;
@@ -54,8 +58,6 @@ public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
-    private DatabaseReference mDatabase;
-    private DatabaseReference mUserReference;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -68,6 +70,8 @@ public class ProfileFragment extends Fragment {
     private ProfileAdapter adapter;
     private ArrayList<ProfileCard> profileCards;
     private MaterialToolbar topAppBar;
+    
+    private MaterialButton deleteBtn, signOutBtn;
 
     public ProfileFragment() {
     }
@@ -104,6 +108,8 @@ public class ProfileFragment extends Fragment {
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this.requireActivity(), gso);
+        
+        initUI();
 
         return view;
     }
@@ -115,16 +121,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.profile_page) {
-                    gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            NavigationUtil.navigateActivity(
-                                    ProfileFragment.this,
-                                    ProfileFragment.this.getContext(),
-                                    SignInActivity.class,
-                                    10);
-                        }
-                    });
+
                 }
                 return false;
             }
@@ -135,6 +132,50 @@ public class ProfileFragment extends Fragment {
         profileCards = getUserInfo(mUser);
         adapter = new ProfileAdapter(profileCards);
         recyclerView.setAdapter(adapter);
+        
+        // Navigate Button
+        deleteBtn = view.findViewById(R.id.delete_acc_btn);
+        deleteBtn.setOnClickListener(this::handleDeleteAccClick);
+        
+        signOutBtn = view.findViewById(R.id.sign_out_btn);
+        signOutBtn.setOnClickListener(this::handleSignOutClick);
+    }
+
+    private void handleSignOutClick(View view) {
+        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+
+            //TODO: Adjust method to more appropriate one
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                NavigationUtil.navigateActivity(
+                        ProfileFragment.this,
+                        ProfileFragment.this.getContext(),
+                        SignInActivity.class,
+                        10);
+            }
+        });
+    }
+
+    private void handleDeleteAccClick(View view) {
+        FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).setValue(null)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        FirebaseAuth.getInstance().getCurrentUser().delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.v(TAG, "Successfully delete account!");
+                                            Intent intent = new Intent(getActivity(), SignUpActivity.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Log.e(TAG, "Unsuccessfully delete account!");
+                                        }
+                                    }
+                                });
+                        }
+                    });
     }
 
     private void handleProfileNavigationClick(View view) {
