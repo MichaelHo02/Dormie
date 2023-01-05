@@ -91,8 +91,13 @@ public class PostCreationActivity extends AppCompatActivity {
     }
 
     private void handleAddPhoto(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(intent, SignalCode.ITEM_CREATION_UPLOAD_PHOTO);
+//        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//        startActivityForResult(intent, SignalCode.ITEM_CREATION_UPLOAD_PHOTO);
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SignalCode.ITEM_CREATION_UPLOAD_PHOTO);
     }
 
     private List<Photo> getPhotos() {
