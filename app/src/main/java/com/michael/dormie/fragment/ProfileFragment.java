@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -69,8 +72,18 @@ public class ProfileFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProfileAdapter adapter;
     private ArrayList<ProfileCard> profileCards;
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
+    private final HomeFragment homeFragment = HomeFragment.newInstance("", "");
+    private final ChatFragment chatFragment = ChatFragment.newInstance("", "");
+    private final RentalRegistrationFragment rentalRegistrationFragment = RentalRegistrationFragment.newInstance("", "");
+    private final ProfileFragment profileFragment = ProfileFragment.newInstance("", "");
+    private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
+
     private MaterialToolbar topAppBar;
-    
+    private ImageView profileImage;
     private MaterialButton deleteBtn, signOutBtn;
 
     public ProfileFragment() {
@@ -84,6 +97,15 @@ public class ProfileFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Log.e("Current User", currentUser.getEmail());
+        }
     }
 
     @Override
@@ -115,23 +137,19 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initUI() {
+        drawerLayout = view.findViewById(R.id.fragment_profile_drawer_layout);
+        navigationView = view.findViewById(R.id.fragment_profile_navigation);
         topAppBar = view.findViewById(R.id.fragment_profile_top_bar);
-        topAppBar.setNavigationOnClickListener(this::handleProfileNavigationClick);
-        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.profile_page) {
-
-                }
-                return false;
-            }
-        });
+        topAppBar.setOnMenuItemClickListener(this::handleMenuItemClick);
 
         // Recyclerview setup
         recyclerView = view.findViewById(R.id.rcv_profile);
         profileCards = getUserInfo(mUser);
         adapter = new ProfileAdapter(profileCards);
         recyclerView.setAdapter(adapter);
+
+        // View
+        profileImage = view.findViewById(R.id.profile_image);
         
         // Navigate Button
         deleteBtn = view.findViewById(R.id.delete_acc_btn);
@@ -139,6 +157,23 @@ public class ProfileFragment extends Fragment {
         
         signOutBtn = view.findViewById(R.id.sign_out_btn);
         signOutBtn.setOnClickListener(this::handleSignOutClick);
+
+        // Navigation + Drawer layout
+        navigationView.setNavigationItemSelectedListener(this::handleProfileNavigationClick);
+        navigationView.setCheckedItem(R.id.home_page);
+        handleUpdateTopAppBar(R.id.profile_page);
+    }
+
+    private boolean handleProfileNavigationClick(MenuItem menuItem) {
+        menuItem.setChecked(true);
+        drawerLayout.close();
+        return handleUpdateTopAppBar(menuItem.getItemId());
+    }
+
+    private boolean handleMenuItemClick(MenuItem menuItem) {
+        menuItem.setChecked(true);
+        drawerLayout.close();
+        return handleUpdateTopAppBar(menuItem.getItemId());
     }
 
     private void handleSignOutClick(View view) {
@@ -178,7 +213,25 @@ public class ProfileFragment extends Fragment {
                     });
     }
 
-    private void handleProfileNavigationClick(View view) {
+    private boolean handleUpdateTopAppBar(int id) {
+        switch (id) {
+            case R.id.home_page:
+                NavigationUtil.changeFragment(getActivity(), R.id.fragment_profile_fl, homeFragment);
+                return true;
+            case R.id.chat_page:
+                NavigationUtil.changeFragment(getActivity(), R.id.fragment_profile_fl, chatFragment);
+                return true;
+            case R.id.rental_registration_page:
+                NavigationUtil.changeFragment(getActivity(), R.id.fragment_profile_fl, rentalRegistrationFragment);
+                return true;
+            case R.id.profile_page:
+                NavigationUtil.changeFragment(getActivity(), R.id.fragment_profile_fl, profileFragment);
+                return true;
+            case R.id.setting_page:
+                NavigationUtil.changeFragment(getActivity(), R.id.fragment_profile_fl, settingFragment);
+                return true;
+        }
+        return false;
     }
 
     private ArrayList<ProfileCard> getUserInfo(FirebaseUser user) {
@@ -191,8 +244,9 @@ public class ProfileFragment extends Fragment {
         documentReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                cards.add(new ProfileCard("Date of birth", value.getString("dob")));
+                cards.add(new ProfileCard("Email", mUser.getEmail()));
                 cards.add(new ProfileCard("Role", value.getString("role")));
+                cards.add(new ProfileCard("Date of birth", value.getString("dob")));
             }
         });
 
