@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "972922179952",
+    "project_id": "dormie-5ad44",
+    "storage_bucket": "dormie-5ad44.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972922179952:android:7cc6fde43e849284e5ffb5",
+        "android_client_info": {
+          "package_name": "com.michael.dormie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972922179952-prmkdjso8dthqd3sqi74onvkakusndkg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.michael.dormie",
+            "certificate_hash": "9fe359f41f575cee381b9db2f99363cf85741cb0"
+          }
+        },
+        {
+          "client_id": "972922179952-fk8d7nk928h41vg6orj56e8cq40tecl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIznkjjyAP-gql5d-WV7PnFRcHDdrWhAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972922179952-fk8d7nk928h41vg6orj56e8cq40tecl0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
