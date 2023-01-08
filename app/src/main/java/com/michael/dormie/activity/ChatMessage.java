@@ -9,7 +9,6 @@ public class ChatMessage {
     public ChatMessage(String messageText, String messageUser) {
         this.messageText = messageText;
         this.messageUser = messageUser;
-        // Initialize to current time
         messageTime = new Date().getTime();
     }
     public ChatMessage(){

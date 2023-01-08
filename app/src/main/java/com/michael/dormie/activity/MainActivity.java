@@ -3,6 +3,7 @@ package com.michael.dormie.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -15,41 +16,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.michael.dormie.R;
 
 public class MainActivity extends AppCompatActivity {
+
     int SIGN_IN_REQUEST_CODE = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
-            // Start sign in/sign up activity
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .build(),
-                    SIGN_IN_REQUEST_CODE
-            );
+
+        // Temporary sign in/ sign up
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+        {
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
         } else {
-            // User is already signed in. Therefore, display
-            // a welcome Toast
-            Toast.makeText(this,
-                            "Welcome " + FirebaseAuth.getInstance()
-                                    .getCurrentUser()
-                                    .getDisplayName(),
-                            Toast.LENGTH_LONG)
-                    .show();
-            // Load chat room contents
+            // Welcome the current user with a Toast message
+            Toast.makeText(this, FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "is already a user", Toast.LENGTH_LONG).show();
+            // Display current list of messages
             displayChatMessages();
         }
 
@@ -76,13 +73,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayChatMessages() {
+
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("chats")
-                .limitToLast(50);
+
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
-                .setQuery(query, ChatMessage.class)
+                .setQuery(FirebaseDatabase.getInstance().getReference(), ChatMessage.class)
+                .setLayout(R.layout.message)
                 .build();
 
         FirebaseListAdapter<ChatMessage> adapter = new FirebaseListAdapter<ChatMessage>(options) {
@@ -100,25 +96,19 @@ public class MainActivity extends AppCompatActivity {
                         model.getMessageTime()));
             }
         };
+        listOfMessages.setAdapter(adapter);
 
         };
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SIGN_IN_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                Toast.makeText(this,
-                                "Successfully signed in. Welcome!",
-                                Toast.LENGTH_LONG)
-                        .show();
+                Toast.makeText(this, "Successfully signed in. Welcome!", Toast.LENGTH_LONG).show();
                 displayChatMessages();
             } else {
-                Toast.makeText(this,
-                                "We couldn't sign you in. Please try again later.",
-                                Toast.LENGTH_LONG)
-                        .show();
+                Toast.makeText(this, "We couldn't sign you in. Please try again later.", Toast.LENGTH_LONG).show();
                 // Close the app
                 finish();
             }
