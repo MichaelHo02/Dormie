@@ -12,17 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.michael.dormie.R;
-import com.michael.dormie.model.Photo;
 
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> {
     private Context context;
-    private List<Photo> photos;
+    private List<Bitmap> photos;
 
-    public PhotoAdapter(Context context, List<Photo> photos) {
+    public PhotoAdapter(Context context, List<Bitmap> photos) {
         this.context = context;
         this.photos = photos;
+    }
+
+    public List<Bitmap> getPhotos() {
+        return photos;
     }
 
     @NonNull
@@ -35,9 +38,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-        Photo photo = photos.get(position);
+        Bitmap photo = photos.get(position);
         if (photo == null) return;
-        Glide.with(context).load(photo.bitmap).into(holder.imageView);
+        Glide.with(context).load(photo).into(holder.imageView);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> 
     }
 
     public void addPhoto(Bitmap bitmap) {
-        photos.add(new Photo(bitmap));
+        photos.add(bitmap);
         notifyItemInserted(photos.size() + 1);
     }
 

@@ -59,8 +59,10 @@ public class PlaceSearchingWatcher implements TextWatcher {
             return;
         }
 
+        Log.d(TAG, "Query the prediction");
         if (!Places.isInitialized()) {
-            Places.initialize(context, context.getString(R.string.google_api_key), Locale.getDefault());
+//            Places.initialize(context, context.getString(R.string.google_api_key), Locale.getDefault());
+            Places.initialize(context, "AIzaSyA3KCcs8KYT8fcMaAUwgSTE3SpeIXGb5Sw", Locale.getDefault());
         }
         PlacesClient placesClient = Places.createClient(context);
 

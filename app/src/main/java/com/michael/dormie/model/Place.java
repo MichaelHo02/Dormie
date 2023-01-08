@@ -4,6 +4,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Place implements Serializable {
     public String authorId;
@@ -12,7 +14,7 @@ public class Place implements Serializable {
     public Location location;
     public Integer rating;
     public String description;
-    public String[] images;
+    public List<String> images = new ArrayList<>();
     public Float[] coordinate;
     public PairValue[] bathroom;
     public PairValue[] bedroom;
@@ -20,15 +22,15 @@ public class Place implements Serializable {
     public String[] amenities;
     public PairValue[] furniture;
 
-    private static class PairValue {
-        Integer qty;
-        String type;
+    private static class PairValue implements Serializable {
+        public Integer qty;
+        public String type;
     }
 
-    public static class Location {
-        String name;
-        String address;
-        LatLng latlng;
+    public static class Location implements Serializable{
+        public String name;
+        public String address;
+        public LatLng latlng;
 
         public Location(String name, String address, LatLng latlng) {
             this.name = name;

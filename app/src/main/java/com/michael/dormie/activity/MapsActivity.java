@@ -71,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MaterialTextView placeName, placeAddress;
     private MaterialButton submitButton;
 
-    private Map<String, List<AutocompletePrediction>> cache = new HashMap<>();
+    private final Map<String, List<AutocompletePrediction>> cache = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +94,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             final List<Place.Field> placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG);
             // Construct a request object, passing the place ID and fields array.
             final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
-            // Initialize the SDK
-            Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+            if (!Places.isInitialized()) {
+                // Initialize the SDK
+//                Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+                Places.initialize(getApplicationContext(), "AIzaSyA3KCcs8KYT8fcMaAUwgSTE3SpeIXGb5Sw");
+            }
             // Create a new PlacesClient instance
             PlacesClient placesClient = Places.createClient(this);
 
