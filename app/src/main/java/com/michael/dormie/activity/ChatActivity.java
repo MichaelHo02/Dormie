@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.michael.dormie.R;
 
 public class ChatActivity extends Activity {
-
+    int SIGN_IN_REQUEST_CODE = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
