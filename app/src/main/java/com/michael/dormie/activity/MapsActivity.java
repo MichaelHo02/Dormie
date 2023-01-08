@@ -52,6 +52,10 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    public static final String PARAM_LOCATION_NAME = "name";
+    public static final String PARAM_LOCATION_ADDRESS = "address";
+    public static final String PARAM_LOCATION_LAT_LNG = "latLng";
+
     private static final String TAG = "MapsActivity";
     private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -110,9 +114,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 placeAddress.setText(address);
                 submitButton.setOnClickListener(view -> {
                     Intent intent = new Intent();
-                    intent.putExtra("name", name);
-                    intent.putExtra("address", address);
-                    intent.putExtra("latLng", place.getLatLng());
+                    intent.putExtra(PARAM_LOCATION_NAME, name);
+                    intent.putExtra(PARAM_LOCATION_ADDRESS, address);
+                    intent.putExtra(PARAM_LOCATION_LAT_LNG, place.getLatLng());
                     setResult(RESULT_OK, intent);
                     finish();
                 });
@@ -122,6 +126,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.e(TAG, "Place not found: " + exception.getMessage());
                     final int statusCode = apiException.getStatusCode();
                     // TODO: Handle error with given status code.
+                    Intent intent = new Intent();
+                    intent.putExtra(PARAM_LOCATION_NAME, "Max Quota");
+                    intent.putExtra(PARAM_LOCATION_ADDRESS, "This is a response from Max Quota");
+                    intent.putExtra(PARAM_LOCATION_LAT_LNG, new LatLng(12, 12));
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             });
         });

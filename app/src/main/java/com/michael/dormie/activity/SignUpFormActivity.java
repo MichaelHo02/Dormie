@@ -190,10 +190,6 @@ public class SignUpFormActivity extends AppCompatActivity {
         }
 
         if (nameLayout.getError() != null || dob.getText().toString().isEmpty() || accountType == null) {
-            Log.e(TAG, String.valueOf(nameLayout.getError() != null));
-            Log.e(TAG, String.valueOf(bitmap == null));
-            Log.e(TAG, dob.getText().toString());
-            Log.e(TAG, String.valueOf(accountType == null));
             Log.i(TAG, "Input is not passed validation");
             return;
         }

@@ -52,6 +52,7 @@ public class PlaceSearchingWatcher implements TextWatcher {
     public void afterTextChanged(Editable editable) {
         String s = editText.getText().toString();
         if (s.isEmpty()) return;
+        if (s.length() < 2) return;
 
         if (cache.containsKey(s)) {
             locationAdapter.setData(cache.get(s));
