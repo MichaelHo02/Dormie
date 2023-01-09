@@ -1,6 +1,5 @@
 package com.michael.dormie.activity;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -10,15 +9,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -26,13 +24,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.model.Place;
+import com.michael.dormie.service.PostCreationService;
 import com.michael.dormie.utils.DataConverter;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
@@ -41,10 +39,7 @@ import com.michael.dormie.utils.ValidationUtil;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -62,6 +57,9 @@ public class PostCreationActivity extends AppCompatActivity {
     private TextInputLayout propertyNameLayout, addressLayout, descriptionLayout;
     private MaterialButton submitBtn;
     private Place place = new Place();
+    private SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
+
+    private boolean isSubmitForm = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,44 +127,18 @@ public class PostCreationActivity extends AppCompatActivity {
         }
 
         place.authorId = currentUser.getUid();
-        place.authorRef = db.collection("users").document();
+        place.authorRef = db.collection("users").document().getPath();
         place.name = propertyName;
         place.description = description;
 
-        Bitmap[] photos = photoAdapter.getPhotos().toArray(new Bitmap[photoAdapter.getItemCount()]);
-//        new UploadImage().execute(photos);
-
-        db.collection("properties")
-                .add(place)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Document added");
-
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageReference = storage.getReference();
-
-                    for (Bitmap photo : photos) {
-                        StorageReference postIMGs = storageReference.child(currentUser.getUid() + "_" + photo.getGenerationId() + "_img.jpeg");
-                        UploadTask uploadTask = postIMGs.putBytes(DataConverter.convertImageToByteArr(photo));
-                        uploadTask.continueWithTask(task -> {
-                                    if (!task.isSuccessful()) throw task.getException();
-                                    return postIMGs.getDownloadUrl();
-                                })
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        place.images.add(task.getResult().toString());
-                                        documentReference
-                                                .set(place, SetOptions.merge());
-//                                        place.images.add(task.getResult().toString());
-                                    }
-                                });
-                    }
-
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error adding document", e);
-                    finish();
-                });
+        List<Bitmap> photos = photoAdapter.getPhotos();
+        for (Bitmap photo : photos) {
+            PostCreationService.startActionUploadImage(
+                    this,
+                    receiver,
+                    String.valueOf(photo.getGenerationId()),
+                    DataConverter.convertImageToByteArr(photo));
+        }
     }
 
     private void handleRemovePhoto(View view) {
@@ -215,58 +187,38 @@ public class PostCreationActivity extends AppCompatActivity {
             String locationAddress = bundle.getString(MapsActivity.PARAM_LOCATION_ADDRESS);
             LatLng locationLatLng = (LatLng) bundle.get(MapsActivity.PARAM_LOCATION_LAT_LNG);
             addressLayout.getEditText().setText(locationName);
-            place.location = new Place.Location(locationName, locationAddress, locationLatLng);
+            place.location = new Place.Location(locationName, locationAddress, locationLatLng.latitude, locationLatLng.longitude);
         }
     }
 
-    private class UploadImage extends AsyncTask<Bitmap, Integer, Long> {
-        protected Long doInBackground(Bitmap... bitmaps) {
-            int count = bitmaps.length;
-            long totalSize = 0;
-
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser == null) {
-                Log.e(TAG, "Cannot get user");
-                return 0L;
-            }
-
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageReference = storage.getReference();
-            for (int i = 0; i < count; i++) {
-                Bitmap photo = bitmaps[i];
-                StorageReference postIMGs = storageReference.child(currentUser.getUid() + "_" + photo.getGenerationId() + "_img.jpeg");
-                UploadTask uploadTask = postIMGs.putBytes(DataConverter.convertImageToByteArr(photo));
-                uploadTask.continueWithTask(task -> {
-                            if (!task.isSuccessful()) throw task.getException();
-                            return postIMGs.getDownloadUrl();
-                        })
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                place.images.add(task.getResult().toString());
-                            }
-                        });
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
-            return totalSize;
+    private class SubmitResultReceiver extends ResultReceiver {
+        public SubmitResultReceiver(Handler handler) {
+            super(handler);
         }
 
-        protected void onProgressUpdate(Integer... progress) {
-        }
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            Log.e(TAG, String.valueOf(resultCode));
+            if (resultCode == SignalCode.UPLOAD_IMG_SUCCESS) {
+                String url = resultData.getString("data");
+                place.images.add(url);
 
-        protected void onPostExecute(Long result) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("properties")
-                    .add(place)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "Document added");
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.w(TAG, "Error adding document", e);
-                        finish();
-                    });
+                if (place.images.size() == photoAdapter.getItemCount() && !isSubmitForm) {
+                    PostCreationService.startActionUploadPost(PostCreationActivity.this, receiver, place);
+                }
+            }
+
+            if (resultCode == SignalCode.UPLOAD_POST_SUCCESS) {
+                isSubmitForm = true;
+                finish();
+            }
+
+            if (resultCode == SignalCode.UPLOAD_POST_ERROR) {
+                isSubmitForm = true;
+                finish();
+            }
+
+            super.onReceiveResult(resultCode, resultData);
         }
     }
-
 }
