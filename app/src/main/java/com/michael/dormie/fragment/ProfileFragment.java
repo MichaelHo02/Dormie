@@ -1,7 +1,5 @@
 package com.michael.dormie.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -24,14 +23,11 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.activity.SignInActivity;
-import com.michael.dormie.activity.SignUpActivity;
 import com.michael.dormie.utils.NavigationUtil;
 
 /**
@@ -101,26 +97,18 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_setting, container, false);
+        view =  inflater.inflate(R.layout.fragment_profile, container, false);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this.requireActivity(), gso);
-        
+
         initUI();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            for (UserInfo profile : user.getProviderData()) {
-                String emailText = profile.getEmail();
-                email.setText(emailText);
-            }
+            email.setText(user.getEmail());
+            name.setText(user.getDisplayName());
         } else {
             Log.e(TAG, "Unsuccessful read account detail");
-        }
-
-        for (UserInfo profile : user.getProviderData()) {
-            String emailText = profile.getEmail();
-            email.setText(emailText);
         }
 
         DocumentReference doc = db.collection("users").document(user.getUid());
@@ -134,6 +122,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        deleteBtn.setOnClickListener(this::handleDeleteAccClick);
+        signOutBtn.setOnClickListener(this::handleSignOutClick);
+
         return view;
     }
 
@@ -145,50 +136,31 @@ public class ProfileFragment extends Fragment {
         dob = view.findViewById(R.id.pf_dob);
         role = view.findViewById(R.id.pf_role);
         
-//        // Navigate Button
+        // Navigate Button
         deleteBtn = view.findViewById(R.id.delete_acc_btn);
-//        deleteBtn.setOnClickListener(this::handleDeleteAccClick);
-//
         signOutBtn = view.findViewById(R.id.sign_out_btn);
-//        signOutBtn.setOnClickListener(this::handleSignOutClick);
+
     }
 
-//    private void handleSignOutClick(View view) {
-//        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-//
-//            //TODO: Adjust method to more appropriate one
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                NavigationUtil.navigateActivity(
-//                        ProfileFragment.this,
-//                        ProfileFragment.this.getContext(),
-//                        SignInActivity.class,
-//                        10);
-//            }
-//        });
-//    }
-//
-//    private void handleDeleteAccClick(View view) {
-//        FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).setValue(null)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//                        FirebaseAuth.getInstance().getCurrentUser().delete()
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            Log.v(TAG, "Successfully delete account!");
-//                                            Intent intent = new Intent(getActivity(), SignUpActivity.class);
-//                                            startActivity(intent);
-//                                        } else {
-//                                            Log.e(TAG, "Unsuccessfully delete account!");
-//                                        }
-//                                    }
-//                                });
-//                        }
-//                    });
-//    }
+    private void handleSignOutClick(View view) {
+        auth.signOut();
+        NavigationUtil.navigateActivity(requireActivity(), ProfileFragment.this.getContext(), SignInActivity.class, 20);
+        Toast.makeText(ProfileFragment.this.getContext(), "Successfully log out!", Toast.LENGTH_SHORT).show();
+    }
 
-
+    private void handleDeleteAccClick(View view) {
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                            NavigationUtil.navigateActivity(requireActivity(), ProfileFragment.this.getContext(), SignInActivity.class, 20);
+                            Toast.makeText(ProfileFragment.this.getContext(), "Successfully delete the account!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "Could not delete the account");
+                        }
+                    }
+                });
+    }
 }
