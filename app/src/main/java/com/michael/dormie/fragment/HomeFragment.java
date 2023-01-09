@@ -59,6 +59,8 @@ public class HomeFragment extends Fragment {
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
+    private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
+
 
     public HomeFragment() {
     }
@@ -113,6 +115,7 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.profile_page) {
+//                    NavigationUtil.changeFragment(requireActivity(), R.id.activity_master_fl, settingFragment);
                     gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
