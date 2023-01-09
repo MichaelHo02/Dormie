@@ -25,7 +25,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
@@ -191,10 +190,6 @@ public class SignUpFormActivity extends AppCompatActivity {
         }
 
         if (nameLayout.getError() != null || dob.getText().toString().isEmpty() || accountType == null) {
-            Log.e(TAG, String.valueOf(nameLayout.getError() != null));
-            Log.e(TAG, String.valueOf(bitmap == null));
-            Log.e(TAG, dob.getText().toString());
-            Log.e(TAG, String.valueOf(accountType == null));
             Log.i(TAG, "Input is not passed validation");
             return;
         }
@@ -257,7 +252,7 @@ public class SignUpFormActivity extends AppCompatActivity {
             Log.d(TAG, "Put image taken from camera");
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             bitmap = photo;
-            avatar.setImageBitmap(photo);
+            avatar.setImageBitmap(bitmap);
         } else if (requestCode == SignalCode.ITEM_CREATION_UPLOAD_PHOTO) {
             Log.d(TAG, "Put image taken from library");
             Uri selectedImg = data.getData();
@@ -270,11 +265,6 @@ public class SignUpFormActivity extends AppCompatActivity {
             }
             bitmap = BitmapFactory.decodeStream(imageStream);
             avatar.setImageBitmap(bitmap);
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -327,7 +317,7 @@ public class SignUpFormActivity extends AppCompatActivity {
                 NavigationUtil.navigateActivity(
                         SignUpFormActivity.this,
                         SignUpFormActivity.this.getBaseContext(),
-                        TenantSignUpForm.class,
+                        TenantSignUpFormActivity.class,
                         SignalCode.TEMPLATE_FORMAT);
             }
             super.onReceiveResult(resultCode, resultData);

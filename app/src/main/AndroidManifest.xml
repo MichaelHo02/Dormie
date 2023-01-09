@@ -16,6 +16,19 @@
         android:theme="@style/Theme.Dormie"
         tools:targetApi="31">
         <service
+            android:name=".service.PostCreationService"
+            android:exported="false"></service>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key" />
+
+        <activity
+            android:name=".activity.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
+
+        <service
             android:name=".service.SignUpFormService"
             android:exported="false" />
         <service
@@ -23,7 +36,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".activity.TenantSignUpForm"
+            android:name=".activity.TenantSignUpFormActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
