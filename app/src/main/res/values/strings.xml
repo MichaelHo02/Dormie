@@ -36,4 +36,6 @@
     <string name="amenities">Amenities</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="please_enter_your_university">Please enter your university</string>
+    <string name="delete_account">Delete account</string>
+    <string name="sign_out">Sign out</string>
 </resources>
