@@ -13,10 +13,10 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/act_item_creation_toolbar"
+            android:id="@+id/top_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_round_close_24"
+            app:navigationIcon="@drawable/ic_round_arrow_back_24"
             app:navigationIconTint="?attr/colorOnSurface"
             app:title="Create Post" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -36,60 +36,75 @@
                 android:layout_width="match_parent"
                 android:layout_height="364dp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/sample" />
+                    android:layout_height="match_parent" />
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
+                    android:id="@+id/wrap_circle_indicator"
+                    style="@style/Widget.Material3.CardView.Filled"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_margin="8dp"
-                    android:elevation="100dp">
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="16dp"
+                    android:layout_marginBottom="16dp">
 
-                    <LinearLayout
+                    <me.relex.circleindicator.CircleIndicator3
+                        android:id="@+id/circle_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:padding="8dp"
+                        app:ci_drawable="@drawable/custom_radius" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_remove"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    app:icon="@drawable/ic_round_close_24" />
+
+                <LinearLayout
+                    android:id="@+id/image_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorSurfaceVariant"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextAppearance.Material3.TitleLarge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:text="Empty Image List"
+                        android:textAlignment="center"
+                        android:textColor="?attr/colorPrimary" />
 
-                        <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:icon="@drawable/ic_round_navigate_before_24" />
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Please import image!"
+                        android:textAlignment="center" />
+                </LinearLayout>
 
-                        <TextView
-                            style="@style/TextAppearance.Material3.LabelMedium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:text="1/3 Images" />
-
-
-                        <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:icon="@drawable/ic_round_navigate_next_24" />
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/act_item_creation_avt_btn_upload"
-                            style="@style/Widget.Material3.Button.Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Upload Image"
-                            app:icon="@drawable/ic_round_add_photo_alternate_24" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_upload"
+                    style="@style/Widget.Material3.Button.IconButton.Filled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:icon="@drawable/ic_round_add_photo_alternate_24" />
             </RelativeLayout>
 
             <LinearLayout
@@ -99,18 +114,14 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/act_item_creation_first_name_layout"
+                    android:id="@+id/property_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="first_name"
+                    android:hint="@string/property_name"
                     android:paddingVertical="8dp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="20"
-                    app:endIconMode="clear_text"
-                    app:errorEnabled="true">
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/act_item_creation_first_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
@@ -119,18 +130,15 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/act_item_creation_last_name_layout"
+                    android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="last_name"
+                    android:hint="@string/address"
                     android:paddingVertical="8dp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="20"
-                    app:endIconMode="clear_text"
-                    app:errorEnabled="true">
+                    app:endIconDrawable="@drawable/ic_round_map_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/act_item_creation_last_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
@@ -139,73 +147,157 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/act_item_creation_dob_layout"
+                    android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="date_of_birth"
+                    android:hint="@string/description"
                     android:paddingVertical="8dp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="20"
-                    app:endIconMode="custom"
-                    app:errorEnabled="true">
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/act_item_creation_dob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/act_item_creation_role_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="role"
-                    android:paddingVertical="8dp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="20"
-                    app:endIconMode="dropdown_menu"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/act_item_creation_role"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:completionThreshold="3"
-                        android:imeOptions="actionDone"
-                        android:inputType="textAutoComplete|textCapWords"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/act_item_creation_unique_feature_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="unique_feature"
-                    android:paddingVertical="8dp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="100"
-                    app:endIconMode="clear_text"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/act_item_creation_unique_feature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
                         android:inputType="textCapSentences|textMultiLine" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp" />
+
+                <TextView
+                    style="@style/TextAppearance.Material3.LabelMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/type_of_house" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/house_types"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingHorizontal="16dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/apartment"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Apartment" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/villa"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Villa" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/house"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="House" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/townhouse"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Townhouse" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/mobile"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Mobile" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/amenities" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/amenities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingHorizontal="16dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/washer"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Washer/Dryer" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ramp"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Ramp access" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/garden"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Garden" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/catsOK"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Cats OK" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/dogsOK"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Dogs OK" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/smokeFree"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Smoke-free" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp" />
+
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/act_item_creation_submit_btn"
+                    android:id="@+id/submit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="submit" />
+                    android:text="@string/submit" />
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

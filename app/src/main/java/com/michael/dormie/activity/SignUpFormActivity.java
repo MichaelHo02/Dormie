@@ -190,10 +190,6 @@ public class SignUpFormActivity extends AppCompatActivity {
         }
 
         if (nameLayout.getError() != null || dob.getText().toString().isEmpty() || accountType == null) {
-            Log.e(TAG, String.valueOf(nameLayout.getError() != null));
-            Log.e(TAG, String.valueOf(bitmap == null));
-            Log.e(TAG, dob.getText().toString());
-            Log.e(TAG, String.valueOf(accountType == null));
             Log.i(TAG, "Input is not passed validation");
             return;
         }
@@ -256,7 +252,7 @@ public class SignUpFormActivity extends AppCompatActivity {
             Log.d(TAG, "Put image taken from camera");
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             bitmap = photo;
-            avatar.setImageBitmap(photo);
+            avatar.setImageBitmap(bitmap);
         } else if (requestCode == SignalCode.ITEM_CREATION_UPLOAD_PHOTO) {
             Log.d(TAG, "Put image taken from library");
             Uri selectedImg = data.getData();
@@ -269,11 +265,6 @@ public class SignUpFormActivity extends AppCompatActivity {
             }
             bitmap = BitmapFactory.decodeStream(imageStream);
             avatar.setImageBitmap(bitmap);
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
