@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.michael.dormie.R;
+import com.michael.dormie.activity.MasterActivity;
 import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
@@ -52,6 +53,8 @@ public class HomeFragment extends Fragment {
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
+    private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
+
 
     public HomeFragment() {
     }
@@ -106,6 +109,7 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.profile_page) {
+//                    NavigationUtil.changeFragment(requireActivity(), R.id.activity_master_fl, settingFragment);
                     gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
