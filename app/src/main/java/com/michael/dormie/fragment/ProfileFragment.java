@@ -56,6 +56,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
 
     private View view;
     private MaterialToolbar topAppBar;
@@ -91,6 +93,9 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this.requireActivity(), gso);
+
         initUI();
         return view;
     }
@@ -119,8 +124,12 @@ public class ProfileFragment extends Fragment {
 
     private void handleSignOutClick(View view) {
         auth.signOut();
-        NavigationUtil.navigateActivity(requireActivity(), ProfileFragment.this.getContext(), SignInActivity.class, 20);
-        Toast.makeText(ProfileFragment.this.getContext(), "Successfully log out!", Toast.LENGTH_SHORT).show();
+        gsc.signOut().addOnCompleteListener(task -> {
+            ProfileFragment.this.requireActivity().finish();
+            NavigationUtil.navigateActivity(requireActivity(), ProfileFragment.this.requireContext(),
+                    SignInActivity.class, 20);
+            Toast.makeText(ProfileFragment.this.getContext(), "Successfully log out!", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void handleDeleteAccClick(View view) {
