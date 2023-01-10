@@ -1,210 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ProfileFragment"
-    android:id="@+id/fragment_profile_drawer_layout"
-    tools:openDrawer="start">
+    tools:context=".fragment.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
-    <LinearLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/fragment_profile_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/master_top_bar"
+            app:navigationIcon="@drawable/ic_round_dehaze_24"
+            app:title="@string/profile"
+            app:titleCentered="true" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/fragment_profile_top_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_round_dehaze_24"
-                app:title="@string/profile"
-                app:titleCentered="true" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/pf_avatar"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_round_account_circle_24"
-                app:tint="?attr/colorPrimary" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/pf_ava_shape"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_centerInParent="true"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
-        </RelativeLayout>
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
 
-            <TextView
-                android:id="@+id/pf_name"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_round_account_circle_24"
+                    app:tint="?attr/colorPrimary" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/pf_avatar"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Username"
-                android:textSize="24sp"
-                style="@style/TextAppearance.Material3.TitleMedium"/>
-        </LinearLayout>
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="6dp">
+                <TextView
+                    android:id="@+id/pf_name"
+                    style="@style/TextAppearance.Material3.DisplaySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_round_email_24" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email" />
+
+                    <TextView
+                        android:id="@+id/pf_email"
+                        style="@style/MaterialAlertDialog.Material3.Body.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_round_cake_24" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date_of_birth" />
+
+                    <TextView
+                        android:id="@+id/pf_dob"
+                        style="@style/MaterialAlertDialog.Material3.Body.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_round_person_24" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/role" />
+
+                    <TextView
+                        android:id="@+id/pf_role"
+                        style="@style/MaterialAlertDialog.Material3.Body.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/sign_out_btn"
-                style="@style/Widget.Material3.Button.TonalButton.Icon"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="@string/sign_out" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_marginTop="16dp"
+                android:text="@string/sign_out"
+                app:icon="@drawable/ic_round_logout_24"
+                app:iconGravity="textStart" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete_acc_btn"
-                style="@style/Widget.Material3.Button.Icon"
-                android:layout_width="0dp"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="@string/delete_account"/>
+                android:layout_marginTop="16dp"
+                android:text="@string/delete_account"
+                app:icon="@drawable/ic_round_delete_24"
+                app:iconGravity="textStart" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_pentagon_16"
-                android:layout_gravity="center"
-                android:padding="10dp"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    style="@style/TextAppearance.Material3.TitleMedium"/>
-                <TextView
-                    android:id="@+id/pf_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Content"
-                    style="@style/MaterialAlertDialog.Material3.Body.Text"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_pentagon_16"
-                android:layout_gravity="center"
-                android:padding="10dp"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/date_of_birth"
-                    style="@style/TextAppearance.Material3.TitleMedium"/>
-                <TextView
-                    android:id="@+id/pf_dob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Content"
-                    style="@style/MaterialAlertDialog.Material3.Body.Text"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_pentagon_16"
-                android:layout_gravity="center"
-                android:padding="10dp"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Role"
-                    style="@style/TextAppearance.Material3.TitleMedium"/>
-                <TextView
-                    android:id="@+id/pf_role"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Content"
-                    style="@style/MaterialAlertDialog.Material3.Body.Text"/>
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:backgroundTint="#FFFBFE"
-        app:srcCompat="@drawable/ic_edit"/>
-
-
-</FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
