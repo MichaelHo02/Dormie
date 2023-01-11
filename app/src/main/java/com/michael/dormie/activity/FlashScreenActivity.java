@@ -21,7 +21,7 @@ public class FlashScreenActivity extends AppCompatActivity {
             public void run() {
                 try {
                     sleep(3000);
-                    startActivity(new Intent(FlashScreenActivity.this, SignInActivity.class));
+                    startActivity(new Intent(FlashScreenActivity.this, HostActivity.class));
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();

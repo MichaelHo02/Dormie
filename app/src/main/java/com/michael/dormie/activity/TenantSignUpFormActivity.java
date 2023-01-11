@@ -136,6 +136,7 @@ public class TenantSignUpFormActivity extends AppCompatActivity {
             }
 
             if (finish) {
+                finish();
                 NavigationUtil.navigateActivity(
                         TenantSignUpFormActivity.this,
                         TenantSignUpFormActivity.this.getBaseContext(),

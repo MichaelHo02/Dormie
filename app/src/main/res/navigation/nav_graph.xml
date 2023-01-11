@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signInFragment">
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.michael.dormie.fragment_v2.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_signInFragment_to_homeLessorFragment"
+            app:destination="@id/homeLessorFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFormFragment"
+            app:destination="@id/signUpFormFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeLessorFragment"
+        android:name="com.michael.dormie.HomeLessorFragment"
+        android:label="fragment_home_lessor"
+        tools:layout="@layout/fragment_home_lessor" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.michael.dormie.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/signUpFormFragment"
+        android:name="com.michael.dormie.SignUpFormFragment"
+        android:label="fragment_sign_up_form"
+        tools:layout="@layout/fragment_sign_up_form" />
+</navigation>
