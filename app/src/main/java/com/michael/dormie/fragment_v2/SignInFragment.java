@@ -18,22 +18,29 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
+import com.google.android.material.progressindicator.IndeterminateDrawable;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.common.collect.Lists;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
-import com.michael.dormie.databinding.ActivityHostBinding;
 import com.michael.dormie.databinding.FragmentSignInBinding;
 import com.michael.dormie.utils.FireBaseDBPath;
-import com.michael.dormie.utils.PlaceSearchingWatcher;
 import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextValidator;
 import com.michael.dormie.utils.ValidationUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SignInFragment extends Fragment {
     private static final String TAG = "SignInFragment";
@@ -41,6 +48,8 @@ public class SignInFragment extends Fragment {
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDB;
+
+    private IndeterminateDrawable loadIcon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +66,10 @@ public class SignInFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        CircularProgressIndicatorSpec spec = new CircularProgressIndicatorSpec(this.requireContext(), null, 0,
+                com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator_ExtraSmall);
+        loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
 
         mAuth = FirebaseAuth.getInstance();
         mDB = FirebaseFirestore.getInstance();
@@ -100,9 +113,16 @@ public class SignInFragment extends Fragment {
             return;
         }
 
+        b.signInBtn.setIcon(loadIcon);
+        loadingProcess();
+
         String email = b.emailEditText.getText().toString();
         String password = b.passwordEditText.getText().toString();
         mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    b.signInBtn.setIcon(null);
+                    completeLoadingProcess();
+                })
                 .addOnSuccessListener(this::handleSuccessSignInEmailPassword)
                 .addOnFailureListener(this::handleFailureSignInEmailPassword);
     }
@@ -143,17 +163,23 @@ public class SignInFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            handleNavigationOnExistingUser();
-        }
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null) {
+//            handleNavigationOnExistingUser();
+//        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SignalCode.SIGN_IN_WITH_GOOGLE) {
+            b.signInBtnGoogle.setIcon(loadIcon);
+            loadingProcess();
             GoogleSignIn.getSignedInAccountFromIntent(data)
+                    .addOnCompleteListener(task -> {
+                        b.signInBtnGoogle.setIcon(null);
+                        completeLoadingProcess();
+                    })
                     .addOnSuccessListener(this::handleSuccessSignInGoogle)
                     .addOnFailureListener(this::handleFailureSignInGoogle);
         }
@@ -212,5 +238,23 @@ public class SignInFragment extends Fragment {
         Navigation.findNavController(b.getRoot()).navigate(
                 SignInFragmentDirections.actionSignInFragmentToHomeLessorFragment()
         );
+    }
+
+    private void loadingProcess() {
+        b.linearProgressIndicator.setVisibility(View.VISIBLE);
+        List<View> views = Arrays.asList(b.emailLayout, b.passwordLayout, b.signInBtn,
+                b.signInBtnGoogle, b.signUpBtn);
+        for (View view : views) {
+            view.setEnabled(false);
+        }
+    }
+
+    private void completeLoadingProcess() {
+        b.linearProgressIndicator.setVisibility(View.VISIBLE);
+        List<View> views = Arrays.asList(b.emailLayout, b.passwordLayout, b.signInBtn,
+                b.signInBtnGoogle, b.signUpBtn);
+        for (View view : views) {
+            view.setEnabled(true);
+        }
     }
 }

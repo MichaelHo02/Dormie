@@ -20,6 +20,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/sign_in" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/linearProgressIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="invisible" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -97,7 +105,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/sign_in" />
+                    android:text="@string/sign_in"
+                    app:iconGravity="textStart" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/signInBtnGoogle"
@@ -105,7 +114,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/sign_in_with_google" />
+                    android:text="@string/sign_in_with_google"
+                    app:iconGravity="textStart" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/signUpBtn"
