@@ -1,4 +1,4 @@
-package com.michael.dormie;
+package com.michael.dormie.fragment_v2;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.michael.dormie.R;
 
 public class SignUpFormFragment extends Fragment {
 

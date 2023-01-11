@@ -25,12 +25,12 @@
     </fragment>
     <fragment
         android:id="@+id/homeLessorFragment"
-        android:name="com.michael.dormie.HomeLessorFragment"
+        android:name="com.michael.dormie.fragment_v2.HomeLessorFragment"
         android:label="fragment_home_lessor"
         tools:layout="@layout/fragment_home_lessor" />
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.michael.dormie.SignUpFragment"
+        android:name="com.michael.dormie.fragment_v2.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFormFragment"
-        android:name="com.michael.dormie.SignUpFormFragment"
+        android:name="com.michael.dormie.fragment_v2.SignUpFormFragment"
         android:label="fragment_sign_up_form"
         tools:layout="@layout/fragment_sign_up_form" />
 </navigation>

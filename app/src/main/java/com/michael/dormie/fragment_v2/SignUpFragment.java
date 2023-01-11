@@ -1,4 +1,4 @@
-package com.michael.dormie;
+package com.michael.dormie.fragment_v2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.michael.dormie.R;
 import com.michael.dormie.activity.MasterActivity;
 import com.michael.dormie.activity.SignUpActivity;
 import com.michael.dormie.activity.SignUpFormActivity;
