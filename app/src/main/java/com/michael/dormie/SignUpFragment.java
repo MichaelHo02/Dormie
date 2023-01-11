@@ -1,64 +1,282 @@
 package com.michael.dormie;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
+import com.google.android.material.progressindicator.IndeterminateDrawable;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.michael.dormie.activity.MasterActivity;
+import com.michael.dormie.activity.SignUpActivity;
+import com.michael.dormie.activity.SignUpFormActivity;
+import com.michael.dormie.databinding.FragmentSignInBinding;
+import com.michael.dormie.databinding.FragmentSignUpBinding;
+import com.michael.dormie.fragment_v2.SignInFragmentDirections;
+import com.michael.dormie.utils.FireBaseDBPath;
+import com.michael.dormie.utils.NavigationUtil;
+import com.michael.dormie.utils.SignalCode;
+import com.michael.dormie.utils.TextValidator;
+import com.michael.dormie.utils.ValidationUtil;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class SignUpFragment extends Fragment {
+    private static final String TAG = "SignUpFragment";
+    private FragmentSignUpBinding b;
+    private GoogleSignInClient gsc;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mDB;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private IndeterminateDrawable loadIcon;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public SignUpFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SignUpFragment newInstance(String param1, String param2) {
-        SignUpFragment fragment = new SignUpFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        b = FragmentSignUpBinding.inflate(inflater, container, false);
+        return b.getRoot();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onDestroyView() {
+        super.onDestroyView();
+        b = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        CircularProgressIndicatorSpec spec = new CircularProgressIndicatorSpec(this.requireContext(), null, 0,
+                com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator);
+        loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
+
+        mAuth = FirebaseAuth.getInstance();
+        mDB = FirebaseFirestore.getInstance();
+        googleSignUpInit();
+        addListener();
+    }
+
+    private void googleSignUpInit() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail().build();
+        gsc = GoogleSignIn.getClient(this.requireContext(), gso);
+    }
+
+    private void addListener() {
+        b.emailEditText.addTextChangedListener(new TextValidator(b.emailLayout) {
+            @Override
+            public void validate(TextInputLayout textInputLayout, String text) {
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
+            }
+        });
+
+        b.passwordEditText.addTextChangedListener(new TextValidator(b.passwordLayout) {
+            @Override
+            public void validate(TextInputLayout textInputLayout, String text) {
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
+            }
+        });
+
+        b.confirmPasswordEditText.addTextChangedListener(new TextValidator(b.confirmPasswordLayout) {
+            @Override
+            public void validate(TextInputLayout textInputLayout, String text) {
+                ValidationUtil.validateEmailAndPassword(textInputLayout, text);
+            }
+        });
+
+        b.signInBtn.setOnClickListener(this::signIn);
+        b.signInBtnGoogle.setOnClickListener(this::signInWithGoogle);
+        b.signUpBtn.setOnClickListener(this::signUp);
+    }
+
+    private void signIn(View view) {
+        Navigation.findNavController(b.getRoot()).navigate(
+                SignUpFragmentDirections.actionSignUpFragmentToSignInFragment());
+    }
+
+    private void signInWithGoogle(View view) {
+        Intent intent = gsc.getSignInIntent();
+        startActivityForResult(intent, SignalCode.SIGN_IN_WITH_GOOGLE);
+    }
+
+    private void signUp(View view) {
+        ValidationUtil.validateEmailAndPassword(b.emailLayout, b.emailEditText.getText().toString());
+        ValidationUtil.validateEmailAndPassword(b.passwordLayout, b.passwordEditText.getText().toString());
+        ValidationUtil.validateEmailAndPassword(b.confirmPasswordLayout,
+                b.confirmPasswordEditText.getText().toString());
+        ValidationUtil.validatePassword(b.passwordLayout, b.confirmPasswordLayout);
+
+        if (b.emailLayout.getError() != null || b.passwordLayout.getError() != null || b.confirmPasswordLayout.getError() != null) {
+            Log.i(TAG, "Input is not passed validation");
+            return;
+        }
+
+        b.signUpBtn.setIcon(loadIcon);
+        loadingProcess();
+
+        String email = b.emailEditText.getText().toString();
+        String password = b.passwordEditText.getText().toString();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    b.signUpBtn.setIcon(null);
+                    completeLoadingProcess();
+                })
+                .addOnSuccessListener(this::handleSuccessSignUpEmailPassword)
+                .addOnFailureListener(this::handleFailureSignUpEmailPassword);
+    }
+
+    private void handleSuccessSignUpEmailPassword(AuthResult authResult) {
+        Log.d(TAG, "Create user with email success");
+        Navigation.findNavController(b.getRoot()).navigate(
+                SignUpFragmentDirections.actionSignUpFragmentToSignUpFormFragment());
+    }
+
+    private void handleFailureSignUpEmailPassword(Exception e) {
+        Log.e(TAG, "Fail to sign up because " + e.getLocalizedMessage());
+        if (e.getLocalizedMessage().contains("email")) {
+            b.emailLayout.setError(e.getLocalizedMessage());
+            return;
+        }
+
+        if (e.getLocalizedMessage().contains("password")) {
+            b.passwordLayout.setError(e.getLocalizedMessage());
+            return;
+        }
+
+        b.emailLayout.setError(e.getLocalizedMessage());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ValidationUtil.resetValidation(b.emailLayout);
+        ValidationUtil.resetValidation(b.passwordLayout);
+        ValidationUtil.resetValidation(b.confirmPasswordLayout);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        user.delete()
+                .addOnSuccessListener(unused -> Log.d(TAG, "User account deleted."))
+                .addOnFailureListener(e -> Log.e(TAG, "Cannot delete user because " + e.getLocalizedMessage()));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SignalCode.SIGN_IN_WITH_GOOGLE) {
+            b.signInBtnGoogle.setIcon(loadIcon);
+            loadingProcess();
+            GoogleSignIn.getSignedInAccountFromIntent(data)
+                    .addOnCompleteListener(task -> {
+                        b.signInBtnGoogle.setIcon(null);
+                        completeLoadingProcess();
+                    })
+                    .addOnSuccessListener(this::handleSuccessSignInGoogle)
+                    .addOnFailureListener(this::handleFailureSignInGoogle);
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+    private void handleSuccessSignInGoogle(GoogleSignInAccount googleSignInAccount) {
+        Log.d(TAG, "Successfully sign in with google");
+        String idToken = googleSignInAccount.getIdToken();
+        if (idToken != null) {
+            AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
+            mAuth.signInWithCredential(firebaseCredential)
+                    .addOnSuccessListener(authResult -> {
+                        Log.d(TAG, "signInWithCredential: success");
+                        handleNavigation(googleSignInAccount);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "signInWithCredential: failure " + e.getLocalizedMessage());
+                    });
+        }
+    }
+
+    private void handleFailureSignInGoogle(Exception e) {
+        Log.e(TAG, "Fail to sign up with google because " + e.getLocalizedMessage());
+        Toast.makeText(this.requireContext(), "Something went wrong. Please try again!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleNavigation(GoogleSignInAccount googleSignInAccount) {
+        if (googleSignInAccount.getId() == null) {
+            handleQueryFail(new Exception());
+            return;
+        }
+        mDB.collection(FireBaseDBPath.USERS)
+                .document(googleSignInAccount.getId())
+                .get()
+                .addOnSuccessListener(this::handleQuerySuccess)
+                .addOnFailureListener(this::handleQueryFail);
+    }
+
+    private void handleQuerySuccess(DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists()) {
+            handleNavigationOnNewUser();
+            return;
+        }
+        handleNavigationOnExistingUser();
+    }
+
+    private void handleQueryFail(Exception e) {
+        Log.e(TAG, "Fail to query user because " + e.getLocalizedMessage());
+    }
+
+    private void handleNavigationOnNewUser() {
+        Navigation.findNavController(b.getRoot()).navigate(
+                SignUpFragmentDirections.actionSignUpFragmentToSignUpFormFragment());
+    }
+
+    private void handleNavigationOnExistingUser() {
+        Toast.makeText(this.requireContext(), "You already create your account!", Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(b.getRoot()).navigate(
+                SignUpFragmentDirections.actionSignUpFragmentToHomeLessorFragment());
+    }
+
+    private void loadingProcess() {
+        b.linearProgressIndicator.setVisibility(View.VISIBLE);
+        List<View> views = Arrays.asList(b.emailLayout, b.passwordLayout, b.confirmPasswordLayout,
+                b.signInBtn,
+                b.signInBtnGoogle, b.signUpBtn);
+        for (View view : views) {
+            view.setEnabled(false);
+        }
+    }
+
+    private void completeLoadingProcess() {
+        b.linearProgressIndicator.setVisibility(View.INVISIBLE);
+        List<View> views = Arrays.asList(b.emailLayout, b.passwordLayout, b.confirmPasswordLayout,
+                b.signInBtn,
+                b.signInBtnGoogle, b.signUpBtn);
+        for (View view : views) {
+            view.setEnabled(true);
+        }
     }
 }

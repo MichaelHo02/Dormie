@@ -2,29 +2,24 @@ package com.michael.dormie.fragment_v2;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.common.collect.Lists;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,11 +29,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.FragmentSignInBinding;
 import com.michael.dormie.utils.FireBaseDBPath;
+import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextValidator;
 import com.michael.dormie.utils.ValidationUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,7 +63,7 @@ public class SignInFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         CircularProgressIndicatorSpec spec = new CircularProgressIndicatorSpec(this.requireContext(), null, 0,
-                com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator_ExtraSmall);
+                com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator);
         loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
 
         mAuth = FirebaseAuth.getInstance();
@@ -163,6 +158,10 @@ public class SignInFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        ValidationUtil.resetValidation(b.emailLayout);
+        ValidationUtil.resetValidation(b.passwordLayout);
+
 //        FirebaseUser user = mAuth.getCurrentUser();
 //        if (user != null) {
 //            handleNavigationOnExistingUser();
@@ -250,7 +249,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void completeLoadingProcess() {
-        b.linearProgressIndicator.setVisibility(View.VISIBLE);
+        b.linearProgressIndicator.setVisibility(View.INVISIBLE);
         List<View> views = Arrays.asList(b.emailLayout, b.passwordLayout, b.signInBtn,
                 b.signInBtnGoogle, b.signUpBtn);
         for (View view : views) {

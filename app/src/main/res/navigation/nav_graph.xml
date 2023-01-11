@@ -16,9 +16,7 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true" />
+            app:destination="@id/signUpFragment" />
         <action
             android:id="@+id/action_signInFragment_to_signUpFormFragment"
             app:destination="@id/signUpFormFragment"
@@ -34,7 +32,19 @@
         android:id="@+id/signUpFragment"
         android:name="com.michael.dormie.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" />
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signUpFormFragment"
+            app:destination="@id/signUpFormFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_homeLessorFragment"
+            app:destination="@id/homeLessorFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFormFragment"
         android:name="com.michael.dormie.SignUpFormFragment"
