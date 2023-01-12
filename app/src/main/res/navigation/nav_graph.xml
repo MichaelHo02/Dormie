@@ -49,5 +49,17 @@
         android:id="@+id/signUpFormFragment"
         android:name="com.michael.dormie.fragment_v2.SignUpFormFragment"
         android:label="fragment_sign_up_form"
-        tools:layout="@layout/fragment_sign_up_form" />
+        tools:layout="@layout/fragment_sign_up_form" >
+        <action
+            android:id="@+id/action_signUpFormFragment_to_tenentFilterFormFragment"
+            app:destination="@id/tenentFilterFormFragment" />
+        <action
+            android:id="@+id/action_signUpFormFragment_to_homeLessorFragment"
+            app:destination="@id/homeLessorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tenentFilterFormFragment"
+        android:name="com.michael.dormie.TenantFilterFormFragment"
+        android:label="fragment_tenent_filter_form"
+        tools:layout="@layout/fragment_tenent_filter_form" />
 </navigation>

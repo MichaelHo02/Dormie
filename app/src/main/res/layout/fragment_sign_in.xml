@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
                 android:visibility="invisible" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
