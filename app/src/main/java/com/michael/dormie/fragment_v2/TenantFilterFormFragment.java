@@ -1,4 +1,4 @@
-package com.michael.dormie;
+package com.michael.dormie.fragment_v2;
 
 import android.os.Bundle;
 

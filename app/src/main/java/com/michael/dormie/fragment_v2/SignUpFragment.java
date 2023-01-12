@@ -51,7 +51,6 @@ public class SignUpFragment extends Fragment {
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDB;
-
     private IndeterminateDrawable loadIcon;
 
     @Override
@@ -153,7 +152,7 @@ public class SignUpFragment extends Fragment {
     private void handleSuccessSignUpEmailPassword(AuthResult authResult) {
         Log.d(TAG, "Create user with email success");
         Navigation.findNavController(b.getRoot()).navigate(
-                SignUpFragmentDirections.actionSignUpFragmentToSignUpFormFragment());
+                SignUpFragmentDirections.actionGlobalSignUpFormNavigation());
     }
 
     private void handleFailureSignUpEmailPassword(Exception e) {
@@ -252,13 +251,13 @@ public class SignUpFragment extends Fragment {
 
     private void handleNavigationOnNewUser() {
         Navigation.findNavController(b.getRoot()).navigate(
-                SignUpFragmentDirections.actionSignUpFragmentToSignUpFormFragment());
+                SignUpFragmentDirections.actionGlobalSignUpFormNavigation());
     }
 
     private void handleNavigationOnExistingUser() {
         Toast.makeText(this.requireContext(), "You already create your account!", Toast.LENGTH_SHORT).show();
         Navigation.findNavController(b.getRoot()).navigate(
-                SignUpFragmentDirections.actionSignUpFragmentToHomeLessorFragment());
+                SignUpFragmentDirections.actionGlobalHomeLessorFragment2());
     }
 
     private void loadingProcess() {

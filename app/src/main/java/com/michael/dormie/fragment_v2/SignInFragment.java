@@ -43,7 +43,6 @@ public class SignInFragment extends Fragment {
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDB;
-
     private IndeterminateDrawable loadIcon;
 
     @Override
@@ -125,8 +124,7 @@ public class SignInFragment extends Fragment {
     private void handleSuccessSignInEmailPassword(AuthResult authResult) {
         Log.d(TAG, "Sign in with email success");
         Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionSignInFragmentToHomeLessorFragment()
-        );
+                SignInFragmentDirections.actionGlobalHomeLessorFragment2());
     }
 
     private void handleFailureSignInEmailPassword(Exception e) {
@@ -217,10 +215,10 @@ public class SignInFragment extends Fragment {
 
     private void handleQuerySuccess(DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists()) {
-            handleNavigationOnNewUser();
+            handleNavigationOnExistingUser();
             return;
         }
-        handleNavigationOnExistingUser();
+        handleNavigationOnNewUser();
     }
 
     private void handleQueryFail(Exception e) {
@@ -229,14 +227,12 @@ public class SignInFragment extends Fragment {
 
     private void handleNavigationOnNewUser() {
         Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionSignInFragmentToSignUpFormFragment()
-        );
+                SignInFragmentDirections.actionGlobalSignUpFormNavigation());
     }
 
     private void handleNavigationOnExistingUser() {
         Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionSignInFragmentToHomeLessorFragment()
-        );
+                SignInFragmentDirections.actionGlobalHomeLessorFragment2());
     }
 
     private void loadingProcess() {

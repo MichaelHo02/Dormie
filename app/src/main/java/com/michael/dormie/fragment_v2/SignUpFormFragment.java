@@ -62,7 +62,6 @@ public class SignUpFormFragment extends Fragment {
     private static final String DATE_PICKER_TAG = "DATE_PICKER";
 
     private FragmentSignUpFormBinding b;
-    private FirebaseUser user;
     private MaterialDatePicker materialDatePicker;
     private IndeterminateDrawable loadIcon;
     private String accountType;
@@ -209,7 +208,7 @@ public class SignUpFormFragment extends Fragment {
     public void onStart() {
         super.onStart();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
             Log.w(TAG, "There is no current user");
             return;
@@ -276,7 +275,7 @@ public class SignUpFormFragment extends Fragment {
                 b.savedBtn.setIcon(null);
                 completeLoadingProcess();
                 Navigation.findNavController(requireView()).navigate(
-                        SignUpFormFragmentDirections.actionSignUpFormFragmentToHomeLessorFragment());
+                        SignUpFormFragmentDirections.actionGlobalHomeLessorFragment());
                 return;
             }
             if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("tenant")) {
