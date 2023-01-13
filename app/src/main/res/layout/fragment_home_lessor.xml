@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment_v2.HomeLessorFragment">
 
-    <!--    <androidx.core.widget.NestedScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:clipToPadding="false"-->
-    <!--        android:elevation="0dp"-->
-    <!--        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-    <!--        <androidx.recyclerview.widget.RecyclerView-->
-    <!--            android:id="@+id/recycleView"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent" />-->
-    <!--    </androidx.core.widget.NestedScrollView>-->
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

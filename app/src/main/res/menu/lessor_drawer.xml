@@ -16,7 +16,7 @@
         android:title="@string/others">
         <menu>
             <item
-                android:id="@+id/profileLessorFragment"
+                android:id="@+id/profileFragment"
                 android:checkable="true"
                 android:icon="@drawable/ic_round_person_24"
                 android:title="@string/profile" />

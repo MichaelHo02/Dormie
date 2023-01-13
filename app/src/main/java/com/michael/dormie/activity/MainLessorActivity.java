@@ -32,11 +32,6 @@ public class MainLessorActivity extends AppCompatActivity {
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(b.fragmentContainerView.getId());
         NavController navController = navHostFragment.getNavController();
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.homeLessorFragment, R.id.chatLessorFragment, R.id.profileLessorFragment)
-                        .setOpenableLayout(b.drawerLayout)
-                        .build();
-
         NavigationUI.setupWithNavController(b.navigationView, navController);
 
         b.navigationView.setCheckedItem(R.id.homeLessorFragment);

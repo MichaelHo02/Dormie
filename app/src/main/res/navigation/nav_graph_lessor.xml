@@ -29,4 +29,9 @@
         android:name="com.michael.dormie.PlaceCreationFragment"
         android:label="fragment_place_creation"
         tools:layout="@layout/fragment_place_creation" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.michael.dormie.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

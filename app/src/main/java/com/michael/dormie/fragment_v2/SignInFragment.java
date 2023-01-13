@@ -23,6 +23,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -160,10 +161,10 @@ public class SignInFragment extends Fragment {
         ValidationUtil.resetValidation(b.emailLayout);
         ValidationUtil.resetValidation(b.passwordLayout);
 
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user != null) {
-//            handleNavigationOnExistingUser();
-//        }
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            handleNavigationOnExistingUser();
+        }
     }
 
     @Override

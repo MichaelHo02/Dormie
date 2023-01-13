@@ -52,8 +52,7 @@ public class HomeLessorFragment extends Fragment {
             drawerLayout.open();
         });
         b.fab.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(
-                    HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
+            Navigation.findNavController(view).navigate(HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
         });
     }
 

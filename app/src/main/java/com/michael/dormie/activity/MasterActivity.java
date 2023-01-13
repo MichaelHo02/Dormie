@@ -24,7 +24,7 @@ public class MasterActivity extends AppCompatActivity {
     private final HomeFragment homeFragment = HomeFragment.newInstance("", "");
     private final ChatFragment chatFragment = ChatFragment.newInstance("", "");
     private final RentalRegistrationFragment rentalRegistrationFragment = RentalRegistrationFragment.newInstance("", "");
-    private final ProfileFragment profileFragment = ProfileFragment.newInstance("", "");
+//    private final ProfileFragment profileFragment = ProfileFragment.newInstance("", "");
     private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
 
     @Override
@@ -66,7 +66,7 @@ public class MasterActivity extends AppCompatActivity {
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, rentalRegistrationFragment);
                 return true;
             case R.id.profilePage:
-                NavigationUtil.changeFragment(this, R.id.activity_master_fl, profileFragment);
+//                NavigationUtil.changeFragment(this, R.id.activity_master_fl, profileFragment);
                 return true;
             case R.id.settingPage:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, settingFragment);
