@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signInFragment">
+    app:startDestination="@id/signInSignUpNavigation">
     <fragment
         android:id="@+id/homeLessorFragment"
         android:name="com.michael.dormie.fragment_v2.HomeLessorFragment"
@@ -19,7 +19,8 @@
             tools:layout="@layout/fragment_sign_up_form">
             <action
                 android:id="@+id/action_signUpFormFragment_to_tenentFilterFormFragment"
-                app:destination="@id/tenentFilterFormFragment" />
+                app:destination="@id/tenentFilterFormFragment"
+                app:popUpToInclusive="false" />
         </fragment>
         <fragment
             android:id="@+id/tenentFilterFormFragment"
@@ -30,7 +31,8 @@
             android:id="@+id/action_global_homeLessorFragment"
             app:destination="@id/homeLessorFragment" />
     </navigation>
-    <navigation android:id="@+id/signInSignUpNavigation"
+    <navigation
+        android:id="@+id/signInSignUpNavigation"
         app:startDestination="@id/signInFragment">
         <fragment
             android:id="@+id/signInFragment"
@@ -45,11 +47,7 @@
             android:id="@+id/signUpFragment"
             android:name="com.michael.dormie.fragment_v2.SignUpFragment"
             android:label="fragment_sign_up"
-            tools:layout="@layout/fragment_sign_up">
-            <action
-                android:id="@+id/action_signUpFragment_to_signInFragment"
-                app:destination="@id/signInFragment" />
-        </fragment>
+            tools:layout="@layout/fragment_sign_up" />
         <action
             android:id="@+id/action_global_signUpFormNavigation"
             app:destination="@id/signUpFormNavigation" />

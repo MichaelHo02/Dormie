@@ -114,8 +114,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void signIn(View view) {
-        Navigation.findNavController(b.getRoot()).navigate(
-                SignUpFragmentDirections.actionSignUpFragmentToSignInFragment());
+        Navigation.findNavController(b.getRoot()).popBackStack();
     }
 
     private void signInWithGoogle(View view) {
