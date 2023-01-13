@@ -11,18 +11,21 @@
         android:label="@string/home"
         tools:layout="@layout/fragment_home_lessor">
         <action
-            android:id="@+id/action_homeLessorFragment_to_chatLessorFragment"
-            app:destination="@id/chatLessorFragment" />
+            android:id="@+id/action_homeLessorFragment_to_chatLessorFragment2"
+            app:destination="@id/chatLessorFragment"
+            app:popUpTo="@id/nav_graph_lessor"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeLessorFragment_to_profileLessorFragment"
+            app:destination="@id/profileLessorFragment"
+            app:popUpTo="@id/nav_graph_lessor"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/chatLessorFragment"
         android:name="com.michael.dormie.ChatLessorFragment"
         android:label="@string/chat"
-        tools:layout="@layout/fragment_chat_lessor">
-        <action
-            android:id="@+id/action_chatLessorFragment_to_profileLessorFragment"
-            app:destination="@id/profileLessorFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_chat_lessor"/>
     <fragment
         android:id="@+id/profileLessorFragment"
         android:name="com.michael.dormie.ProfileLessorFragment"

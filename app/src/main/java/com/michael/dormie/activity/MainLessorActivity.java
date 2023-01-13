@@ -1,8 +1,13 @@
 package com.michael.dormie.activity;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -28,18 +33,23 @@ public class MainLessorActivity extends AppCompatActivity {
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(b.fragmentContainerView.getId());
         NavController navController = navHostFragment.getNavController();
         AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.homeLessorFragment, R.id.chatLessorFragment
-                        , R.id.profileLessorFragment)
+                new AppBarConfiguration.Builder(R.id.homeLessorFragment, R.id.chatLessorFragment, R.id.profileLessorFragment)
                         .setOpenableLayout(b.drawerLayout)
-                        .setDrawerLayout(b.drawerLayout)
                         .build();
 
         NavigationUI.setupWithNavController(b.toolbar, navController, appBarConfiguration);
 
         b.navigationView.setCheckedItem(R.id.homeLessorFragment);
         b.navigationView.setNavigationItemSelectedListener(item -> {
+            b.drawerLayout.close();
             return NavigationUI.onNavDestinationSelected(item, navController)
                     || super.onOptionsItemSelected(item);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        b.navigationView.setCheckedItem(Navigation.findNavController(b.fragmentContainerView).getCurrentDestination().getId());
     }
 }
