@@ -37,7 +37,7 @@ public class MainLessorActivity extends AppCompatActivity {
         b.navigationView.setCheckedItem(R.id.homeLessorFragment);
         b.navigationView.setNavigationItemSelectedListener(item -> {
             b.drawerLayout.close();
-            return NavigationUI.onNavDestinationSelected(item, navController)
+            return NavigationUI.onNavDestinationSelected(item, navController, false)
                     || super.onOptionsItemSelected(item);
         });
     }
