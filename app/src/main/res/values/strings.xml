@@ -38,4 +38,22 @@
     <string name="please_enter_your_university">Please enter your university</string>
     <string name="delete_account">Delete account</string>
     <string name="sign_out">Sign out</string>
+    <string name="role">Role</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loading">Loading</string>
+    <string name="apartment">Apartment</string>
+    <string name="villa">Villa</string>
+    <string name="house">House</string>
+    <string name="townhouse">Townhouse</string>
+    <string name="mobile">Mobile</string>
+    <string name="washer_dryer">Washer/Dryer</string>
+    <string name="ramp_access">Ramp access</string>
+    <string name="garden">Garden</string>
+    <string name="cats_ok">Cats OK</string>
+    <string name="dogs_ok">Dogs OK</string>
+    <string name="smoke_free">Smoke-free</string>
+    <string name="school">School</string>
+    <string name="distance_from_school_minimum">Distance from school (minimum)</string>
+    <string name="distance_from_school_maximum">Distance from school (maximum)</string>
 </resources>

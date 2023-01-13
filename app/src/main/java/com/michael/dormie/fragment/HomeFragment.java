@@ -25,7 +25,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.michael.dormie.R;
-import com.michael.dormie.activity.MasterActivity;
 import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
@@ -108,7 +107,7 @@ public class HomeFragment extends Fragment {
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.profile_page) {
+                if (item.getItemId() == R.id.profilePage) {
 //                    NavigationUtil.changeFragment(requireActivity(), R.id.activity_master_fl, settingFragment);
                     gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

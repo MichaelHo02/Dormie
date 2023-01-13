@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_lessor"
+    app:startDestination="@id/homeLessorFragment">
+
+    <fragment
+        android:id="@+id/homeLessorFragment"
+        android:name="com.michael.dormie.fragment_v2.HomeLessorFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home_lessor">
+        <action
+            android:id="@+id/action_homeLessorFragment_to_placeCreationFragment"
+            app:destination="@id/placeCreationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatLessorFragment"
+        android:name="com.michael.dormie.ChatLessorFragment"
+        android:label="@string/chat"
+        tools:layout="@layout/fragment_chat_lessor"/>
+    <fragment
+        android:id="@+id/profileLessorFragment"
+        android:name="com.michael.dormie.ProfileLessorFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile_lessor" />
+    <fragment
+        android:id="@+id/placeCreationFragment"
+        android:name="com.michael.dormie.PlaceCreationFragment"
+        android:label="fragment_place_creation"
+        tools:layout="@layout/fragment_place_creation" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.michael.dormie.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

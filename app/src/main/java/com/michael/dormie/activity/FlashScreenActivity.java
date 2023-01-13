@@ -1,6 +1,7 @@
 package com.michael.dormie.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import android.Manifest;
 import android.content.Intent;
@@ -21,7 +22,7 @@ public class FlashScreenActivity extends AppCompatActivity {
             public void run() {
                 try {
                     sleep(3000);
-                    startActivity(new Intent(FlashScreenActivity.this, SignInActivity.class));
+                    startActivity(new Intent(FlashScreenActivity.this, HostActivity.class));
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();
