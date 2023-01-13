@@ -37,7 +37,7 @@ public class MainLessorActivity extends AppCompatActivity {
                         .setOpenableLayout(b.drawerLayout)
                         .build();
 
-        NavigationUI.setupWithNavController(b.toolbar, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(b.navigationView, navController);
 
         b.navigationView.setCheckedItem(R.id.homeLessorFragment);
         b.navigationView.setNavigationItemSelectedListener(item -> {
