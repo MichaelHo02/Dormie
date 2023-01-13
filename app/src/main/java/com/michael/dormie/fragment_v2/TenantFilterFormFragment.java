@@ -157,7 +157,7 @@ public class TenantFilterFormFragment extends Fragment {
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "DocumentSnapshot added");
                     Navigation.findNavController(b.getRoot()).navigate(
-                            TenantFilterFormFragmentDirections.actionGlobalHomeLessorFragment());
+                            TenantFilterFormFragmentDirections.actionGlobalMainLessorActivity());
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);

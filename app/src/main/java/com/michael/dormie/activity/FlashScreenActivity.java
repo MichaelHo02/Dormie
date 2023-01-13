@@ -1,6 +1,7 @@
 package com.michael.dormie.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import android.Manifest;
 import android.content.Intent;

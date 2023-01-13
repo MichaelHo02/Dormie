@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
-        android:id="@+id/homePage"
+        android:id="@+id/homeLessorFragment"
         android:checkable="true"
         android:icon="@drawable/ic_round_home_24"
         android:title="@string/home" />
     <item
-        android:id="@+id/chatPage"
+        android:id="@+id/chatLessorFragment"
         android:checkable="true"
         android:icon="@drawable/ic_round_chat_bubble_24"
         android:title="@string/chat" />
-    <item
-        android:id="@+id/rental_registration_page"
-        android:checkable="true"
-        android:icon="@drawable/ic_round_work_24"
-        android:title="@string/rental_registration" />
 
     <item
         android:id="@+id/others_item"
         android:title="@string/others">
         <menu>
             <item
-                android:id="@+id/profilePage"
+                android:id="@+id/profileLessorFragment"
                 android:checkable="true"
                 android:icon="@drawable/ic_round_person_24"
                 android:title="@string/profile" />
-
-            <item
-                android:id="@+id/settingPage"
-                android:checkable="true"
-                android:icon="@drawable/ic_round_settings_24"
-                android:title="@string/setting" />
         </menu>
     </item>
 </menu>

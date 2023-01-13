@@ -3,56 +3,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signInSignUpNavigation">
-    <fragment
-        android:id="@+id/homeLessorFragment"
-        android:name="com.michael.dormie.fragment_v2.HomeLessorFragment"
-        android:label="fragment_home_lessor"
-        tools:layout="@layout/fragment_home_lessor" />
-    <navigation
-        android:id="@+id/signUpFormNavigation"
-        app:startDestination="@id/signUpFormFragment">
-        <fragment
-            android:id="@+id/signUpFormFragment"
-            android:name="com.michael.dormie.fragment_v2.SignUpFormFragment"
-            android:label="fragment_sign_up_form"
-            tools:layout="@layout/fragment_sign_up_form">
+    app:startDestination="@id/authenticateNavigation">
+    <navigation android:id="@+id/authenticateNavigation"
+        app:startDestination="@id/signInSignUpNavigation">
+        <navigation
+            android:id="@+id/signInSignUpNavigation"
+            app:startDestination="@id/signInFragment">
+            <fragment
+                android:id="@+id/signInFragment"
+                android:name="com.michael.dormie.fragment_v2.SignInFragment"
+                android:label="fragment_sign_in"
+                tools:layout="@layout/fragment_sign_in">
+                <action
+                    android:id="@+id/action_signInFragment_to_signUpFragment"
+                    app:destination="@id/signUpFragment" />
+            </fragment>
+            <fragment
+                android:id="@+id/signUpFragment"
+                android:name="com.michael.dormie.fragment_v2.SignUpFragment"
+                android:label="fragment_sign_up"
+                tools:layout="@layout/fragment_sign_up" />
             <action
-                android:id="@+id/action_signUpFormFragment_to_tenentFilterFormFragment"
-                app:destination="@id/tenentFilterFormFragment"
-                app:popUpToInclusive="false" />
-        </fragment>
-        <fragment
-            android:id="@+id/tenentFilterFormFragment"
-            android:name="com.michael.dormie.fragment_v2.TenantFilterFormFragment"
-            android:label="fragment_tenent_filter_form"
-            tools:layout="@layout/fragment_tenent_filter_form" />
+                android:id="@+id/action_global_signUpFormNavigation"
+                app:destination="@id/signUpFormNavigation" />
+        </navigation>
+        <navigation
+            android:id="@+id/signUpFormNavigation"
+            app:startDestination="@id/signUpFormFragment">
+            <fragment
+                android:id="@+id/signUpFormFragment"
+                android:name="com.michael.dormie.fragment_v2.SignUpFormFragment"
+                android:label="fragment_sign_up_form"
+                tools:layout="@layout/fragment_sign_up_form">
+                <action
+                    android:id="@+id/action_signUpFormFragment_to_tenentFilterFormFragment"
+                    app:destination="@id/tenentFilterFormFragment"
+                    app:popUpToInclusive="false" />
+            </fragment>
+            <fragment
+                android:id="@+id/tenentFilterFormFragment"
+                android:name="com.michael.dormie.fragment_v2.TenantFilterFormFragment"
+                android:label="fragment_tenent_filter_form"
+                tools:layout="@layout/fragment_tenent_filter_form" />
+        </navigation>
         <action
-            android:id="@+id/action_global_homeLessorFragment"
-            app:destination="@id/homeLessorFragment" />
+            android:id="@+id/action_global_mainLessorActivity"
+            app:destination="@id/mainLessorActivity" />
     </navigation>
-    <navigation
-        android:id="@+id/signInSignUpNavigation"
-        app:startDestination="@id/signInFragment">
-        <fragment
-            android:id="@+id/signInFragment"
-            android:name="com.michael.dormie.fragment_v2.SignInFragment"
-            android:label="fragment_sign_in"
-            tools:layout="@layout/fragment_sign_in">
-            <action
-                android:id="@+id/action_signInFragment_to_signUpFragment"
-                app:destination="@id/signUpFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/signUpFragment"
-            android:name="com.michael.dormie.fragment_v2.SignUpFragment"
-            android:label="fragment_sign_up"
-            tools:layout="@layout/fragment_sign_up" />
-        <action
-            android:id="@+id/action_global_signUpFormNavigation"
-            app:destination="@id/signUpFormNavigation" />
-        <action
-            android:id="@+id/action_global_homeLessorFragment2"
-            app:destination="@id/homeLessorFragment" />
-    </navigation>
+    <activity
+        android:id="@+id/mainLessorActivity"
+        android:name="com.michael.dormie.activity.MainLessorActivity"
+        android:label="activity_main_lessor"
+        tools:layout="@layout/activity_main_lessor" />
 </navigation>

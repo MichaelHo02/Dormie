@@ -1,12 +1,11 @@
 package com.michael.dormie.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.color.DynamicColors;
-import com.michael.dormie.R;
 import com.michael.dormie.databinding.ActivityHostBinding;
 
 public class HostActivity extends AppCompatActivity {

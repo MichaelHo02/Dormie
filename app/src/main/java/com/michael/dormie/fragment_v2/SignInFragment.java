@@ -124,7 +124,7 @@ public class SignInFragment extends Fragment {
     private void handleSuccessSignInEmailPassword(AuthResult authResult) {
         Log.d(TAG, "Sign in with email success");
         Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionGlobalHomeLessorFragment2());
+                SignInFragmentDirections.actionGlobalMainLessorActivity());
     }
 
     private void handleFailureSignInEmailPassword(Exception e) {
@@ -232,7 +232,7 @@ public class SignInFragment extends Fragment {
 
     private void handleNavigationOnExistingUser() {
         Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionGlobalHomeLessorFragment2());
+                SignInFragmentDirections.actionGlobalMainLessorActivity());
     }
 
     private void loadingProcess() {

@@ -53,6 +53,7 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment:2.5.3"
     implementation "androidx.navigation:navigation-ui:2.5.3"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.5.3"
 
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation 'me.relex:circleindicator:2.1.6'

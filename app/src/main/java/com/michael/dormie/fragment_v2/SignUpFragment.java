@@ -256,7 +256,7 @@ public class SignUpFragment extends Fragment {
     private void handleNavigationOnExistingUser() {
         Toast.makeText(this.requireContext(), "You already create your account!", Toast.LENGTH_SHORT).show();
         Navigation.findNavController(b.getRoot()).navigate(
-                SignUpFragmentDirections.actionGlobalHomeLessorFragment2());
+                SignUpFragmentDirections.actionGlobalMainLessorActivity());
     }
 
     private void loadingProcess() {

@@ -275,7 +275,7 @@ public class SignUpFormFragment extends Fragment {
                 b.savedBtn.setIcon(null);
                 completeLoadingProcess();
                 Navigation.findNavController(requireView()).navigate(
-                        SignUpFormFragmentDirections.actionGlobalHomeLessorFragment());
+                        SignUpFormFragmentDirections.actionGlobalMainLessorActivity());
                 return;
             }
             if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("tenant")) {
