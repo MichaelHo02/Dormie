@@ -56,4 +56,6 @@
     <string name="school">School</string>
     <string name="distance_from_school_minimum">Distance from school (minimum)</string>
     <string name="distance_from_school_maximum">Distance from school (maximum)</string>
+    <string name="empty_image_list">Empty Image List</string>
+    <string name="please_import_image">Please import image!</string>
 </resources>
