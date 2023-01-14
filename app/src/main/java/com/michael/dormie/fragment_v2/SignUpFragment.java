@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -131,6 +132,8 @@ public class SignUpFragment extends Fragment {
 
         if (b.emailLayout.getError() != null || b.passwordLayout.getError() != null || b.confirmPasswordLayout.getError() != null) {
             Log.i(TAG, "Input is not passed validation");
+            Snackbar.make(b.getRoot(), "Please try again!",
+                    Snackbar.LENGTH_LONG).show();
             return;
         }
 
@@ -215,13 +218,16 @@ public class SignUpFragment extends Fragment {
                     })
                     .addOnFailureListener(e -> {
                         Log.w(TAG, "signInWithCredential: failure " + e.getLocalizedMessage());
+                        Snackbar.make(b.getRoot(), "Something went wrong. Please try again!",
+                                Snackbar.LENGTH_LONG).show();
                     });
         }
     }
 
     private void handleFailureSignInGoogle(Exception e) {
         Log.e(TAG, "Fail to sign up with google because " + e.getLocalizedMessage());
-        Toast.makeText(this.requireContext(), "Something went wrong. Please try again!", Toast.LENGTH_SHORT).show();
+        Snackbar.make(b.getRoot(), "Something went wrong. Please try again!",
+                Snackbar.LENGTH_LONG).show();
     }
 
     private void handleNavigation(GoogleSignInAccount googleSignInAccount) {
@@ -254,7 +260,8 @@ public class SignUpFragment extends Fragment {
     }
 
     private void handleNavigationOnExistingUser() {
-        Toast.makeText(this.requireContext(), "You already create your account!", Toast.LENGTH_SHORT).show();
+        Snackbar.make(b.getRoot(), "You already create your account!",
+                Snackbar.LENGTH_LONG).show();
         Navigation.findNavController(b.getRoot()).navigate(
                 SignUpFragmentDirections.actionGlobalMainLessorActivity());
     }

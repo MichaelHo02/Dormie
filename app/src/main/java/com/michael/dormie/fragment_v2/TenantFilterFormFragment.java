@@ -24,6 +24,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -161,6 +162,8 @@ public class TenantFilterFormFragment extends Fragment {
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);
+                    Snackbar.make(b.getRoot(), "Fail to saved information. Please try again!",
+                            Snackbar.LENGTH_LONG).show();
                 });
     }
 
@@ -182,7 +185,11 @@ public class TenantFilterFormFragment extends Fragment {
     private void loadingProcess() {
         b.linearProgressIndicator.setVisibility(View.VISIBLE);
         List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup, b.schoolLayout,
-                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn);
+                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn,
+                b.washerDryerChip, b.rampChip, b.gardenChip,
+                b.catsOKChip, b.dogsOKChip, b.smokeFreeChip,
+                b.apartmentChip, b.villaChip, b.houseChip,
+                b.townhouseChip, b.mobileChip);
         for (View view : views) {
             view.setEnabled(false);
         }
@@ -191,7 +198,11 @@ public class TenantFilterFormFragment extends Fragment {
     private void completeLoadingProcess() {
         b.linearProgressIndicator.setVisibility(View.INVISIBLE);
         List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup, b.schoolLayout,
-                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn);
+                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn,
+                b.washerDryerChip, b.rampChip, b.gardenChip,
+                b.catsOKChip, b.dogsOKChip, b.smokeFreeChip,
+                b.apartmentChip, b.villaChip, b.houseChip,
+                b.townhouseChip, b.mobileChip);
         for (View view : views) {
             view.setEnabled(true);
         }

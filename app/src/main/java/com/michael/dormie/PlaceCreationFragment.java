@@ -27,6 +27,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -153,8 +154,17 @@ public class PlaceCreationFragment extends Fragment {
         String propertyName;
         String description;
 
+        String errorMsg = "";
+        if (b.nameLayout.getError() != null)
+            errorMsg += "Invalid property name. ";
+        if (b.descriptionLayout.getError() != null)
+            errorMsg += "Invalid description. ";
+        if (photoAdapter.getItemCount() == 0)
+            errorMsg += "Invalid or no photo.";
+
         if (b.nameLayout.getError() != null || b.descriptionLayout.getError() != null || photoAdapter.getItemCount() == 0) {
             Log.i(TAG, "Input is not passed validation");
+            Snackbar.make(b.getRoot(), errorMsg, Snackbar.LENGTH_LONG).show();
             return;
         }
 
