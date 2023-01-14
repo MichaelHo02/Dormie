@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +30,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.FragmentSignInBinding;
 import com.michael.dormie.utils.FireBaseDBPath;
-import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextValidator;
 import com.michael.dormie.utils.ValidationUtil;
@@ -165,7 +163,7 @@ public class SignInFragment extends Fragment {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            handleNavigationOnExistingUser();
+            handleUserInfoQuery(user.getUid());
         }
     }
 
@@ -215,8 +213,12 @@ public class SignInFragment extends Fragment {
             handleQueryFail(new Exception());
             return;
         }
+        handleUserInfoQuery(googleSignInAccount.getId());
+    }
+
+    private void handleUserInfoQuery(String id) {
         mDB.collection(FireBaseDBPath.USERS)
-                .document(googleSignInAccount.getId())
+                .document(id)
                 .get()
                 .addOnSuccessListener(this::handleQuerySuccess)
                 .addOnFailureListener(this::handleQueryFail);
@@ -224,7 +226,8 @@ public class SignInFragment extends Fragment {
 
     private void handleQuerySuccess(DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists()) {
-            handleNavigationOnExistingUser();
+            String role = documentSnapshot.getData().get("role").toString();
+            handleNavigationOnExistingUser(role);
             return;
         }
         handleNavigationOnNewUser();
@@ -239,9 +242,16 @@ public class SignInFragment extends Fragment {
                 SignInFragmentDirections.actionGlobalSignUpFormNavigation());
     }
 
-    private void handleNavigationOnExistingUser() {
-        Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionGlobalMainLessorActivity());
+    private void handleNavigationOnExistingUser(String role) {
+        if (role.equals("tenant")) {
+            Navigation.findNavController(b.getRoot()).navigate(
+                    SignInFragmentDirections.actionGlobalMainTenantActivity());
+            return;
+        }
+        if (role.equals("lessor")) {
+            Navigation.findNavController(b.getRoot()).navigate(
+                    SignInFragmentDirections.actionGlobalMainLessorActivity());
+        }
     }
 
     private void loadingProcess() {
