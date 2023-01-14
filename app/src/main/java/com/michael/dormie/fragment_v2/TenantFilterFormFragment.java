@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.PlaceTypes;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
@@ -35,6 +36,7 @@ import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -135,8 +137,13 @@ public class TenantFilterFormFragment extends Fragment {
     }
 
     private void handleOpenSchoolMap(View view) {
+        Bundle bundle = new Bundle();
+        ArrayList<String> filters = new ArrayList<>();
+        filters.add(PlaceTypes.SCHOOL);
+        filters.add(PlaceTypes.UNIVERSITY);
+        bundle.putStringArrayList(MapsActivity.PARAM_LOCATION_TYPE_FILTER, filters);
         NavigationUtil.navigateActivity(this, this.requireContext(), MapsActivity.class,
-                SignalCode.NAVIGATE_MAP);
+                SignalCode.NAVIGATE_MAP, bundle);
     }
 
     private void handleSavedBtn(View view) {

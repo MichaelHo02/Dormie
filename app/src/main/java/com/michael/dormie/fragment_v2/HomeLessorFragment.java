@@ -61,6 +61,11 @@ public class HomeLessorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
+        b.recycleView.setLayoutManager(manager);
+        places = getPlaceList();
+        placeAdapter = new PlaceAdapter(this.requireContext(), places);
+        b.recycleView.setAdapter(placeAdapter);
         recycleViewInit();
 
         b.toolbar.setNavigationOnClickListener(v -> {

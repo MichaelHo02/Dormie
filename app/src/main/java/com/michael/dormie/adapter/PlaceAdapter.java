@@ -41,16 +41,16 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ItemHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-        holder.locationName.setText(places.get(position).name);
-        String addressDisplay = "Address: " + places.get(position).location.address;
-        holder.locationAddress.setText(addressDisplay);
+        holder.locationName.setText(places.get(position).getName());
+//        String addressDisplay = "Address: " + places.get(position).getLocation().address;
+//        holder.locationAddress.setText(addressDisplay);
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.sample)
                 .error(R.drawable.sample);
 
-        Glide.with(context).load(places.get(position).images.get(0)).apply(options).into(holder.locationImage);
+//        Glide.with(context).load(places.get(position).getImages().get(0)).apply(options).into(holder.locationImage);
     }
 
     @Override

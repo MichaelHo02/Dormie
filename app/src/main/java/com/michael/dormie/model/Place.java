@@ -129,7 +129,4 @@ public class Place implements Serializable {
     public void removeAmenity(String amenity) {
         amenities.remove(amenity);
     }
-
-    public Place() {}
-
 }
