@@ -41,6 +41,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.LocationAdapter;
+import com.michael.dormie.databinding.ActivityHostBinding;
+import com.michael.dormie.databinding.ActivityMapsBinding;
 import com.michael.dormie.implement.IClickableCallback;
 import com.michael.dormie.utils.PlaceSearchingWatcher;
 
@@ -55,53 +57,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String PARAM_LOCATION_NAME = "name";
     public static final String PARAM_LOCATION_ADDRESS = "address";
     public static final String PARAM_LOCATION_LAT_LNG = "latLng";
+    public static final String PARAM_LOCATION_TYPE_FILTER = "filter";
 
     private static final String TAG = "MapsActivity";
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
-    private AutocompleteSupportFragment autocompleteSupportFragment;
-    private SearchBar searchBar;
-    private SearchView searchView;
-    private RecyclerView recyclerView;
     private LocationAdapter locationAdapter;
-    private LinearLayout cardView;
-    private MaterialTextView placeName, placeAddress;
-    private MaterialButton submitButton;
+    private ActivityMapsBinding b;
 
     private final Map<String, List<AutocompletePrediction>> cache = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        b = ActivityMapsBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(b.map.getId());
         mapFragment.getMapAsync(this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         locationAdapter = new LocationAdapter(new ArrayList<>(), (pos, autocompletePrediction) -> {
-            searchBar.setText(autocompletePrediction.getPrimaryText(null));
-            searchView.hide();
+            b.searchBar.setText(autocompletePrediction.getPrimaryText(null));
+            b.searchView.hide();
 
-            // Define a Place ID.
             final String placeId = autocompletePrediction.getPlaceId();
-            // Specify the fields to return.
             final List<Place.Field> placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG);
-            // Construct a request object, passing the place ID and fields array.
             final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
             if (!Places.isInitialized()) {
-                // Initialize the SDK
-//                Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
-                Places.initialize(getApplicationContext(), "AIzaSyA3KCcs8KYT8fcMaAUwgSTE3SpeIXGb5Sw");
+                Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
             }
-            // Create a new PlacesClient instance
             PlacesClient placesClient = Places.createClient(this);
-
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 Place place = response.getPlace();
                 Log.i(TAG, "Place found: " + place.getName());
@@ -110,12 +97,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(autocompletePrediction.getPrimaryText(null).toString()));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 15));
 
-                cardView.setVisibility(View.VISIBLE);
+                b.placeCard.setVisibility(View.VISIBLE);
                 String name = autocompletePrediction.getPrimaryText(null).toString();
                 String address = autocompletePrediction.getSecondaryText(null).toString();
-                placeName.setText(name);
-                placeAddress.setText(address);
-                submitButton.setOnClickListener(view -> {
+                b.placeName.setText(name);
+                b.placeAddress.setText(address);
+                b.submitBtn.setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.putExtra(PARAM_LOCATION_NAME, name);
                     intent.putExtra(PARAM_LOCATION_ADDRESS, address);
@@ -138,38 +125,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
         });
-        recyclerView = findViewById(R.id.recycle_view);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(locationAdapter);
+        b.recycleView.setLayoutManager(linearLayoutManager);
+        b.recycleView.setAdapter(locationAdapter);
 
-        searchBar = findViewById(R.id.search_bar);
-        searchView = findViewById(R.id.search_view);
-        searchView.getEditText().addTextChangedListener(
-                new PlaceSearchingWatcher(this, searchView.getEditText(), cache, locationAdapter));
-
-        cardView = findViewById(R.id.place_card);
-        placeName = findViewById(R.id.place_name);
-        placeAddress = findViewById(R.id.place_address);
-        submitButton = findViewById(R.id.submit_button);
-
-        searchBar.setNavigationOnClickListener(view -> {
+        Intent it = getIntent();
+        List<String> filters = it.getExtras().getStringArrayList(PARAM_LOCATION_TYPE_FILTER);
+        b.searchView.getEditText().addTextChangedListener(
+                new PlaceSearchingWatcher(
+                        this, b.searchView.getEditText(), cache, locationAdapter, filters));
+        b.searchBar.setNavigationOnClickListener(view -> {
             setResult(RESULT_CANCELED);
             finish();
         });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 }

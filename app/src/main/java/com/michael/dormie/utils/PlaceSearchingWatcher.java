@@ -30,22 +30,23 @@ public class PlaceSearchingWatcher implements TextWatcher {
     private final EditText editText;
     private Map<String, List<AutocompletePrediction>> cache;
     private LocationAdapter locationAdapter;
+    private List<String> typesFilter;
 
-    public PlaceSearchingWatcher(Context context, EditText editText, Map<String, List<AutocompletePrediction>> cache, LocationAdapter locationAdapter) {
+    public PlaceSearchingWatcher(Context context, EditText editText, Map<String,
+            List<AutocompletePrediction>> cache, LocationAdapter locationAdapter, List<String> typesFilter) {
         this.context = context;
         this.editText = editText;
         this.cache = cache;
         this.locationAdapter = locationAdapter;
+        this.typesFilter = typesFilter;
     }
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
@@ -61,8 +62,7 @@ public class PlaceSearchingWatcher implements TextWatcher {
 
         Log.d(TAG, "Query the prediction");
         if (!Places.isInitialized()) {
-//            Places.initialize(context, context.getString(R.string.google_api_key), Locale.getDefault());
-            Places.initialize(context, "AIzaSyA3KCcs8KYT8fcMaAUwgSTE3SpeIXGb5Sw", Locale.getDefault());
+            Places.initialize(context, context.getString(R.string.google_api_key), Locale.getDefault());
         }
         PlacesClient placesClient = Places.createClient(context);
 
@@ -73,11 +73,8 @@ public class PlaceSearchingWatcher implements TextWatcher {
         // Use the builder to create a FindAutocompletePredictionsRequest.
         FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
                 // Call either setLocationBias() OR setLocationRestriction().
-                .setLocationBias(bounds)
-                //.setLocationRestriction(bounds)
-                .setOrigin(new LatLng(-33.8749937, 151.2041382))
-                .setCountries("AU", "NZ")
-                .setTypesFilter(Arrays.asList("school", "university"))
+                .setCountries("VN")
+                .setTypesFilter(typesFilter)
                 .setQuery(editText.getText().toString())
                 .build();
 

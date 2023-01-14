@@ -52,7 +52,7 @@ public class HomeLessorFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
         b.recycleView.setLayoutManager(manager);
         places = getPlaceList();
-        placeAdapter = new PlaceAdapter(places);
+        placeAdapter = new PlaceAdapter(this.requireContext(), places);
         b.recycleView.setAdapter(placeAdapter);
 
         b.toolbar.setNavigationOnClickListener(v -> {

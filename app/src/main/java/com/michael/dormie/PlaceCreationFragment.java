@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.PlaceTypes;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
@@ -130,10 +131,14 @@ public class PlaceCreationFragment extends Fragment {
     }
 
     private void handleOpenMap(View view) {
+        Bundle bundle = new Bundle();
+        ArrayList<String> filters = new ArrayList<>();
+        filters.add(PlaceTypes.GEOCODE);
+        bundle.putStringArrayList(MapsActivity.PARAM_LOCATION_TYPE_FILTER, filters);
         NavigationUtil.navigateActivity(
                 this,
                 this.requireContext(),
-                MapsActivity.class, SignalCode.NAVIGATE_MAP);
+                MapsActivity.class, SignalCode.NAVIGATE_MAP, bundle);
     }
 
 
