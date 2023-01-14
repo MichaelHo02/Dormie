@@ -5,26 +5,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +27,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.PlaceAdapter;
-import com.michael.dormie.databinding.ActivityMainLessorBinding;
 import com.michael.dormie.databinding.FragmentHomeLessorBinding;
 import com.michael.dormie.model.Place;
 
@@ -63,10 +56,12 @@ public class HomeLessorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
         b.recycleView.setLayoutManager(manager);
-        places = getPlaceList();
-        placeAdapter = new PlaceAdapter(this.requireContext(), places);
+
+        placeAdapter = new PlaceAdapter(this.requireContext(), new ArrayList<>());
         b.recycleView.setAdapter(placeAdapter);
-        recycleViewInit();
+        fetchNewData();
+
+        b.refreshLayout.setOnRefreshListener(this::fetchNewData);
 
         b.toolbar.setNavigationOnClickListener(v -> {
             DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.drawerLayout);
@@ -88,30 +83,29 @@ public class HomeLessorFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 String searchText = newText.toLowerCase();
                 List<Place> temp = new ArrayList<>();
-
                 for (Place place : places) {
-                    if (place.name.toLowerCase(Locale.ROOT).contains(searchText)) {
+                    if (place.getName().toLowerCase(Locale.ROOT).contains(searchText)) {
                         temp.add(place);
                     }
                 }
-
                 if (temp.isEmpty()) {
                     Toast.makeText(getContext(), "No places found.", Toast.LENGTH_SHORT).show();
                 } else {
                     placeAdapter.setFilteredList(temp);
                 }
-        b.bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.home_bottom_search) {
+                b.bottomAppBar.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.home_bottom_search) {
 
-                }
+                    }
+                    return false;
+                });
                 return false;
             }
         });
     }
 
-    private void recycleViewInit() {
+    private void fetchNewData() {
+        Log.e("ABC", "HEllo");
         places = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -119,25 +113,18 @@ public class HomeLessorFragment extends Fragment {
         db.collection("properties")
                 .whereEqualTo("authorId", user.getUid())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Place place = document.toObject(Place.class);
-                                places.add(place);
-                            }
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                        Log.e("Hello", queryDocumentSnapshot.getData().toString());
+                        Place place = queryDocumentSnapshot.toObject(Place.class);
 
-                            LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-                            b.recycleView.setLayoutManager(manager);
-                            placeAdapter = new PlaceAdapter(getContext(), places);
-                            b.recycleView.setAdapter(placeAdapter);
-                        } else {
-                            System.out.println("Error");
-                        }
-
+                        Log.e("Hello", place.getName().toString());
+                        places.add(place);
                     }
+                    Log.e("HELO", String.valueOf(places.size()));
+                    Log.e("HELO", String.valueOf(places.get(0)));
+                    placeAdapter.setFilteredList(places);
+                    b.refreshLayout.setRefreshing(false);
                 });
-
     }
 }

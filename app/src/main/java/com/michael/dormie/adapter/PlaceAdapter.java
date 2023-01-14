@@ -1,6 +1,7 @@
 package com.michael.dormie.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,16 +42,17 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ItemHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-        holder.locationName.setText(places.get(position).getName());
-//        String addressDisplay = "Address: " + places.get(position).getLocation().address;
-//        holder.locationAddress.setText(addressDisplay);
-
+        Place place = places.get(position);
+        if (place == null) return;
+        Log.e("ABC", "HElO");
+        holder.locationName.setText(place.getName());
+        String addressDisplay = "Address: " + place.getLocation().address;
+        holder.locationAddress.setText(addressDisplay);
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.sample)
                 .error(R.drawable.sample);
-
-//        Glide.with(context).load(places.get(position).getImages().get(0)).apply(options).into(holder.locationImage);
+        Glide.with(context).load(place.getImages().get(0)).apply(options).into(holder.locationImage);
     }
 
     @Override
