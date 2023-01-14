@@ -118,8 +118,8 @@ public class TenantSignUpFormActivity extends AppCompatActivity {
         } else return;
 
         SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
-        Tenant tenant = new Tenant(_houseTypes, _amenities, _school, _minDistance, _maxDistance);
-        SignUpFormService.startActionUpdateTenant(this, receiver, tenant);
+//        Tenant tenant = new Tenant(_houseTypes, _amenities, _school, _minDistance, _maxDistance);
+//        SignUpFormService.startActionUpdateTenant(this, receiver, tenant);
     }
 
     private class SubmitResultReceiver extends ResultReceiver {
@@ -136,6 +136,7 @@ public class TenantSignUpFormActivity extends AppCompatActivity {
             }
 
             if (finish) {
+                finish();
                 NavigationUtil.navigateActivity(
                         TenantSignUpFormActivity.this,
                         TenantSignUpFormActivity.this.getBaseContext(),

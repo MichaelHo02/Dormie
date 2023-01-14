@@ -16,11 +16,11 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1" />
 
         <LinearLayout
-            android:id="@+id/place_card"
+            android:id="@+id/placeCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -28,14 +28,14 @@
             android:visibility="gone">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/place_name"
+                android:id="@+id/placeName"
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/place_address"
+                android:id="@+id/placeAddress"
                 style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                 android:textColor="?attr/colorSecondary" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/submit_button"
+                android:id="@+id/submitBtn"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,21 +52,21 @@
     </LinearLayout>
 
     <com.google.android.material.search.SearchBar
-        android:id="@+id/search_bar"
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/please_enter_your_university"
         app:navigationIcon="@drawable/ic_round_arrow_back_24" />
 
     <com.google.android.material.search.SearchView
-        android:id="@+id/search_view"
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/please_enter_your_university"
-        app:layout_anchor="@id/search_bar">
+        app:layout_anchor="@id/searchBar">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycle_view"
+            android:id="@+id/recycleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.search.SearchView>

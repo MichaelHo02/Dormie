@@ -12,19 +12,19 @@ public class TopAppBarUtil {
 
     private boolean updateTopBarTitle(int id) {
         switch (id) {
-            case R.id.home_page:
+            case R.id.homePage:
                 topAppBar.setTitle(R.string.home);
                 return true;
-            case R.id.chat_page:
+            case R.id.chatPage:
                 topAppBar.setTitle(R.string.chat);
                 return true;
             case R.id.rental_registration_page:
                 topAppBar.setTitle(R.string.rental_registration);
                 return true;
-            case R.id.profile_page:
+            case R.id.profilePage:
                 topAppBar.setTitle(R.string.profile);
                 return true;
-            case R.id.setting_page:
+            case R.id.settingPage:
                 topAppBar.setTitle(R.string.setting);
                 return true;
         }

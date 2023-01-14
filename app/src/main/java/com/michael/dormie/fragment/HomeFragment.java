@@ -24,8 +24,10 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.R;
-import com.michael.dormie.activity.MasterActivity;
 import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
@@ -108,7 +110,7 @@ public class HomeFragment extends Fragment {
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.profile_page) {
+                if (item.getItemId() == R.id.profilePage) {
 //                    NavigationUtil.changeFragment(requireActivity(), R.id.activity_master_fl, settingFragment);
                     gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -138,20 +140,38 @@ public class HomeFragment extends Fragment {
         drawerLayout.open();
     }
 
-
     private void recycleViewInit() {
-        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-        recyclerView.setLayoutManager(manager);
-        places = getPlaceList();
-        placeAdapter = new PlaceAdapter(places);
-        recyclerView.setAdapter(placeAdapter);
-    }
+        places = new ArrayList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private List<Place> getPlaceList() {
-        List<Place> places = new ArrayList<>();
+        db.collection("properties")
+                .whereEqualTo("authorId", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Place place = document.toObject(Place.class);
+                                places.add(place);
+                            }
+
+                            LinearLayoutManager manager = new LinearLayoutManager(requireContext());
+                            recyclerView.setLayoutManager(manager);
+                            placeAdapter = new PlaceAdapter(getContext(), places);
+                            recyclerView.setAdapter(placeAdapter);
+                        } else {
+                            System.out.println("Error");
+                        }
+
+                    }
+                });
+
+        /*List<Place> places = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             places.add(new Place());
         }
-        return places;
+        return places;*/
     }
 }
