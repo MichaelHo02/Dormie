@@ -25,6 +25,8 @@ public class Place implements Serializable {
         public Integer qty;
         public String type;
 
+        public PairValue() {}
+
         public PairValue(Integer qty, String type) {
             this.qty = qty;
             this.type = type;
@@ -36,6 +38,8 @@ public class Place implements Serializable {
         public String address;
         public Double lat;
         public Double lng;
+
+        public Location() {}
 
         public Location(String name, String address, Double lat, Double lng) {
             this.name = name;
@@ -125,4 +129,7 @@ public class Place implements Serializable {
     public void removeAmenity(String amenity) {
         amenities.remove(amenity);
     }
+
+    public Place() {}
+
 }
