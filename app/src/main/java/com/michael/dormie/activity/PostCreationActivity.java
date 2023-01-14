@@ -126,10 +126,10 @@ public class PostCreationActivity extends AppCompatActivity {
             return;
         }
 
-        place.authorId = currentUser.getUid();
-        place.authorRef = db.collection("users").document().getPath();
-        place.name = propertyName;
-        place.description = description;
+        place.setAuthorId(currentUser.getUid());
+        place.setAuthorRef(db.collection("users").document().getPath());
+        place.setName(propertyName);
+        place.setDescription(description);
 
         List<Bitmap> photos = photoAdapter.getPhotos();
         for (Bitmap photo : photos) {
@@ -187,7 +187,8 @@ public class PostCreationActivity extends AppCompatActivity {
             String locationAddress = bundle.getString(MapsActivity.PARAM_LOCATION_ADDRESS);
             LatLng locationLatLng = (LatLng) bundle.get(MapsActivity.PARAM_LOCATION_LAT_LNG);
             addressLayout.getEditText().setText(locationName);
-            place.location = new Place.Location(locationName, locationAddress, locationLatLng.latitude, locationLatLng.longitude);
+            place.setLocation(new Place.Location(locationName, locationAddress, locationLatLng.latitude,
+                    locationLatLng.longitude));
         }
     }
 
@@ -201,9 +202,9 @@ public class PostCreationActivity extends AppCompatActivity {
             Log.e(TAG, String.valueOf(resultCode));
             if (resultCode == SignalCode.UPLOAD_IMG_SUCCESS) {
                 String url = resultData.getString("data");
-                place.images.add(url);
+                place.addImage(url);
 
-                if (place.images.size() == photoAdapter.getItemCount() && !isSubmitForm) {
+                if (place.getImages().size() == photoAdapter.getItemCount() && !isSubmitForm) {
                     PostCreationService.startActionUploadPost(PostCreationActivity.this, receiver, place);
                 }
             }
