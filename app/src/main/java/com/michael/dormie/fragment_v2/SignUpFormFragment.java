@@ -31,6 +31,7 @@ import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -176,7 +177,6 @@ public class SignUpFormFragment extends Fragment {
         if (bitmap != null)
             bytes = DataConverter.convertImageToByteArr(bitmap);
 
-        //TODO: add loading animation
         b.savedBtn.setIcon(loadIcon);
         loadingProcess();
         SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
@@ -230,7 +230,7 @@ public class SignUpFormFragment extends Fragment {
                 startActivityForResult(camIntent, SignalCode.ITEM_CREATION_TAKE_PHOTO);
                 return;
             }
-            Toast.makeText(this.requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+            Snackbar.make(b.getRoot(), "Camera permission denied", Snackbar.LENGTH_LONG).show();
         }
     }
 

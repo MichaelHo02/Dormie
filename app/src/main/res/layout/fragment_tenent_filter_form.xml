@@ -197,8 +197,7 @@
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:imeOptions="actionDone" />
+                        android:focusableInTouchMode="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider

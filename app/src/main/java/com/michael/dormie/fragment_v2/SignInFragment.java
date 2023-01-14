@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -104,6 +105,7 @@ public class SignInFragment extends Fragment {
         ValidationUtil.validateEmailAndPassword(b.passwordLayout, b.passwordEditText.getText().toString());
 
         if (b.emailLayout.getError() != null || b.passwordLayout.getError() != null) {
+            Snackbar.make(b.getRoot(), "Invalid email or password", Snackbar.LENGTH_LONG).show();
             Log.i(TAG, "Input is not passed validation");
             return;
         }
@@ -193,13 +195,19 @@ public class SignInFragment extends Fragment {
                         Log.d(TAG, "Sign in with credential success");
                         handleNavigation(googleSignInAccount);
                     })
-                    .addOnFailureListener(e -> Log.w(TAG, "Sign in with credential failure " + e.getLocalizedMessage()));
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG,
+                                "Sign in with credential failure " + e.getLocalizedMessage());
+                        Snackbar.make(b.getRoot(), "Something went wrong. Please try again!",
+                                Snackbar.LENGTH_LONG).show();
+                    });
         }
     }
 
     private void handleFailureSignInGoogle(Exception e) {
         Log.e(TAG, "Fail to sign in with google because " + e.getLocalizedMessage());
-        Toast.makeText(this.requireContext(), "Something went wrong. Please try again!", Toast.LENGTH_SHORT).show();
+        Snackbar.make(b.getRoot(), "Something went wrong. Please try again!",
+                Snackbar.LENGTH_LONG).show();
     }
 
     private void handleNavigation(GoogleSignInAccount googleSignInAccount) {
