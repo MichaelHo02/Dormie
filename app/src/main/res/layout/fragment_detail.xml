@@ -11,6 +11,14 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/dt_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/master_top_bar"
+            app:navigationIcon="@drawable/ic_round_dehaze_24"
+            app:title="@string/profile"
+            app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -30,7 +38,7 @@
                 android:layout_height="364dp">
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
+                    android:id="@+id/dt_view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
