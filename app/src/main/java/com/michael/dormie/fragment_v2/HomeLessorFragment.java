@@ -105,7 +105,6 @@ public class HomeLessorFragment extends Fragment {
     }
 
     private void fetchNewData() {
-        Log.e("ABC", "HEllo");
         places = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,12 +116,8 @@ public class HomeLessorFragment extends Fragment {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                         Log.e("Hello", queryDocumentSnapshot.getData().toString());
                         Place place = queryDocumentSnapshot.toObject(Place.class);
-
-                        Log.e("Hello", place.getName().toString());
                         places.add(place);
                     }
-                    Log.e("HELO", String.valueOf(places.size()));
-                    Log.e("HELO", String.valueOf(places.get(0)));
                     placeAdapter.setFilteredList(places);
                     b.refreshLayout.setRefreshing(false);
                 });
