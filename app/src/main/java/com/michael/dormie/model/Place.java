@@ -48,6 +48,5 @@ public class Place implements Serializable {
             this.lng = lng;
         }
     }
-
     public Place() {}
 }

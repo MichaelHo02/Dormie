@@ -54,8 +54,6 @@ public class SignUpFormActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore mDB;
-    private FirebaseStorage storage;
 
     private ImageView avatar;
     private Bitmap bitmap;
@@ -77,8 +75,6 @@ public class SignUpFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_form);
         mAuth = FirebaseAuth.getInstance();
-        mDB = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
         initVariables();
         initCalendar();
         setActions();
@@ -256,7 +252,6 @@ public class SignUpFormActivity extends AppCompatActivity {
         } else if (requestCode == SignalCode.ITEM_CREATION_UPLOAD_PHOTO) {
             Log.d(TAG, "Put image taken from library");
             Uri selectedImg = data.getData();
-
             InputStream imageStream = null;
             try {
                 imageStream = getContentResolver().openInputStream(selectedImg);
@@ -305,6 +300,7 @@ public class SignUpFormActivity extends AppCompatActivity {
             }
 
             if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("lessor")) {
+                finish();
                 NavigationUtil.navigateActivity(
                         SignUpFormActivity.this,
                         SignUpFormActivity.this.getBaseContext(),
@@ -314,6 +310,7 @@ public class SignUpFormActivity extends AppCompatActivity {
             }
 
             if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("tenant")) {
+                finish();
                 NavigationUtil.navigateActivity(
                         SignUpFormActivity.this,
                         SignUpFormActivity.this.getBaseContext(),

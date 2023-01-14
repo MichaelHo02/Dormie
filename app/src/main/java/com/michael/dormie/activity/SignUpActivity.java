@@ -21,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.R;
@@ -193,16 +194,20 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void handleNavigation(GoogleSignInAccount googleSignInAccount) {
-        mDB.collection(FireBaseDBPath.persons)
-                .whereEqualTo("id", googleSignInAccount.getId())
+        if (googleSignInAccount.getId() == null) {
+            handleQueryFail(new Exception());
+            return;
+        }
+        mDB.collection(FireBaseDBPath.USERS)
+                .document(googleSignInAccount.getId())
                 .get()
                 .addOnSuccessListener(this::handleQuerySuccess)
                 .addOnFailureListener(this::handleQueryFail);
     }
 
-    private void handleQuerySuccess(QuerySnapshot queryDocumentSnapshots) {
+    private void handleQuerySuccess(DocumentSnapshot documentSnapshot) {
         finish();
-        if (queryDocumentSnapshots.getDocuments().isEmpty()) {
+        if (documentSnapshot.exists()) {
             handleNavigationOnNewUser();
             return;
         }
@@ -214,7 +219,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void handleNavigationOnNewUser() {
-        finish();
         NavigationUtil.navigateActivity(
                 this,
                 SignUpActivity.this,

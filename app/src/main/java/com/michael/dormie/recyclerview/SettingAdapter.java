@@ -16,11 +16,9 @@ import java.util.List;
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingViewHolder> {
 
-    private final SettingRecyclerInterface recyclerInterface;
     private List<SettingCard> list;
 
-    public SettingAdapter(SettingRecyclerInterface recyclerInterface, List<SettingCard> list) {
-        this.recyclerInterface = recyclerInterface;
+    public SettingAdapter(List<SettingCard> list) {
         this.list = list;
     }
 
@@ -28,7 +26,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     @Override
     public SettingAdapter.SettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.setting_card, parent, false);
-        return new SettingAdapter.SettingViewHolder(view, recyclerInterface);
+        return new SettingAdapter.SettingViewHolder(view);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
         private TextView cardContent;
         private Switch cardSwitch;
 
-        public SettingViewHolder(@NonNull View itemView, SettingRecyclerInterface recyclerInterface) {
+        public SettingViewHolder(@NonNull View itemView) {
             super(itemView);
 
             cardTitle = itemView.findViewById(R.id.setting_title);
