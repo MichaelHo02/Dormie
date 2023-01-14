@@ -18,12 +18,17 @@ import com.michael.dormie.model.Place;
 import java.util.List;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ItemHolder> {
-    private final List<Place> places;
-    private final Context context;
+    private List<Place> places;
+    private Context context;
 
     public PlaceAdapter(Context context, List<Place> places) {
         this.places = places;
         this.context = context;
+    }
+
+    public void setFilteredList(List<Place> filteredList) {
+        this.places = filteredList;
+        notifyDataSetChanged();
     }
 
     @NonNull

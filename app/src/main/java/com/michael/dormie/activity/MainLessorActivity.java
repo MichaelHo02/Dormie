@@ -12,14 +12,18 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 
+import com.michael.dormie.MyBroadcastReceiver;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.ActivityMainLessorBinding;
 
 public class MainLessorActivity extends AppCompatActivity {
     ActivityMainLessorBinding b;
+    MyBroadcastReceiver bcr;
+    IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +44,20 @@ public class MainLessorActivity extends AppCompatActivity {
             return NavigationUI.onNavDestinationSelected(item, navController)
                     || super.onOptionsItemSelected(item);
         });
+
+        registerService();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         b.navigationView.setCheckedItem(Navigation.findNavController(b.fragmentContainerView).getCurrentDestination().getId());
+    }
+
+    private void registerService() {
+        bcr = new MyBroadcastReceiver();
+        intentFilter = new IntentFilter("android.intent.action.BATTERY_LOW");
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        this.registerReceiver(bcr, intentFilter);
     }
 }
