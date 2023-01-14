@@ -140,15 +140,6 @@ public class HomeFragment extends Fragment {
         drawerLayout.open();
     }
 
-
-//    private void recycleViewInit() {
-//        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-//        recyclerView.setLayoutManager(manager);
-//        places = getPlaceList();
-//        placeAdapter = new PlaceAdapter(getContext(), places);
-//        recyclerView.setAdapter(placeAdapter);
-//    }
-
     private void recycleViewInit() {
         places = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
