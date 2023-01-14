@@ -29,11 +29,12 @@ public class Tenant implements Serializable {
     }
 
     public void addHouseType(String type) {
-        amenities.add(type);
+        if (!houseTypes.contains(type))
+            houseTypes.add(type);
     }
 
     public void removeHouseType(String type) {
-        amenities.remove(type);
+        houseTypes.remove(type);
     }
 
     public void setHouseTypes(List<String> houseTypes) {
@@ -45,7 +46,8 @@ public class Tenant implements Serializable {
     }
 
     public void addAmenity(String amenity) {
-        amenities.add(amenity);
+        if (!amenities.contains(amenity))
+            amenities.add(amenity);
     }
 
     public void removeAmenity(String amenity) {
@@ -92,5 +94,7 @@ public class Tenant implements Serializable {
             this.lat = lat;
             this.lng = lng;
         }
+
+        public Location() {}
     }
 }

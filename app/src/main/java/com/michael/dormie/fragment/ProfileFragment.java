@@ -74,8 +74,31 @@ public class ProfileFragment extends Fragment {
             drawerLayout.open();
         });
 
+        initEditFormBtn();
         b.signOutBtn.setOnClickListener(this::handleSignOutClick);
         b.delAccBtn.setOnClickListener(this::handleDeleteAccClick);
+        b.editFormBtn.setOnClickListener(this::handleEditFormClick);
+    }
+
+    private void initEditFormBtn() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.getResult().get("role").equals("lessor")) {
+                    b.editFormBtn.setVisibility(View.INVISIBLE);
+                } else {
+                    b.editFormBtn.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void handleEditFormClick(View view) {
+        Navigation.findNavController(b.getRoot()).navigate(ProfileFragmentDirections.actionProfileFragmentToEditFormFragment());
     }
 
     private void handleSignOutClick(View view) {
@@ -108,7 +131,7 @@ public class ProfileFragment extends Fragment {
         }
         b.profileEmail.setText(currentUser.getEmail());
         b.profileName.setText(currentUser.getDisplayName());
-        Glide.with(b.getRoot()).load(currentUser.getPhotoUrl()).into(b.avatarImageView);
+        //Glide.with(b.getRoot()).load(currentUser.getPhotoUrl()).into(b.avatarImageView);
         DocumentReference doc = db.collection("users").document(currentUser.getUid());
         doc.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot != null) {
