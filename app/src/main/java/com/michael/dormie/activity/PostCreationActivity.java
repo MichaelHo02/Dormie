@@ -187,8 +187,8 @@ public class PostCreationActivity extends AppCompatActivity {
             String locationAddress = bundle.getString(MapsActivity.PARAM_LOCATION_ADDRESS);
             LatLng locationLatLng = (LatLng) bundle.get(MapsActivity.PARAM_LOCATION_LAT_LNG);
             addressLayout.getEditText().setText(locationName);
-            place.setLocation(new Place.Location(locationName, locationAddress, locationLatLng.latitude,
-                    locationLatLng.longitude));
+//            place.setLocation(new Place.Location(locationName, locationAddress, locationLatLng.latitude,
+//                    locationLatLng.longitude));
         }
     }
 

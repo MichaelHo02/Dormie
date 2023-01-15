@@ -29,11 +29,11 @@ public class Tenant implements Serializable {
     }
 
     public void addHouseType(String type) {
-        amenities.add(type);
+        houseTypes.add(type);
     }
 
     public void removeHouseType(String type) {
-        amenities.remove(type);
+        houseTypes.remove(type);
     }
 
     public void setHouseTypes(List<String> houseTypes) {
@@ -80,11 +80,14 @@ public class Tenant implements Serializable {
         this.maxDistance = maxDistance;
     }
 
-    public static class Location implements Serializable{
+    public static class Location implements Serializable {
         public String name;
         public String address;
         public Double lat;
         public Double lng;
+
+        public Location() {
+        }
 
         public Location(String name, String address, Double lat, Double lng) {
             this.name = name;

@@ -68,7 +68,8 @@ public class HomeLessorFragment extends Fragment {
             drawerLayout.open();
         });
         b.fab.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
+            Navigation.findNavController(view).navigate(
+                    HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
         });
 
         SearchView searchView = (SearchView) b.bottomAppBar.getMenu().findItem(R.id.home_bottom_search).getActionView();

@@ -124,8 +124,11 @@ public class SignInFragment extends Fragment {
 
     private void handleSuccessSignInEmailPassword(AuthResult authResult) {
         Log.d(TAG, "Sign in with email success");
-        Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionGlobalMainLessorActivity());
+        if (authResult.getUser() == null) {
+            handleQueryFail(new Exception());
+            return;
+        }
+        handleUserInfoQuery(authResult.getUser().getUid());
     }
 
     private void handleFailureSignInEmailPassword(Exception e) {
@@ -192,6 +195,7 @@ public class SignInFragment extends Fragment {
                     .addOnSuccessListener(authResult -> {
                         Log.d(TAG, "Sign in with credential success");
                         handleNavigation(googleSignInAccount);
+
                     })
                     .addOnFailureListener(e -> {
                         Log.w(TAG,
@@ -230,7 +234,7 @@ public class SignInFragment extends Fragment {
             handleNavigationOnExistingUser(role);
             return;
         }
-        handleNavigationOnNewUser();
+//        handleNavigationOnNewUser();
     }
 
     private void handleQueryFail(Exception e) {
