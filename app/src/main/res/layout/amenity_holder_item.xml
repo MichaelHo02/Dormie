@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/dt_amenity_card"
-        style="@style/TextAppearance.Material3.BodyMedium"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/dt_amenity_chip"
+        style="@style/Widget.Material3.Chip.Filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/amenities"
-        android:clickable="false"/>
+        android:layout_marginHorizontal="8dp"
+        android:clickable="false"
+        android:checked="true"
+        android:text="Apartment" />
 
 </RelativeLayout>
 
