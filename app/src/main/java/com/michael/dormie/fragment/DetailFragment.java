@@ -9,14 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
@@ -45,13 +44,10 @@ public class DetailFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
-    private View view;
-    private MaterialToolbar topAppBar;
     private PhotoAdapter photoAdapter;
     private List<Bitmap> photos;
     private AmenityAdapter amenityAdapter;
     private List<String> amenitites;
-
 
     public DetailFragment() {
         // Required empty public constructor
@@ -82,33 +78,54 @@ public class DetailFragment extends Fragment {
 
         b.dtToolbar.setNavigationOnClickListener(this::handleNavigationOnClick);
 
-        Place place = (Place) getArguments().getSerializable("place_detail");
-        b.dtPlaceName.setText(place.getName());
-        b.dtPlaceAddress.setText(place.getLocation().address);
-        b.dtPlaceDescription.setText(place.getDescription());
+        try {
+            Place place = (Place) getArguments().getSerializable("place_detail");
+            b.dtPlaceName.setText(place.getName());
+            b.dtPlaceAddress.setText(place.getLocation().address);
+            b.dtPlaceAddress.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    final int DRAWABLE_RIGHT = 2;
+                    final int DRAWABLE_BOTTOM = 3;
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (event.getRawX() >= (b.dtPlaceAddress.getRight() - b.dtPlaceAddress.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("place", place);
+                            Navigation.findNavController(view).navigate(R.id.action_detailFragment_to_mapsActivity, bundle);
+                        }
+                    }
 
-        photos = new ArrayList<>();
-        for (String photo : place.getImages()) {
-            photos.add(DataConverter.getImageBitmap(photo));
-        }
-        photoAdapter = new PhotoAdapter(getContext(), photos);
-        b.dtViewPager.setLayoutDirection(linearLayoutManager.getLayoutDirection());
-        b.dtViewPager.setAdapter(photoAdapter);
+                    return false;
+                }
+            });
+            b.dtPlaceDescription.setText(place.getDescription());
 
-        amenitites = place.getAmenities();
-        amenityAdapter = new AmenityAdapter(getContext(), amenitites);
-        b.dtViewPager.setLayoutDirection(linearLayoutManager.getLayoutDirection());
-        b.dtViewPager.setAdapter(amenityAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
 
-        b.dtEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("place", place);
+            photos = new ArrayList<>();
+            for (String photo : place.getImages()) {
+                photos.add(DataConverter.getImageBitmap(photo));
             }
-        });
+            photoAdapter = new PhotoAdapter(getContext(), photos);
+            b.dtViewPager.setLayoutDirection(linearLayoutManager.getLayoutDirection());
+            b.dtViewPager.setAdapter(photoAdapter);
+
+            amenitites = place.getAmenities();
+            amenityAdapter = new AmenityAdapter(getContext(), amenitites);
+            b.dtViewPager.setLayoutDirection(linearLayoutManager.getLayoutDirection());
+            b.dtViewPager.setAdapter(amenityAdapter);
+
+            b.dtEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("place", place);
+                }
+            });
+        } catch (Exception e) {
+            Log.e("ERROR", String.valueOf(e));
+        }
     }
 
     private void handleNavigationOnClick(View view) {
