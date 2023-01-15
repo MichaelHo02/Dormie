@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeLessorFragment"
+        android:checkable="true"
+        android:icon="@drawable/ic_round_home_24"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/chatLessorFragment"
+        android:checkable="true"
+        android:icon="@drawable/ic_round_chat_bubble_24"
+        android:title="@string/chat" />
+
+    <item
+        android:id="@+id/others_item"
+        android:title="@string/others">
+        <menu>
+            <item
+                android:id="@+id/profileFragment"
+                android:checkable="true"
+                android:icon="@drawable/ic_round_person_24"
+                android:title="@string/profile" />
+        </menu>
+    </item>
+</menu>

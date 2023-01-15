@@ -15,37 +15,24 @@ public class Place implements Serializable {
     //    public Integer rating;
     private String description;
     private List<String> images;
-    //    public PairValue[] bathroom;
-//    public PairValue[] bedroom;
     private String houseType;
     private List<String> amenities;
-//    public PairValue[] furniture;
-
-    public static class PairValue implements Serializable {
-        public Integer qty;
-        public String type;
-
-        public PairValue() {}
-
-        public PairValue(Integer qty, String type) {
-            this.qty = qty;
-            this.type = type;
-        }
-    }
 
     public static class Location implements Serializable {
         public String name;
         public String address;
         public Double lat;
         public Double lng;
+        public String geoHash;
 
         public Location() {}
 
-        public Location(String name, String address, Double lat, Double lng) {
+        public Location(String name, String address, Double lat, Double lng, String geoHash) {
             this.name = name;
             this.address = address;
             this.lat = lat;
             this.lng = lng;
+            this.geoHash = geoHash;
         }
     }
 
