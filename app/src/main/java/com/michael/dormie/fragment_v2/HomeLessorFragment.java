@@ -114,6 +114,7 @@ public class HomeLessorFragment extends Fragment {
                 .whereEqualTo("authorId", user.getUid())
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) return;
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                         Log.e("Hello", queryDocumentSnapshot.getData().toString());
                         Place place = queryDocumentSnapshot.toObject(Place.class);

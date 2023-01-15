@@ -125,7 +125,7 @@ public class SignInFragment extends Fragment {
     private void handleSuccessSignInEmailPassword(AuthResult authResult) {
         Log.d(TAG, "Sign in with email success");
         if (authResult.getUser() == null) {
-            handleQueryFail(new Exception());
+//            handleQueryFail(new Exception());
             return;
         }
         handleUserInfoQuery(authResult.getUser().getUid());
@@ -230,6 +230,7 @@ public class SignInFragment extends Fragment {
 
     private void handleQuerySuccess(DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists()) {
+            Log.d(TAG, "Navigate to the existing user");
             String role = documentSnapshot.getData().get("role").toString();
             handleNavigationOnExistingUser(role);
             return;
@@ -248,11 +249,13 @@ public class SignInFragment extends Fragment {
 
     private void handleNavigationOnExistingUser(String role) {
         if (role.equals("tenant")) {
+            Log.d(TAG, "Navigate tenant home page");
             Navigation.findNavController(b.getRoot()).navigate(
                     SignInFragmentDirections.actionGlobalMainTenantActivity());
             return;
         }
         if (role.equals("lessor")) {
+            Log.d(TAG, "Navigate lessor home page");
             Navigation.findNavController(b.getRoot()).navigate(
                     SignInFragmentDirections.actionGlobalMainLessorActivity());
         }
