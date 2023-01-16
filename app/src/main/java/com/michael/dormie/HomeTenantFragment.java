@@ -34,28 +34,29 @@ import com.michael.dormie.implement.PaginationScrollingListener;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.FireBaseDBPath;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HomeTenantFragment extends Fragment {
     private static final String TAG = "HomeTenantFragment";
     private final int MAX_REQUEST = 1;
 
     FragmentHomeTenantBinding b;
-    private List<Place> places;
+    private Set<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;
     private Tenant tenantReference;
     private List<Query> queries;
-    boolean call = true;
 
     private boolean isLoading;
     private boolean isLastPage;
-    private int totalPage = 2;
+    private int totalPage = 4;
     private int currentPage = 1;
 
     @Override
@@ -73,7 +74,7 @@ public class HomeTenantFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        places = new ArrayList<>();
+        places = new HashSet<>();
         queries = new ArrayList<>();
 
         b.toolbar.setNavigationOnClickListener(v -> {
@@ -82,14 +83,17 @@ public class HomeTenantFragment extends Fragment {
         });
 
         manager = new LinearLayoutManager(requireContext());
-        placeAdapter = new PlaceAdapter(this.requireContext(), places);
+        int size = places.size();
+        placeAdapter = new PlaceAdapter(this.requireContext(),
+                Arrays.asList(places.toArray(new Place[size])));
         b.recycleView.setLayoutManager(manager);
         b.recycleView.setHasFixedSize(true);
         b.recycleView.setAdapter(placeAdapter);
         b.recycleView.addOnScrollListener(createInfiniteScrollListener());
 
         fetchInitData(() -> {
-            placeAdapter.setFilteredList(places);
+            int tmpSize = places.size();
+            placeAdapter.setFilteredList(Arrays.asList(places.toArray(new Place[tmpSize])));
             if (currentPage < totalPage) {
                 placeAdapter.addFooterLoading();
             } else {
@@ -106,7 +110,8 @@ public class HomeTenantFragment extends Fragment {
                 currentPage++;
                 new Handler().postDelayed(() -> fetchData(() -> {
                     placeAdapter.removeFooterLoading();
-                    placeAdapter.setFilteredList(places);
+                    int tmpSize = places.size();
+                    placeAdapter.setFilteredList(Arrays.asList(places.toArray(new Place[tmpSize])));
                     isLoading = false;
                     if (currentPage < totalPage) {
                         placeAdapter.addFooterLoading();
