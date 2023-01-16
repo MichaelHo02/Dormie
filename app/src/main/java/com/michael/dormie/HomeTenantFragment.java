@@ -8,7 +8,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.util.Log;
@@ -31,21 +30,21 @@ import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.databinding.FragmentHomeTenantBinding;
 import com.michael.dormie.implement.ICallBack;
 import com.michael.dormie.implement.PaginationScrollingListener;
+import com.michael.dormie.implement.PlaceInterface;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.FireBaseDBPath;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HomeTenantFragment extends Fragment {
     private static final String TAG = "HomeTenantFragment";
     private final int MAX_REQUEST = 1;
 
     FragmentHomeTenantBinding b;
+    private final PlaceInterface placeInterface;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;
@@ -57,6 +56,10 @@ public class HomeTenantFragment extends Fragment {
     private boolean isLastPage;
     private int totalPage = 2;
     private int currentPage = 1;
+
+    public HomeTenantFragment(PlaceInterface placeInterface) {
+        this.placeInterface = placeInterface;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

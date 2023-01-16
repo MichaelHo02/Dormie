@@ -31,6 +31,7 @@ import com.michael.dormie.R;
 import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.adapter.PlaceAdapter;
+import com.michael.dormie.implement.PlaceInterface;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;

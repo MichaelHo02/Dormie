@@ -77,7 +77,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 .placeholder(R.drawable.sample)
                 .error(R.drawable.sample);
         Glide.with(context).load(place.getImages().get(0)).apply(options).into(((ItemHolder) holder).locationImage);
-        ((ItemHolder) holder).root.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -106,15 +106,30 @@ public class PlaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public static final class ItemHolder extends RecyclerView.ViewHolder {
         View root;
+        Place place;
         ShapeableImageView locationImage;
         MaterialTextView locationName, locationAddress;
 
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
-            root = itemView;
             locationImage = itemView.findViewById(R.id.locationImage);
             locationName = itemView.findViewById(R.id.locationName);
             locationAddress = itemView.findViewById(R.id.locationAddress);
+
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (placeInterface != null) {
+//                        int position = getAdapterPosition();
+//
+//                        if (position != RecyclerView.NO_POSITION) {
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("place_detail", place);
+//                            Navigation.findNavController(itemView).navigate(R.id.action_homeTenantFragment_to_tenantDetailFragment, bundle);
+//                        }
+//                    }
+//                }
+//            });
         }
     }
 
