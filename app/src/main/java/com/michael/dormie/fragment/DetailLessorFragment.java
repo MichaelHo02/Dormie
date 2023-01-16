@@ -1,6 +1,5 @@
 package com.michael.dormie.fragment;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -10,8 +9,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,7 +83,6 @@ public class DetailLessorFragment extends Fragment {
             b.dtPlaceName.setText(place.getName());
             b.dtPlaceAddress.setText(place.getLocation().address);
             b.dtPlaceAddress.setOnTouchListener(new View.OnTouchListener() {
-                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     final int DRAWABLE_RIGHT = 2;
@@ -105,20 +101,20 @@ public class DetailLessorFragment extends Fragment {
             });
             b.dtPlaceDescription.setText(place.getDescription());
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
 
             photos = new ArrayList<>();
             for (String photo : place.getImages()) {
                 photos.add(DataConverter.getImageBitmap(photo));
             }
             photoAdapter = new PhotoAdapter(getContext(), photos);
-            b.dtViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+            b.dtViewPager.setLayoutDirection(linearLayoutManager.getLayoutDirection());
             b.dtViewPager.setAdapter(photoAdapter);
 
             amenitites = place.getAmenities();
             amenityAdapter = new AmenityAdapter(getContext(), amenitites);
-            b.dtAmenities.setLayoutManager(linearLayoutManager);
-            b.dtAmenities.setAdapter(amenityAdapter);
+            b.dtViewPager.setLayoutDirection(linearLayoutManager.getLayoutDirection());
+            b.dtViewPager.setAdapter(amenityAdapter);
 
             b.dtEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
