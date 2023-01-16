@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.model.Tenant;
+import com.michael.dormie.model.User;
 import com.michael.dormie.utils.SignalCode;
 
 import java.util.HashMap;
@@ -149,9 +150,10 @@ public class SignUpFormService extends IntentService {
             return;
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> user = new HashMap<>();
-        user.put("role", role);
-        user.put("dob", dob);
+        User user = new User(role, dob, false, null);
+//        Map<String, Object> user = new HashMap<>();
+//        user.put("role", role);
+//        user.put("dob", dob);
         db.collection("users")
                 .document(currentUser.getUid())
                 .set(user, SetOptions.merge())
