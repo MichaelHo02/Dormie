@@ -19,10 +19,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.michael.dormie.R;
 import com.michael.dormie.model.ChatMessage;
+
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,7 +93,7 @@ public class ChatFragment extends Fragment {
                 // Read the input field and push a new instance of Chat to the Firebase database
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://dormie-5ad44-default-rtdb.asia-southeast1.firebasedatabase.app");
                 DatabaseReference myRef = database.getReference("server/saved_chat");
-                myRef.push().setValue(new ChatMessage(input.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
+                myRef.push().setValue(new ChatMessage(input.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getEmail()));
                 // Clear current input
                 input.setText("");
             }
@@ -116,9 +119,9 @@ public class ChatFragment extends Fragment {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Obtain references for message, time, and user
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+                TextView messageText = (TextView) v.findViewById(R.id.message_text);
+                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
+                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
                 // Change message text, user, and time
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());
@@ -127,6 +130,7 @@ public class ChatFragment extends Fragment {
         };
         ListView listOfMessages = (ListView) view.findViewById(R.id.list_of_messages);
         listOfMessages.setAdapter(adapter);
+
 
     };
 
