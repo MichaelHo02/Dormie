@@ -9,10 +9,22 @@
         android:id="@+id/homeTenantFragment"
         android:name="com.michael.dormie.HomeTenantFragment"
         android:label="fragment_home_tenant"
-        tools:layout="@layout/fragment_home_tenant" />
+        tools:layout="@layout/fragment_home_tenant" >
+        <action
+            android:id="@+id/action_homeTenantFragment_to_tenantDetailFragment"
+            app:destination="@id/tenantDetailFragment" />
+        <action
+            android:id="@+id/action_homeTenantFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/tenantDetailFragment"
+        android:name="com.michael.dormie.fragment.DetailTenantFragment"
+        android:label="fragment_detail_tenant"
+        tools:layout="@layout/fragment_detail_tenant" />
 </navigation>

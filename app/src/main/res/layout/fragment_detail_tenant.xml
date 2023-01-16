@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.TenantDetailFragment">
+    tools:context=".fragment.DetailTenantFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/dt_toolbar"
+            android:id="@+id/tdt_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/master_top_bar"
@@ -22,7 +22,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+        android:id="@+id/tdt_nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
@@ -38,12 +38,12 @@
                 android:layout_height="364dp">
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/dt_view_pager"
+                    android:id="@+id/tdt_view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/dt_wrap_circle_indicator"
+                    android:id="@+id/tdt_wrap_circle_indicator"
                     style="@style/Widget.Material3.CardView.Filled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                     android:layout_marginBottom="16dp">
 
                     <me.relex.circleindicator.CircleIndicator3
-                        android:id="@+id/dt_circle_indicator"
+                        android:id="@+id/tdt_circle_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
@@ -71,7 +71,7 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/dt_place_name"
+                    android:id="@+id/tdt_place_name"
                     style="@style/TextAppearance.Material3.BodyLarge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.BodyMedium"
-                    android:id="@+id/dt_place_address"
+                    android:id="@+id/tdt_place_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
@@ -109,7 +109,7 @@
                     android:layout_height="32dp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/dt_place_description"
+                    android:id="@+id/tdt_place_description"
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                     android:paddingBottom="16dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/dt_amenities"
+                    android:id="@+id/tdt_amenities"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scrollbars="horizontal"/>
@@ -140,10 +140,10 @@
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Material3.Button.Icon"
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-        android:id="@+id/dt_elevatedButton"
+        android:id="@+id/tdt_Send_Request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Post"
+        android:text="Send Request"
         app:icon="@drawable/ic_baseline_edit_24"
         android:layout_gravity="bottom|right"
         android:layout_margin="24dp"

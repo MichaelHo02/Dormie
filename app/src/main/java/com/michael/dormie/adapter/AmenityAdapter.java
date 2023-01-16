@@ -24,6 +24,10 @@ public class AmenityAdapter extends RecyclerView.Adapter<AmenityAdapter.ItemHold
         this.context = context;
     }
 
+    public List<String> getAmenities() {
+        return amenities;
+    }
+
     @NonNull
     @Override
     public AmenityAdapter.ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
