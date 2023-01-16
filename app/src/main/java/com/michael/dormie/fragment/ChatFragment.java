@@ -81,11 +81,12 @@ public class ChatFragment extends Fragment {
         displayChatMessages();
 
         // Using FAB to send message
-        FloatingActionButton fab = (FloatingActionButton)getView().findViewById(R.id.fab);
+        EditText input = (EditText) view.findViewById(R.id.input);
+        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText input = (EditText)getView().findViewById(R.id.input);
+
                 // Read the input field and push a new instance of Chat to the Firebase database
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://dormie-5ad44-default-rtdb.asia-southeast1.firebasedatabase.app");
                 DatabaseReference myRef = database.getReference("server/saved_chat");
@@ -124,7 +125,7 @@ public class ChatFragment extends Fragment {
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
             }
         };
-        ListView listOfMessages = (ListView)getView().findViewById(R.id.list_of_messages);
+        ListView listOfMessages = (ListView) view.findViewById(R.id.list_of_messages);
         listOfMessages.setAdapter(adapter);
 
     };
