@@ -56,7 +56,7 @@ public class HomeTenantFragment extends Fragment {
 
     private boolean isLoading;
     private boolean isLastPage;
-    private int totalPage = 4;
+    private int totalPage = 2;
     private int currentPage = 1;
 
     @Override
