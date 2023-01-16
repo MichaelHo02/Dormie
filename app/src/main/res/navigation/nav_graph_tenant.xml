@@ -14,5 +14,18 @@
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editFormFragment"
+            app:destination="@id/editFormFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFormFragment"
+        android:name="com.michael.dormie.fragment_v2.EditFormFragment"
+        android:label="fragment_edit_form"
+        tools:layout="@layout/fragment_edit_form" >
+        <action
+            android:id="@+id/action_editFormFragment_to_homeTenantFragment"
+            app:destination="@id/homeTenantFragment" />
+    </fragment>
 </navigation>
