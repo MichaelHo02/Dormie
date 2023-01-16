@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.MessageTenantFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/chat_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/master_top_bar"
+            app:navigationIcon="@drawable/ic_round_dehaze_24"
+            app:title="@string/profile"
+            app:titleCentered="true" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/chat_nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_rcv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"/>
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:paddingVertical="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:id="@+id/chat_msg"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:text="Send Request"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/send_msg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_baseline_send_24" />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

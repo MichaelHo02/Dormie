@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeLessorFragment_to_placeCreationFragment"
             app:destination="@id/placeCreationFragment" />
+        <action
+            android:id="@+id/action_homeLessorFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatLessorFragment"
@@ -39,4 +42,9 @@
         android:name="com.michael.dormie.PromotionFragment"
         android:label="fragment_promotion"
         tools:layout="@layout/fragment_promotion" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.michael.dormie.fragment.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat_tenant" />
 </navigation>

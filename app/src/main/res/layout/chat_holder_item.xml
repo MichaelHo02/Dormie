@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chat_contact"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:text="@string/username"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/last_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                style="@style/TextAppearance.Material3.BodyLarge"
+                android:text="last message"/>
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/chat_time"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="italic"
+            style="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="time"/>
+    </LinearLayout>
+</LinearLayout>
