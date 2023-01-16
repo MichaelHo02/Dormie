@@ -47,4 +47,9 @@
             android:id="@+id/action_editFormFragment_to_homeLessorFragment"
             app:destination="@id/homeLessorFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/promotionFragment"
+        android:name="com.michael.dormie.PromotionFragment"
+        android:label="fragment_promotion"
+        tools:layout="@layout/fragment_promotion" />
 </navigation>

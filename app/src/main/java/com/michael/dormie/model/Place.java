@@ -5,7 +5,10 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Place implements Serializable {
     private String authorId;
@@ -15,43 +18,34 @@ public class Place implements Serializable {
     //    public Integer rating;
     private String description;
     private List<String> images;
-    //    public PairValue[] bathroom;
-//    public PairValue[] bedroom;
     private String houseType;
     private List<String> amenities;
-//    public PairValue[] furniture;
-
-    public static class PairValue implements Serializable {
-        public Integer qty;
-        public String type;
-
-        public PairValue() {}
-
-        public PairValue(Integer qty, String type) {
-            this.qty = qty;
-            this.type = type;
-        }
-    }
+    private boolean isPromoted;
+    private Date expiryDate;
 
     public static class Location implements Serializable {
         public String name;
         public String address;
         public Double lat;
         public Double lng;
+        public String geoHash;
 
         public Location() {}
 
-        public Location(String name, String address, Double lat, Double lng) {
+        public Location(String name, String address, Double lat, Double lng, String geoHash) {
             this.name = name;
             this.address = address;
             this.lat = lat;
             this.lng = lng;
+            this.geoHash = geoHash;
         }
     }
 
     public Place() {
         images = new ArrayList<>();
         amenities = new ArrayList<>();
+        isPromoted = false;
+        expiryDate = null;
     }
 
     public String getAuthorId() {
@@ -128,5 +122,21 @@ public class Place implements Serializable {
 
     public void removeAmenity(String amenity) {
         amenities.remove(amenity);
+    }
+
+    public boolean isPromoted() {
+        return isPromoted;
+    }
+
+    public void setPromoted(boolean promoted) {
+        isPromoted = promoted;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
 }

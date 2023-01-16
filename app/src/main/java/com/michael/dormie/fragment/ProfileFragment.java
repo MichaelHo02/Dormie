@@ -38,6 +38,7 @@ import com.michael.dormie.R;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.databinding.FragmentHomeLessorBinding;
 import com.michael.dormie.databinding.FragmentProfileBinding;
+import com.michael.dormie.model.User;
 import com.michael.dormie.utils.NavigationUtil;
 
 public class ProfileFragment extends Fragment {
@@ -105,7 +106,6 @@ public class ProfileFragment extends Fragment {
         auth.signOut();
         gsc.signOut().addOnSuccessListener(task -> {
             this.requireActivity().finish();
-            Toast.makeText(ProfileFragment.this.getContext(), "Successfully log out!", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -116,7 +116,8 @@ public class ProfileFragment extends Fragment {
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "User account deleted.");
                     this.requireActivity().finish();
-                    Toast.makeText(ProfileFragment.this.getContext(), "Successfully delete the account!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getContext(), "Successfully delete the account!",
+                            Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Could not delete the account"));
     }
@@ -135,8 +136,9 @@ public class ProfileFragment extends Fragment {
         DocumentReference doc = db.collection("users").document(currentUser.getUid());
         doc.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot != null) {
-                b.profileDOB.setText(documentSnapshot.getString("dob"));
-                b.profileRole.setText(documentSnapshot.getString("role"));
+                User user = documentSnapshot.toObject(User.class);
+                b.profileDOB.setText(user.getDob());
+                b.profileRole.setText(user.getRole());
             }
         });
     }

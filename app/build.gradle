@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.michael.dormie'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.michael.dormie"
         minSdk 25
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -53,9 +53,15 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment:2.5.3"
     implementation "androidx.navigation:navigation-ui:2.5.3"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.5.3"
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'com.firebase:geofire-android-common:3.1.0'
+
+    implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
+
+    implementation 'com.stripe:stripe-android:20.17.0'
+    implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
+    implementation 'com.github.kittinunf.fuel:fuel-json:2.3.1'
 
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation 'me.relex:circleindicator:2.1.6'

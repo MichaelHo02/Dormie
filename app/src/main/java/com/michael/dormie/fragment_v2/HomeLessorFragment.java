@@ -68,7 +68,8 @@ public class HomeLessorFragment extends Fragment {
             drawerLayout.open();
         });
         b.fab.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
+            Navigation.findNavController(view).navigate(
+                    HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
         });
 
         SearchView searchView = (SearchView) b.bottomAppBar.getMenu().findItem(R.id.home_bottom_search).getActionView();
@@ -105,7 +106,6 @@ public class HomeLessorFragment extends Fragment {
     }
 
     private void fetchNewData() {
-        Log.e("ABC", "HEllo");
         places = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -114,6 +114,7 @@ public class HomeLessorFragment extends Fragment {
                 .whereEqualTo("authorId", user.getUid())
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) return;
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                         Place place = queryDocumentSnapshot.toObject(Place.class);
                         places.add(place);

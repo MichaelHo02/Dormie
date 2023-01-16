@@ -82,11 +82,14 @@ public class Tenant implements Serializable {
         this.maxDistance = maxDistance;
     }
 
-    public static class Location implements Serializable{
+    public static class Location implements Serializable {
         public String name;
         public String address;
         public Double lat;
         public Double lng;
+
+        public Location() {
+        }
 
         public Location(String name, String address, Double lat, Double lng) {
             this.name = name;

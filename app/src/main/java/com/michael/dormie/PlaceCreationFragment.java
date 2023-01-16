@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.PlaceTypes;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -230,8 +232,11 @@ public class PlaceCreationFragment extends Fragment {
             LatLng locationLatLng = (LatLng) bundle.get(MapsActivity.PARAM_LOCATION_LAT_LNG);
             Log.e(TAG, locationAddress);
             b.addressEditText.setText(locationName);
+            String hash =
+                    GeoFireUtils.getGeoHashForLocation(new GeoLocation(locationLatLng.latitude,
+                            locationLatLng.longitude));
             place.setLocation(new Place.Location(locationName, locationAddress,
-                    locationLatLng.latitude, locationLatLng.longitude));
+                    locationLatLng.latitude, locationLatLng.longitude, hash));
         }
     }
 

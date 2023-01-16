@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +30,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.FragmentSignInBinding;
 import com.michael.dormie.utils.FireBaseDBPath;
-import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
 import com.michael.dormie.utils.TextValidator;
 import com.michael.dormie.utils.ValidationUtil;
@@ -126,8 +124,11 @@ public class SignInFragment extends Fragment {
 
     private void handleSuccessSignInEmailPassword(AuthResult authResult) {
         Log.d(TAG, "Sign in with email success");
-        Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionGlobalMainLessorActivity());
+        if (authResult.getUser() == null) {
+//            handleQueryFail(new Exception());
+            return;
+        }
+        handleUserInfoQuery(authResult.getUser().getUid());
     }
 
     private void handleFailureSignInEmailPassword(Exception e) {
@@ -165,7 +166,7 @@ public class SignInFragment extends Fragment {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            handleNavigationOnExistingUser();
+            handleUserInfoQuery(user.getUid());
         }
     }
 
@@ -194,6 +195,7 @@ public class SignInFragment extends Fragment {
                     .addOnSuccessListener(authResult -> {
                         Log.d(TAG, "Sign in with credential success");
                         handleNavigation(googleSignInAccount);
+
                     })
                     .addOnFailureListener(e -> {
                         Log.w(TAG,
@@ -215,8 +217,12 @@ public class SignInFragment extends Fragment {
             handleQueryFail(new Exception());
             return;
         }
+        handleUserInfoQuery(googleSignInAccount.getId());
+    }
+
+    private void handleUserInfoQuery(String id) {
         mDB.collection(FireBaseDBPath.USERS)
-                .document(googleSignInAccount.getId())
+                .document(id)
                 .get()
                 .addOnSuccessListener(this::handleQuerySuccess)
                 .addOnFailureListener(this::handleQueryFail);
@@ -224,10 +230,12 @@ public class SignInFragment extends Fragment {
 
     private void handleQuerySuccess(DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists()) {
-            handleNavigationOnExistingUser();
+            Log.d(TAG, "Navigate to the existing user");
+            String role = documentSnapshot.getData().get("role").toString();
+            handleNavigationOnExistingUser(role);
             return;
         }
-        handleNavigationOnNewUser();
+//        handleNavigationOnNewUser();
     }
 
     private void handleQueryFail(Exception e) {
@@ -239,9 +247,18 @@ public class SignInFragment extends Fragment {
                 SignInFragmentDirections.actionGlobalSignUpFormNavigation());
     }
 
-    private void handleNavigationOnExistingUser() {
-        Navigation.findNavController(b.getRoot()).navigate(
-                SignInFragmentDirections.actionGlobalMainLessorActivity());
+    private void handleNavigationOnExistingUser(String role) {
+        if (role.equals("tenant")) {
+            Log.d(TAG, "Navigate tenant home page");
+            Navigation.findNavController(b.getRoot()).navigate(
+                    SignInFragmentDirections.actionGlobalMainTenantActivity());
+            return;
+        }
+        if (role.equals("lessor")) {
+            Log.d(TAG, "Navigate lessor home page");
+            Navigation.findNavController(b.getRoot()).navigate(
+                    SignInFragmentDirections.actionGlobalMainLessorActivity());
+        }
     }
 
     private void loadingProcess() {
