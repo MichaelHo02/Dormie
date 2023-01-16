@@ -101,7 +101,7 @@ public class TenantFilterFormFragment extends Fragment {
         } else if (i == this.b.distBtn8.getId()) {
             maxDist = 20000;
         }
-        tenant.setMinDistance(maxDist);
+        tenant.setMaxDistance(maxDist);
     }
 
     private void handleMinDistanceBtnChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
@@ -165,7 +165,7 @@ public class TenantFilterFormFragment extends Fragment {
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "DocumentSnapshot added");
                     Navigation.findNavController(b.getRoot()).navigate(
-                            TenantFilterFormFragmentDirections.actionGlobalMainLessorActivity());
+                            TenantFilterFormFragmentDirections.actionGlobalMainTenantActivity());
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);

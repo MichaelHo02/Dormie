@@ -82,7 +82,6 @@ public class ProfileFragment extends Fragment {
         auth.signOut();
         gsc.signOut().addOnSuccessListener(task -> {
             this.requireActivity().finish();
-            Toast.makeText(ProfileFragment.this.getContext(), "Successfully log out!", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -93,7 +92,8 @@ public class ProfileFragment extends Fragment {
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "User account deleted.");
                     this.requireActivity().finish();
-                    Toast.makeText(ProfileFragment.this.getContext(), "Successfully delete the account!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getContext(), "Successfully delete the account!",
+                            Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Could not delete the account"));
     }
