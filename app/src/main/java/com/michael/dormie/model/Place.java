@@ -5,6 +5,8 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +20,8 @@ public class Place implements Serializable {
     private List<String> images;
     private String houseType;
     private List<String> amenities;
+    private boolean isPromoted;
+    private Date expiryDate;
 
     public static class Location implements Serializable {
         public String name;
@@ -40,6 +44,8 @@ public class Place implements Serializable {
     public Place() {
         images = new ArrayList<>();
         amenities = new ArrayList<>();
+        isPromoted = false;
+        expiryDate = null;
     }
 
     public String getAuthorId() {
@@ -116,5 +122,21 @@ public class Place implements Serializable {
 
     public void removeAmenity(String amenity) {
         amenities.remove(amenity);
+    }
+
+    public boolean isPromoted() {
+        return isPromoted;
+    }
+
+    public void setPromoted(boolean promoted) {
+        isPromoted = promoted;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
 }

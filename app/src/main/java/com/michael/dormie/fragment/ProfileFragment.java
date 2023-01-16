@@ -38,6 +38,7 @@ import com.michael.dormie.R;
 import com.michael.dormie.activity.SignInActivity;
 import com.michael.dormie.databinding.FragmentHomeLessorBinding;
 import com.michael.dormie.databinding.FragmentProfileBinding;
+import com.michael.dormie.model.User;
 import com.michael.dormie.utils.NavigationUtil;
 
 public class ProfileFragment extends Fragment {
@@ -112,8 +113,9 @@ public class ProfileFragment extends Fragment {
         DocumentReference doc = db.collection("users").document(currentUser.getUid());
         doc.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot != null) {
-                b.profileDOB.setText(documentSnapshot.getString("dob"));
-                b.profileRole.setText(documentSnapshot.getString("role"));
+                User user = documentSnapshot.toObject(User.class);
+                b.profileDOB.setText(user.getDob());
+                b.profileRole.setText(user.getRole());
             }
         });
     }

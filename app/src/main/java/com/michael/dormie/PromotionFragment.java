@@ -17,10 +17,23 @@ import com.github.kittinunf.fuel.core.FuelError;
 import com.github.kittinunf.fuel.core.Request;
 import com.github.kittinunf.fuel.core.Response;
 import com.github.kittinunf.fuel.core.ResponseHandler;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.databinding.FragmentPromotionBinding;
+import com.michael.dormie.model.Place;
+import com.michael.dormie.model.User;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
@@ -29,6 +42,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class PromotionFragment extends Fragment {
@@ -39,6 +54,7 @@ public class PromotionFragment extends Fragment {
     PaymentSheet paymentSheet;
     String paymentIntentClientSecret;
     PaymentSheet.CustomerConfiguration customerConfiguration;
+    boolean isOneMonth;
 
     private IndeterminateDrawable loadIcon;
 
@@ -70,12 +86,30 @@ public class PromotionFragment extends Fragment {
         b.payBtnOneMonth.setOnClickListener(v -> {
             b.payBtnOneMonth.setIcon(loadIcon);
             loadingProcess();
+            isOneMonth = true;
             getDetails(999);
+
         });
         b.payBtnOneYear.setOnClickListener(v -> {
             b.payBtnOneYear.setIcon(loadIcon);
             loadingProcess();
+            isOneMonth = false;
             getDetails(9999);
+        });
+
+        // Disable button if user is promoted
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currentUser = documentSnapshot.toObject(User.class);
+                if (currentUser.isPromoted()) {
+                    b.payBtnOneMonth.setEnabled(false);
+                    b.payBtnOneYear.setEnabled(false);
+                }
+            }
         });
     }
 
@@ -121,7 +155,25 @@ public class PromotionFragment extends Fragment {
         );
     }
 
+    private Date chooseExpiryDate() {
+        Date expiryDate;
+        Calendar calendar = Calendar.getInstance();
+
+        if (isOneMonth) {
+            calendar.add(Calendar.MONTH, 1);
+        } else {
+            calendar.add(Calendar.YEAR, 1);
+        }
+
+        expiryDate = calendar.getTime();
+        return expiryDate;
+    }
+
     private void onPaymentSheetResult(PaymentSheetResult paymentSheetResult) {
+        completeLoadingProcess();
+        b.payBtnOneYear.setIcon(null);
+        b.payBtnOneMonth.setIcon(null);
+
         if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
             Log.d(TAG, "Canceled");
             Snackbar.make(b.getRoot(), "Canceled payment", Snackbar.LENGTH_SHORT).show();
@@ -131,12 +183,47 @@ public class PromotionFragment extends Fragment {
                     Snackbar.LENGTH_SHORT).show();
         } else if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
             Log.d(TAG, "Completed");
+
+            // Update user
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(user.getUid());
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User currentUser = documentSnapshot.toObject(User.class);
+                    currentUser.setPromoted(true);
+                    currentUser.setExpiryDate(chooseExpiryDate());
+                    db.collection("users").document(user.getUid()).set(currentUser, SetOptions.merge());
+                }
+            });
+
+            // Update user's posts
+            db.collection("properties")
+                    .whereEqualTo("authorId", user.getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Place place = document.toObject(Place.class);
+                                    place.setPromoted(true);
+                                    place.setExpiryDate(chooseExpiryDate());
+                                    db.collection("properties").document(document.getId()).set(place, SetOptions.merge());
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+
+                        }
+                    });
+
+            b.payBtnOneMonth.setEnabled(false);
+            b.payBtnOneYear.setEnabled(false);
             Snackbar.make(b.getRoot(), "Complete payment!",
                     Snackbar.LENGTH_SHORT).show();
         }
-        completeLoadingProcess();
-        b.payBtnOneYear.setIcon(null);
-        b.payBtnOneMonth.setIcon(null);
     }
 
     private void loadingProcess() {
@@ -151,5 +238,47 @@ public class PromotionFragment extends Fragment {
         for (View view : views) {
             view.setEnabled(true);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currentUser = documentSnapshot.toObject(User.class);
+                if (currentUser.afterExpiryDate()) {
+                    currentUser.setPromoted(false);
+                    db.collection("users").document(user.getUid()).set(currentUser, SetOptions.merge());
+                    db.collection("properties")
+                            .whereEqualTo("authorId", user.getUid())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Place place = document.toObject(Place.class);
+                                            place.setPromoted(false);
+                                            db.collection("properties").document(document.getId()).set(place, SetOptions.merge());
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+
+                                }
+                            });
+
+                    b.payBtnOneMonth.setEnabled(true);
+                    b.payBtnOneYear.setEnabled(true);
+                }
+            }
+        });
+
     }
 }
