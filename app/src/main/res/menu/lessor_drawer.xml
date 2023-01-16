@@ -20,6 +20,11 @@
                 android:checkable="true"
                 android:icon="@drawable/ic_round_person_24"
                 android:title="@string/profile" />
+            <item
+                android:id="@+id/promotionFragment"
+                android:checkable="true"
+                android:icon="@drawable/ic_round_star_24"
+                android:title="@string/promotion" />
         </menu>
     </item>
 </menu>
