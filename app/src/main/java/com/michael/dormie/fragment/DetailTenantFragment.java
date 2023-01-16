@@ -19,14 +19,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
-import com.michael.dormie.adapter.PlaceAdapter;
-import com.michael.dormie.databinding.FragmentDetailLessorBinding;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.utils.DataConverter;
@@ -131,7 +128,7 @@ public class DetailTenantFragment extends Fragment {
             b.tdtViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
             b.tdtViewPager.setAdapter(photoAdapter);
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
             amenitites = place.getAmenities();
             amenityAdapter = new AmenityAdapter(requireContext(), amenitites);
             b.tdtAmenities.setLayoutManager(linearLayoutManager);
