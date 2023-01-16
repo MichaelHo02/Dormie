@@ -26,5 +26,9 @@
         android:id="@+id/tenantDetailFragment"
         android:name="com.michael.dormie.fragment.DetailTenantFragment"
         android:label="fragment_detail_tenant"
-        tools:layout="@layout/fragment_detail_tenant" />
+        tools:layout="@layout/fragment_detail_tenant" >
+        <argument
+            android:name="Place"
+            app:argType="com.michael.dormie.model.Place" />
+    </fragment>
 </navigation>

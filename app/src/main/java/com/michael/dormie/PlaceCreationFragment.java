@@ -54,16 +54,16 @@ import java.util.List;
 public class PlaceCreationFragment extends Fragment {
     private static final String TAG = "PostCreationActivity";
 
-    private PhotoAdapter photoAdapter;
-    private Place place = new Place();
-    private PlaceCreationFragment.SubmitResultReceiver receiver =
+    private PhotoAdapter<Bitmap> photoAdapter;
+    private final Place place = new Place();
+    private final PlaceCreationFragment.SubmitResultReceiver receiver =
             new SubmitResultReceiver(new Handler());
     FragmentPlaceCreationBinding b;
     private boolean isSubmitForm;
     private IndeterminateDrawable loadIcon;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         b = FragmentPlaceCreationBinding.inflate(inflater, container, false);
         return b.getRoot();
     }
@@ -84,7 +84,7 @@ public class PlaceCreationFragment extends Fragment {
         loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
 
         b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(view).popBackStack());
-        photoAdapter = new PhotoAdapter(this.requireContext(), getPhotos());
+        photoAdapter = new PhotoAdapter<>(this.requireContext(), getPhotos());
         b.viewPager.setAdapter(photoAdapter);
         b.circleIndicator.setViewPager(b.viewPager);
         photoAdapter.registerAdapterDataObserver(b.circleIndicator.getAdapterDataObserver());
@@ -114,8 +114,7 @@ public class PlaceCreationFragment extends Fragment {
 
 
     private List<Bitmap> getPhotos() {
-        List<Bitmap> photos = new ArrayList<>();
-        return photos;
+        return new ArrayList<>();
     }
 
     private void handleAddPhoto(View view) {

@@ -16,16 +16,16 @@ import com.michael.dormie.R;
 
 import java.util.List;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> {
+public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> {
     private Context context;
-    private List<Bitmap> photos;
+    private List<T> photos;
 
-    public PhotoAdapter(Context context, List<Bitmap> photos) {
+    public PhotoAdapter(Context context, List<T> photos) {
         this.context = context;
         this.photos = photos;
     }
 
-    public List<Bitmap> getPhotos() {
+    public List<T> getPhotos() {
         return photos;
     }
 
@@ -39,7 +39,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-        Bitmap photo = photos.get(position);
+        T photo = photos.get(position);
         if (photo == null) return;
         Glide.with(context).load(photo).into(holder.imageView);
     }
@@ -49,7 +49,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> 
         return photos != null ? photos.size() : 0;
     }
 
-    public void addPhoto(Bitmap bitmap) {
+    public void addPhoto(T bitmap) {
         photos.add(bitmap);
         notifyItemInserted(photos.size() + 1);
     }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -82,7 +83,8 @@ public class HomeTenantFragment extends Fragment {
         });
 
         manager = new LinearLayoutManager(requireContext());
-        placeAdapter = new PlaceAdapter(this.requireContext(), places);
+        placeAdapter = new PlaceAdapter(this.requireContext(), places, place -> Navigation
+                .findNavController(b.getRoot()).navigate(HomeTenantFragmentDirections.actionHomeTenantFragmentToTenantDetailFragment(place)));
         b.recycleView.setLayoutManager(manager);
         b.recycleView.setHasFixedSize(true);
         b.recycleView.setAdapter(placeAdapter);

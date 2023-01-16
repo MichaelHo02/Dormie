@@ -11,23 +11,30 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tdt_toolbar"
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            style="?attr/collapsingToolbarLayoutMediumStyle"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/master_top_bar"
-            app:navigationIcon="@drawable/ic_round_dehaze_24"
-            app:title="@string/profile"
-            app:titleCentered="true" />
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            app:expandedTitleGravity="bottom"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_round_arrow_back_24"
+                app:navigationIconTint="?attr/colorOnSurface" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/tdt_nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <!--    Display images    -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,12 +45,12 @@
                 android:layout_height="364dp">
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/tdt_view_pager"
+                    android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/tdt_wrap_circle_indicator"
+                    android:id="@+id/wrapCircleIndicator"
                     style="@style/Widget.Material3.CardView.Filled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,7 +60,7 @@
                     android:layout_marginBottom="16dp">
 
                     <me.relex.circleindicator.CircleIndicator3
-                        android:id="@+id/tdt_circle_indicator"
+                        android:id="@+id/circleIndicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
@@ -71,20 +78,8 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tdt_place_name"
-                    style="@style/TextAppearance.Material3.TitleLarge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/place_name"/>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/placeAddress"
                     style="@style/TextAppearance.Material3.BodyLarge"
-                    android:id="@+id/tdt_place_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
@@ -102,18 +97,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="@string/description"/>
+                    android:text="@string/description" />
 
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="32dp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tdt_place_description"
+                    android:id="@+id/placeDescription"
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Set in the District 7 district of Ho Chi Minh City, RIVER PANORAMA 2BEDROOM+NetFlix offers accommodation with a private pool and an ATM. Guests staying at this apartment have access to a fully equipped kitchen and a balcony. This 2-bedroom apartment will provide you with a flat-screen TV, air conditioning and a living room. A sun terrace and a children's playground are available for guests at the apartment to use. Saigon Exhibition and Convention Center is 4.1 km from RIVER PANORAMA 2BEDROOM+NetFlix, while Nha Rong Wharf is 8 km from the property. The nearest airport is Tan Son Nhat International Airport, 15 km from the accommodation."/>
+                    android:text="Set in the District 7 district of Ho Chi Minh City, RIVER PANORAMA 2BEDROOM+NetFlix offers accommodation with a private pool and an ATM. Guests staying at this apartment have access to a fully equipped kitchen and a balcony. This 2-bedroom apartment will provide you with a flat-screen TV, air conditioning and a living room. A sun terrace and a children's playground are available for guests at the apartment to use. Saigon Exhibition and Convention Center is 4.1 km from RIVER PANORAMA 2BEDROOM+NetFlix, while Nha Rong Wharf is 8 km from the property. The nearest airport is Tan Son Nhat International Airport, 15 km from the accommodation." />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -125,14 +120,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="@string/amenities"
-                    android:paddingBottom="16dp"/>
+                    android:paddingBottom="16dp"
+                    android:text="@string/amenities" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/tdt_amenities"
+                    android:id="@+id/amenities"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scrollbars="horizontal"/>
+                    android:scrollbars="horizontal" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -142,14 +137,14 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/chatBtn"
         style="@style/Widget.Material3.Button.Icon"
-        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-        android:id="@+id/tdt_Send_Request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Request"
-        app:icon="@drawable/ic_baseline_edit_24"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"/>
+        android:text="Chat with Lessor"
+        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+        app:icon="@drawable/ic_baseline_edit_24"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

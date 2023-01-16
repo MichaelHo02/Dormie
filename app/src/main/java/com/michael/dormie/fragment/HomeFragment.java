@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
 
                             LinearLayoutManager manager = new LinearLayoutManager(requireContext());
                             recyclerView.setLayoutManager(manager);
-                            placeAdapter = new PlaceAdapter(getContext(), places);
+//                            placeAdapter = new PlaceAdapter(getContext(), places);
                             recyclerView.setAdapter(placeAdapter);
                         } else {
                             System.out.println("Error");

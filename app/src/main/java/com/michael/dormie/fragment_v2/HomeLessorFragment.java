@@ -57,7 +57,8 @@ public class HomeLessorFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
         b.recycleView.setLayoutManager(manager);
 
-        placeAdapter = new PlaceAdapter(this.requireContext(), new ArrayList<>());
+        placeAdapter = new PlaceAdapter(this.requireContext(), new ArrayList<>(), place -> Navigation
+                .findNavController(b.getRoot()).navigate(HomeLessorFragmentDirections.actionHomeLessorFragmentToDetaiLessorlFragment(place)));
         b.recycleView.setAdapter(placeAdapter);
         fetchNewData();
 
