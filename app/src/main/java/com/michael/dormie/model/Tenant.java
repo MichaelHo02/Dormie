@@ -88,9 +88,6 @@ public class Tenant implements Serializable {
         public Double lat;
         public Double lng;
 
-        public Location() {
-        }
-
         public Location(String name, String address, Double lat, Double lng) {
             this.name = name;
             this.address = address;
