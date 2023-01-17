@@ -106,6 +106,8 @@ public class PromotionFragment extends Fragment {
             if (currentUser.isPromoted()) {
                 b.payBtnOneMonth.setEnabled(false);
                 b.payBtnOneYear.setEnabled(false);
+                b.payBtnOneMonth.setText(R.string.your_account_is_promoted);
+                b.payBtnOneYear.setText(R.string.your_account_is_promoted);
             }
         });
     }
@@ -218,6 +220,8 @@ public class PromotionFragment extends Fragment {
 
             b.payBtnOneMonth.setEnabled(false);
             b.payBtnOneYear.setEnabled(false);
+            b.payBtnOneMonth.setText(R.string.your_account_is_promoted);
+            b.payBtnOneYear.setText(R.string.your_account_is_promoted);
             Snackbar.make(b.getRoot(), "Complete payment!",
                     Snackbar.LENGTH_SHORT).show();
         }

@@ -20,7 +20,6 @@
             <Button
                 style="?attr/materialIconButtonFilledTonalStyle"
                 android:id="@+id/tenant_letter_btn"
-                android:background="@drawable/ic_rental_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
 
@@ -72,8 +71,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/ic_check_24"/>
+                    android:layout_centerInParent="true"/>
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
