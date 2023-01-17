@@ -2,16 +2,15 @@ package com.michael.dormie.fragment_v2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -160,7 +159,6 @@ public class SignUpFragment extends Fragment {
             b.passwordLayout.setError(e.getLocalizedMessage());
             return;
         }
-
         b.emailLayout.setError(e.getLocalizedMessage());
     }
 

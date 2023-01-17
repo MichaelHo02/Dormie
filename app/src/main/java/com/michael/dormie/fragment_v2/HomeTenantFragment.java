@@ -1,6 +1,11 @@
-package com.michael.dormie;
+package com.michael.dormie.fragment_v2;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,13 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
@@ -28,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.michael.dormie.R;
 import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.databinding.FragmentHomeTenantBinding;
 import com.michael.dormie.implement.ICallBack;
@@ -37,18 +36,13 @@ import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.FireBaseDBPath;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class HomeTenantFragment extends Fragment {
     private static final String TAG = "HomeTenantFragment";
     private final int MAX_REQUEST = 1;
 
-    FragmentHomeTenantBinding b;
+    private FragmentHomeTenantBinding b;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;

@@ -1,16 +1,15 @@
-package com.michael.dormie;
+package com.michael.dormie.fragment_v2;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.kittinunf.fuel.Fuel;
 import com.github.kittinunf.fuel.core.FuelError;
@@ -31,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.michael.dormie.R;
 import com.michael.dormie.databinding.FragmentPromotionBinding;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.User;
@@ -49,12 +49,12 @@ import java.util.List;
 public class PromotionFragment extends Fragment {
     private static final String TAG = "PromotionFragment";
 
-    FragmentPromotionBinding b;
+    private FragmentPromotionBinding b;
 
-    PaymentSheet paymentSheet;
-    String paymentIntentClientSecret;
-    PaymentSheet.CustomerConfiguration customerConfiguration;
-    boolean isOneMonth;
+    private PaymentSheet paymentSheet;
+    private String paymentIntentClientSecret;
+    private PaymentSheet.CustomerConfiguration customerConfiguration;
+    private boolean isOneMonth;
 
     private IndeterminateDrawable loadIcon;
 
@@ -101,14 +101,11 @@ public class PromotionFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User currentUser = documentSnapshot.toObject(User.class);
-                if (currentUser.isPromoted()) {
-                    b.payBtnOneMonth.setEnabled(false);
-                    b.payBtnOneYear.setEnabled(false);
-                }
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            User currentUser = documentSnapshot.toObject(User.class);
+            if (currentUser.isPromoted()) {
+                b.payBtnOneMonth.setEnabled(false);
+                b.payBtnOneYear.setEnabled(false);
             }
         });
     }

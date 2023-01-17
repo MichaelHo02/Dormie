@@ -1,19 +1,14 @@
 package com.michael.dormie.service;
 
-import  android.app.IntentService;
-import android.content.Intent;
+import android.app.IntentService;
 import android.content.Context;
+import android.content.Intent;
 import android.os.ResultReceiver;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -22,9 +17,6 @@ import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.model.User;
 import com.michael.dormie.utils.SignalCode;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SignUpFormService extends IntentService {
     private static final String TAG = "SignUpFormService";

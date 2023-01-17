@@ -29,7 +29,7 @@
         tools:layout="@layout/fragment_profile_lessor" />
     <fragment
         android:id="@+id/placeCreationFragment"
-        android:name="com.michael.dormie.PlaceCreationFragment"
+        android:name="com.michael.dormie.fragment_v2.PlaceCreationFragment"
         android:label="fragment_place_creation"
         tools:layout="@layout/fragment_place_creation" >
         <argument
@@ -44,7 +44,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/promotionFragment"
-        android:name="com.michael.dormie.PromotionFragment"
+        android:name="com.michael.dormie.fragment_v2.PromotionFragment"
         android:label="fragment_promotion"
         tools:layout="@layout/fragment_promotion" />
     <fragment

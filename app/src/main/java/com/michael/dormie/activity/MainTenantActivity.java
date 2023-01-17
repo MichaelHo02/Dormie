@@ -16,9 +16,7 @@ import com.michael.dormie.R;
 import com.michael.dormie.databinding.ActivityMainTenantBinding;
 
 public class MainTenantActivity extends AppCompatActivity {
-    ActivityMainTenantBinding b;
-    MyBroadcastReceiver bcr;
-    IntentFilter intentFilter;
+    private ActivityMainTenantBinding b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +26,8 @@ public class MainTenantActivity extends AppCompatActivity {
         View view = b.getRoot();
         setContentView(view);
 
-        NavHostFragment navHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(b.fragmentContainerView.getId());
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(b.fragmentContainerView.getId());
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(b.navigationView, navController);
 
@@ -46,12 +44,13 @@ public class MainTenantActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        b.navigationView.setCheckedItem(Navigation.findNavController(b.fragmentContainerView).getCurrentDestination().getId());
+        b.navigationView.setCheckedItem(Navigation.findNavController(b.fragmentContainerView)
+                .getCurrentDestination().getId());
     }
 
     private void registerService() {
-        bcr = new MyBroadcastReceiver();
-        intentFilter = new IntentFilter("android.intent.action.BATTERY_LOW");
+        MyBroadcastReceiver bcr = new MyBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter("android.intent.action.BATTERY_LOW");
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         this.registerReceiver(bcr, intentFilter);
     }

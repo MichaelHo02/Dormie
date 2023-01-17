@@ -1,13 +1,11 @@
 package com.michael.dormie.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,7 +14,6 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
 import com.michael.dormie.R;
-import com.michael.dormie.implement.ICallBack;
 import com.michael.dormie.model.Place;
 
 import java.util.List;
@@ -26,9 +23,9 @@ public class PlaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_LOADING = 2;
 
     private List<Place> places;
-    private Context context;
+    private final Context context;
     private boolean isLoadingAdd;
-    private ICallBackItem callBackItem;
+    private final ICallBackItem callBackItem;
 
     public PlaceAdapter(Context context, List<Place> places, ICallBackItem callBackItem) {
         this.places = places;
@@ -90,13 +87,11 @@ public class PlaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void addFooterLoading() {
         isLoadingAdd = true;
-//        places.add(null);
     }
 
     public void removeFooterLoading() {
         isLoadingAdd = false;
         int idx = places.size() - 1;
-//        places.remove(idx);
         notifyItemRemoved(idx);
     }
 

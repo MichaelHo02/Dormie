@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeTenantFragment"
-        android:name="com.michael.dormie.HomeTenantFragment"
+        android:name="com.michael.dormie.fragment_v2.HomeTenantFragment"
         android:label="fragment_home_tenant"
         tools:layout="@layout/fragment_home_tenant" >
         <action
