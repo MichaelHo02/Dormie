@@ -24,8 +24,6 @@ import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.PlaceTypes;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
@@ -35,10 +33,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.activity.MapsActivity;
-import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentPlaceCreationBinding;
-import com.michael.dormie.fragment.DetailLessorFragmentDirections;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.service.PostCreationService;
 import com.michael.dormie.utils.DataConverter;
@@ -50,7 +46,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class PlaceCreationFragment extends Fragment {

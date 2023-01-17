@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Place implements Serializable {
+    private String uuid;
     private String authorId;
     private String authorRef;
     private String name;
@@ -39,6 +40,14 @@ public class Place implements Serializable {
     public Place() {
         images = new ArrayList<>();
         amenities = new ArrayList<>();
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getAuthorId() {

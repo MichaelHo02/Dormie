@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class DetailLessorFragment extends Fragment {
 
         Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
-
+        b.topAppBar.setOnMenuItemClickListener(this::handleMenuClick);
 
         b.placeName.setText(place.getName());
         b.placeAddress.setText(place.getLocation().address);
@@ -76,6 +77,14 @@ public class DetailLessorFragment extends Fragment {
             Navigation.findNavController(b.getRoot()).navigate(DetailLessorFragmentDirections
                     .actionDetailLessorFragmentToPlaceCreationFragment(place));
         });
+    }
+
+    private boolean handleMenuClick(MenuItem item) {
+        if (item.getItemId() == R.id.deletePlace) {
+//            Fire
+            return true;
+        }
+        return false;
     }
 
     private void handleNavigationOnClick(View view) {
