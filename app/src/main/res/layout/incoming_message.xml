@@ -29,6 +29,6 @@
         android:id="@+id/message_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         />
 </RelativeLayout>

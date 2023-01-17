@@ -6,20 +6,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.color.DynamicColors;
 
 import com.google.android.material.navigation.NavigationView;
 import com.michael.dormie.R;
-import com.michael.dormie.fragment.ChatFragment;
+import com.michael.dormie.fragment.ChatContactFragment;
 import com.michael.dormie.fragment.HomeFragment;
 import com.michael.dormie.fragment.ProfileFragment;
 import com.michael.dormie.fragment.RentalRegistrationFragment;
 import com.michael.dormie.fragment.SettingFragment;
 import com.michael.dormie.utils.NavigationUtil;
-import com.michael.dormie.utils.TopAppBarUtil;
 
 public class MasterActivity extends AppCompatActivity {
 
@@ -27,7 +22,7 @@ public class MasterActivity extends AppCompatActivity {
     private NavigationView navigationView;
 
     private final HomeFragment homeFragment = HomeFragment.newInstance("", "");
-    private final ChatFragment chatFragment = ChatFragment.newInstance("", "");
+    private final ChatContactFragment chatContactFragment = ChatContactFragment.newInstance("", "");
     private final RentalRegistrationFragment rentalRegistrationFragment = RentalRegistrationFragment.newInstance("", "");
     private final ProfileFragment profileFragment = ProfileFragment.newInstance("", "");
     private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
@@ -65,7 +60,7 @@ public class MasterActivity extends AppCompatActivity {
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, homeFragment);
                 return true;
             case R.id.chat_page:
-                NavigationUtil.changeFragment(this, R.id.activity_master_fl, chatFragment);
+                NavigationUtil.changeFragment(this, R.id.activity_master_fl, chatContactFragment);
                 return true;
             case R.id.rental_registration_page:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, rentalRegistrationFragment);

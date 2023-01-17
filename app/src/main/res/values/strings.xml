@@ -38,4 +38,6 @@
     <string name="please_enter_your_university">Please enter your university</string>
     <string name="delete_account">Delete account</string>
     <string name="sign_out">Sign out</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

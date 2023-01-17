@@ -22,19 +22,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.michael.dormie.R;
 import com.michael.dormie.model.ChatMessage;
 
-import java.util.Collections;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChatFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ChatFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -133,7 +126,7 @@ public class ChatFragment extends Fragment {
         // Use FirebaseListOptions to obtain database
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
                 .setQuery(myRef, ChatMessage.class)
-                .setLayout(R.layout.message)
+                .setLayout(R.layout.incoming_message)
                 .setLifecycleOwner(this)
                 .build();
 
