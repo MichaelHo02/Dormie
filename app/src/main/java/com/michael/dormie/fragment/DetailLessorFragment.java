@@ -34,17 +34,13 @@ public class DetailLessorFragment extends Fragment {
     private static final String TAG = "DetailFragment";
 
     FragmentDetailLessorBinding b;
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
 
     private PhotoAdapter photoAdapter;
-    private List<String> photos;
     private AmenityAdapter amenityAdapter;
     private List<String> amenities;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         b = FragmentDetailLessorBinding.inflate(inflater, container, false);
         return b.getRoot();
     }
@@ -52,21 +48,19 @@ public class DetailLessorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
         Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
-        b.topAppBar.setTitle(place.getName());
 
+
+        b.placeName.setText(place.getName());
         b.placeAddress.setText(place.getLocation().address);
         b.placeDescription.setText(place.getDescription());
 
-        photos = new ArrayList<>();
-        photos.addAll(place.getImages());
-        photoAdapter = new PhotoAdapter<>(requireContext(), photos);
-        b.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        photoAdapter = new PhotoAdapter<>(requireContext(), place.getImages());
         b.viewPager.setAdapter(photoAdapter);
+        b.circleIndicator.setViewPager(b.viewPager);
+        photoAdapter.registerAdapterDataObserver(b.circleIndicator.getAdapterDataObserver());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
         amenities = place.getAmenities();
@@ -74,22 +68,18 @@ public class DetailLessorFragment extends Fragment {
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
 
-        b.editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lead to chat
-            }
+        b.mapBtn.setOnClickListener(v -> {
+
+        });
+
+        b.editBtn.setOnClickListener(v -> {
+            Navigation.findNavController(b.getRoot()).navigate(DetailLessorFragmentDirections
+                    .actionDetailLessorFragmentToPlaceCreationFragment(place));
         });
     }
 
     private void handleNavigationOnClick(View view) {
         Navigation.findNavController(b.getRoot()).popBackStack();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        db = FirebaseFirestore.getInstance();
     }
 
     @Override

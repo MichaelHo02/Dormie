@@ -70,7 +70,7 @@ public class HomeLessorFragment extends Fragment {
         });
         b.fab.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(
-                    HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment());
+                    HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment(null));
         });
 
         SearchView searchView = (SearchView) b.bottomAppBar.getMenu().findItem(R.id.home_bottom_search).getActionView();

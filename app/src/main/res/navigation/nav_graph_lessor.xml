@@ -31,7 +31,12 @@
         android:id="@+id/placeCreationFragment"
         android:name="com.michael.dormie.PlaceCreationFragment"
         android:label="fragment_place_creation"
-        tools:layout="@layout/fragment_place_creation" />
+        tools:layout="@layout/fragment_place_creation" >
+        <argument
+            android:name="Place"
+            app:argType="com.michael.dormie.model.Place"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
@@ -45,5 +50,8 @@
         <argument
             android:name="Place"
             app:argType="com.michael.dormie.model.Place" />
+        <action
+            android:id="@+id/action_detailLessorFragment_to_placeCreationFragment"
+            app:destination="@id/placeCreationFragment" />
     </fragment>
 </navigation>

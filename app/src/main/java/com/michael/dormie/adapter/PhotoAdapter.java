@@ -2,6 +2,7 @@ package com.michael.dormie.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.michael.dormie.R;
 import java.util.List;
 
 public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> {
+    private static final String TAG = "PhotoAdapter";
+
     private Context context;
     private List<T> photos;
 
@@ -41,7 +44,18 @@ public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolde
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         T photo = photos.get(position);
         if (photo == null) return;
-        Glide.with(context).load(photo).into(holder.imageView);
+        if (photo instanceof PhotoObject) {
+            Log.e(TAG, "Object instance of PhotoObject");
+            PhotoObject photoObject = (PhotoObject) photo;
+            if (photoObject.url != null) {
+                Glide.with(context).load(photoObject.url).into(holder.imageView);
+            } else {
+                Glide.with(context).load(photoObject.bitmap).into(holder.imageView);
+            }
+        } else {
+            Log.e(TAG, "Any other Object");
+            Glide.with(context).load((String) photo).into(holder.imageView);
+        }
     }
 
     @Override
@@ -68,4 +82,16 @@ public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolde
         }
     }
 
+    public static final class PhotoObject {
+        public String url;
+        public Bitmap bitmap;
+
+        public PhotoObject(String image) {
+            this.url = image;
+        }
+
+        public PhotoObject(Bitmap bitmap) {
+            this.bitmap = bitmap;
+        }
+    }
 }

@@ -38,6 +38,7 @@ import com.michael.dormie.activity.MapsActivity;
 import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentPlaceCreationBinding;
+import com.michael.dormie.fragment.DetailLessorFragmentDirections;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.service.PostCreationService;
 import com.michael.dormie.utils.DataConverter;
@@ -49,13 +50,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PlaceCreationFragment extends Fragment {
     private static final String TAG = "PostCreationActivity";
 
-    private PhotoAdapter<Bitmap> photoAdapter;
-    private final Place place = new Place();
+    private PhotoAdapter<PhotoAdapter.PhotoObject> photoAdapter;
+    private Place place = new Place();
     private final PlaceCreationFragment.SubmitResultReceiver receiver =
             new SubmitResultReceiver(new Handler());
     FragmentPlaceCreationBinding b;
@@ -83,8 +85,44 @@ public class PlaceCreationFragment extends Fragment {
                 com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator);
         loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
 
+
+        Place p = PlaceCreationFragmentArgs.fromBundle(getArguments()).getPlace();
+        if (p != null) {
+            this.place = p;
+            List<PhotoAdapter.PhotoObject> photoObjects = new ArrayList<>();
+            for (String image : place.getImages()) {
+                photoObjects.add(new PhotoAdapter.PhotoObject(image));
+            }
+            photoAdapter = new PhotoAdapter<>(requireContext(), photoObjects);
+            b.imageCover.setVisibility(View.GONE);
+
+            b.nameEditText.setText(place.getName());
+            b.addressEditText.setText(place.getLocation().name);
+            b.descriptionEditText.setText(place.getDescription());
+
+            List<Chip> houseChips = Arrays.asList(
+                    b.apartmentChip, b.villaChip, b.houseChip,
+                    b.townhouseChip, b.mobileChip
+            );
+            for (Chip houseChip : houseChips) {
+                if (houseChip.getText().toString().equals(place.getHouseType())) {
+                    houseChip.setChecked(true);
+                    break;
+                }
+            }
+
+            List<Chip> amenitiesChips = Arrays.asList(b.washerDryerChip, b.rampChip, b.gardenChip,
+                    b.catsOKChip, b.dogsOKChip, b.smokeFreeChip);
+            for (Chip amenitiesChip : amenitiesChips) {
+                if (place.getAmenities().contains(amenitiesChip.getText().toString())) {
+                    amenitiesChip.setChecked(true);
+                }
+            }
+        } else {
+            photoAdapter = new PhotoAdapter<>(this.requireContext(), new ArrayList<>());
+        }
+
         b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(view).popBackStack());
-        photoAdapter = new PhotoAdapter<>(this.requireContext(), getPhotos());
         b.viewPager.setAdapter(photoAdapter);
         b.circleIndicator.setViewPager(b.viewPager);
         photoAdapter.registerAdapterDataObserver(b.circleIndicator.getAdapterDataObserver());
@@ -110,11 +148,6 @@ public class PlaceCreationFragment extends Fragment {
         Chip c = b.getRoot().findViewById(chipGroup.getCheckedChipId());
         place.setHouseType(c.getText().toString());
         Log.d(TAG, c.getText().toString());
-    }
-
-
-    private List<Bitmap> getPhotos() {
-        return new ArrayList<>();
     }
 
     private void handleAddPhoto(View view) {
@@ -191,13 +224,16 @@ public class PlaceCreationFragment extends Fragment {
         b.submitBtn.setIcon(loadIcon);
         loadingProcess();
 
-        List<Bitmap> photos = photoAdapter.getPhotos();
-        for (Bitmap photo : photos) {
-            PostCreationService.startActionUploadImage(
-                    this.requireContext(),
-                    receiver,
-                    String.valueOf(photo.getGenerationId()),
-                    DataConverter.convertImageToByteArr(photo));
+        List<PhotoAdapter.PhotoObject> photos = photoAdapter.getPhotos();
+        for (PhotoAdapter.PhotoObject photo : photos) {
+            if (photo.bitmap != null) {
+                Bitmap bitmap = photo.bitmap;
+                PostCreationService.startActionUploadImage(
+                        this.requireContext(),
+                        receiver,
+                        String.valueOf(bitmap.getGenerationId()),
+                        DataConverter.convertImageToByteArr(bitmap));
+            }
         }
     }
 
@@ -219,7 +255,7 @@ public class PlaceCreationFragment extends Fragment {
                 e.printStackTrace();
             }
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-            photoAdapter.addPhoto(bitmap);
+            photoAdapter.addPhoto(new PhotoAdapter.PhotoObject(bitmap));
             b.viewPager.setCurrentItem(photoAdapter.getItemCount());
             b.imageCover.setVisibility(View.GONE);
         }
