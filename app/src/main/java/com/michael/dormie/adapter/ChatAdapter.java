@@ -42,11 +42,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
     public void onBindViewHolder(@NonNull ChatAdapter.ItemHolder holder, int position) {
         user = FirebaseAuth.getInstance().getCurrentUser();
         Chat chat = chats.get(position);
-        Message msg = chat.getContent().get(-1);
-        if (chat == null) return;
-        holder.contact.setText(chat.getSentId());
-        holder.lastMsg.setText(msg.getContent());
-        holder.time.setText(msg.getTimestamp());
 
     }
 

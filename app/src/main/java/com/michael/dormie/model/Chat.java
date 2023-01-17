@@ -1,40 +1,103 @@
 package com.michael.dormie.model;
 
-import java.io.Serializable;
-import java.util.List;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.ServerTimestamp;
 
-public class Chat implements Serializable {
-    private String chatId;
-    private List<Message> content;
-    private String sentId;
+import java.util.Date;
 
-    public Chat(String chatId, List<Message> content, String sentId) {
-        this.chatId = chatId;
-        this.content = content;
-        this.sentId = sentId;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+@IgnoreExtraProperties
+public class Chat extends AbstractChat {
+    private String mName;
+    private String mMessage;
+    private String mUid;
+    private Date mTimestamp;
+
+    public Chat() {
+        // Needed for Firebase
     }
 
-    public String getChatId() {
-        return chatId;
+    public Chat(@Nullable String name, @Nullable String message, @NonNull String uid) {
+        mName = name;
+        mMessage = message;
+        mUid = uid;
     }
 
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
+    @Override
+    @Nullable
+    public String getName() {
+        return mName;
     }
 
-    public List<Message> getContent() {
-        return content;
+    @Override
+    public void setName(@Nullable String name) {
+        mName = name;
     }
 
-    public void setContent(List<Message> content) {
-        this.content = content;
+    @Override
+    @Nullable
+    public String getMessage() {
+        return mMessage;
     }
 
-    public String getSentId() {
-        return sentId;
+    @Override
+    public void setMessage(@Nullable String message) {
+        mMessage = message;
     }
 
-    public void setSentId(String sentId) {
-        this.sentId = sentId;
+    @Override
+    @NonNull
+    public String getUid() {
+        return mUid;
+    }
+
+    @Override
+    public void setUid(@NonNull String uid) {
+        mUid = uid;
+    }
+
+    @ServerTimestamp
+    @Nullable
+    public Date getTimestamp() {
+        return mTimestamp;
+    }
+
+    public void setTimestamp(@Nullable Date timestamp) {
+        mTimestamp = timestamp;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Chat chat = (Chat) o;
+
+        return mTimestamp.equals(chat.mTimestamp)
+                && mUid.equals(chat.mUid)
+                && (mName == null ? chat.mName == null : mName.equals(chat.mName))
+                && (mMessage == null ? chat.mMessage == null : mMessage.equals(chat.mMessage));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mName == null ? 0 : mName.hashCode();
+        result = 31 * result + (mMessage == null ? 0 : mMessage.hashCode());
+        result = 31 * result + mUid.hashCode();
+        result = 31 * result + mTimestamp.hashCode();
+        return result;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "mName='" + mName + '\'' +
+                ", mMessage='" + mMessage + '\'' +
+                ", mUid='" + mUid + '\'' +
+                ", mTimestamp=" + mTimestamp +
+                '}';
     }
 }

@@ -14,8 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -95,14 +99,48 @@ public class ChatTenantFragment extends Fragment {
             b.fragmentChatRv.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 
         } catch (Exception e) {
-
         }
 
 
     }
 
     private void loadChatList(View view) {
-//        Query query = FirebaseDatabase.getInstance().getReference().child("");
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("chats")
+                .limitToLast(50);
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // ...
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ...
+            }
+        };
+        query.addChildEventListener(childEventListener);
+        FirebaseRecyclerOptions<Chat> options =
+                new FirebaseRecyclerOptions.Builder<Chat>()
+                        .setQuery(query, Chat.class)
+                        .build();
 
     }
 
