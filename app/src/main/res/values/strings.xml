@@ -60,4 +60,5 @@
     <string name="empty_image_list">Empty Image List</string>
     <string name="please_import_image">Please import image!</string>
     <string name="edit_post">Edit Post</string>
+    <string name="chat_with_lessor">Chat with Lessor</string>
 </resources>

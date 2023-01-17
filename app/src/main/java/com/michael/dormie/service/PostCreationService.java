@@ -14,6 +14,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.model.Place;
+import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.SignalCode;
 
 public class PostCreationService extends IntentService {
@@ -95,7 +96,7 @@ public class PostCreationService extends IntentService {
 
     private void handleActionUploadPost(ResultReceiver receiver, Object place) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("properties")
+        db.collection(FireBaseDBPath.PROPERTIES)
                 .add(place)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Document added");

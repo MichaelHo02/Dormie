@@ -25,9 +25,10 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="Place Details"
+                app:menu="@menu/place_detail_lessor_top_bar"
                 app:navigationIcon="@drawable/ic_round_arrow_back_24"
-                app:navigationIconTint="?attr/colorOnSurface" />
+                app:navigationIconTint="?attr/colorOnSurface"
+                app:title="Place Details" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -107,7 +108,7 @@
                         style="@style/TextAppearance.Material3.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/mapBtn"
