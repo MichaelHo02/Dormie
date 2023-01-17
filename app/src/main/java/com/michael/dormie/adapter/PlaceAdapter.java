@@ -90,13 +90,13 @@ public class PlaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void addFooterLoading() {
         isLoadingAdd = true;
-        places.add(new Place());
+//        places.add(null);
     }
 
     public void removeFooterLoading() {
         isLoadingAdd = false;
         int idx = places.size() - 1;
-        places.remove(idx);
+//        places.remove(idx);
         notifyItemRemoved(idx);
     }
 

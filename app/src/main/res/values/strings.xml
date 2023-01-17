@@ -61,4 +61,13 @@
     <string name="please_import_image">Please import image!</string>
     <string name="edit_post">Edit Post</string>
     <string name="chat_with_lessor">Chat with Lessor</string>
+    <string name="promotion">Promotion</string>
+    <string name="paymentURL">https://us-central1-dormie-5ad44.cloudfunctions.net/stripePayment</string>
+    <string name="one_month_promotion">One Month Promotion</string>
+    <string name="_10_for_duration_of_1_month">$9.99 for duration of 1 month</string>
+    <string name="one_month_body_text">Your post will be recommended first if your place is in the search range. By doing this, you have a higher chance of approach your client. This plan is suitable for short-term lessor. You can use this promotion in high demanding months.</string>
+    <string name="one_year_body_text">Your post will be recommended first if your place is in the search range. By doing this, you have a higher chance of approach your client. This plan is suitable for long-term lessor. You can use this promotion if you have lots of place for rented/sale. You also got 2 months worth of subscription discount.</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="one_year_promotion">One Year Promotion</string>
+    <string name="_100_for_duration_of_12_months">$99.99 for duration of 12 months</string>
 </resources>

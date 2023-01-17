@@ -43,6 +43,11 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
+        android:id="@+id/promotionFragment"
+        android:name="com.michael.dormie.PromotionFragment"
+        android:label="fragment_promotion"
+        tools:layout="@layout/fragment_promotion" />
+    <fragment
         android:id="@+id/detailLessorFragment"
         android:name="com.michael.dormie.fragment.DetailLessorFragment"
         android:label="fragment_detail_lessor"

@@ -167,6 +167,15 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/editFormBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Edit Form"
+                app:icon="@drawable/ic_edit"
+                app:iconGravity="textStart" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/signOutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

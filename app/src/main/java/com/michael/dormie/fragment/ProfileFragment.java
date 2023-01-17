@@ -23,6 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.FragmentProfileBinding;
+import com.michael.dormie.model.User;
+import com.michael.dormie.utils.NavigationUtil;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
@@ -58,8 +60,31 @@ public class ProfileFragment extends Fragment {
             drawerLayout.open();
         });
 
+        initEditFormBtn();
         b.signOutBtn.setOnClickListener(this::handleSignOutClick);
         b.delAccBtn.setOnClickListener(this::handleDeleteAccClick);
+        b.editFormBtn.setOnClickListener(this::handleEditFormClick);
+    }
+
+    private void initEditFormBtn() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.getResult().get("role").equals("lessor")) {
+                    b.editFormBtn.setVisibility(View.INVISIBLE);
+                } else {
+                    b.editFormBtn.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void handleEditFormClick(View view) {
+        Navigation.findNavController(b.getRoot()).navigate(ProfileFragmentDirections.actionProfileFragmentToEditFormFragment());
     }
 
     private void handleSignOutClick(View view) {
@@ -96,8 +121,9 @@ public class ProfileFragment extends Fragment {
         DocumentReference doc = db.collection("users").document(currentUser.getUid());
         doc.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot != null) {
-                b.profileDOB.setText(documentSnapshot.getString("dob"));
-                b.profileRole.setText(documentSnapshot.getString("role"));
+                User user = documentSnapshot.toObject(User.class);
+                b.profileDOB.setText(user.getDob());
+                b.profileRole.setText(user.getRole());
             }
         });
     }

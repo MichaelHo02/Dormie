@@ -13,12 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.PlaceTypes;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -28,8 +26,11 @@ import com.google.android.material.progressindicator.IndeterminateDrawable;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.michael.dormie.R;
 import com.michael.dormie.activity.MapsActivity;
 import com.michael.dormie.databinding.FragmentTenentFilterFormBinding;
 import com.michael.dormie.model.Tenant;
@@ -40,11 +41,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TenantFilterFormFragment extends Fragment {
-    private static final String TAG = "TenantFilterFormFragment";
+public class EditFormFragment extends Fragment {
+    private static final String TAG = "EditFormFragment";
     private FragmentTenentFilterFormBinding b;
     private IndeterminateDrawable loadIcon;
-    Tenant tenant;
+    Tenant  tenant;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +66,67 @@ public class TenantFilterFormFragment extends Fragment {
                 com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator);
         loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
         tenant = new Tenant();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("tenants").document(user.getUid());
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                tenant = documentSnapshot.toObject(Tenant.class);
+
+                for (String s : tenant.getHouseTypes()) {
+                    if (s.equals("Apartment")) b.apartmentChip.setChecked(true);
+                    if (s.equals("Villa")) b.villaChip.setChecked(true);
+                    if (s.equals("House")) b.houseChip.setChecked(true);
+                    if (s.equals("Townhouse")) b.townhouseChip.setChecked(true);
+                    if (s.equals("Mobile")) b.mobileChip.setChecked(true);
+                }
+
+                for (String s : tenant.getAmenities()) {
+                    if (s.equals("Washer/Dryer")) b.washerDryerChip.setChecked(true);
+                    if (s.equals("Ramp access")) b.rampChip.setChecked(true);
+                    if (s.equals("Garden")) b.gardenChip.setChecked(true);
+                    if (s.equals("Cats OK")) b.catsOKChip.setChecked(true);
+                    if (s.equals("Dogs OK")) b.dogsOKChip.setChecked(true);
+                    if (s.equals("Smoke-free")) b.smokeFreeChip.setChecked(true);
+                }
+
+                b.schoolEditText.setText(tenant.getSchool().name);
+
+                switch (tenant.getMinDistance()) {
+                    case 100:
+                        b.minDistanceGroup.check(R.id.distBtn1);
+                        break;
+                    case 200:
+                        b.minDistanceGroup.check(R.id.distBtn2);
+                        break;
+                    case 500:
+                        b.minDistanceGroup.check(R.id.distBtn3);
+                        break;
+                    case 1000:
+                        b.minDistanceGroup.check(R.id.distBtn4);
+                        break;
+                }
+
+                switch (tenant.getMaxDistance()) {
+                    case 1000:
+                        b.maxDistanceGroup.check(R.id.distBtn5);
+                        break;
+                    case 5000:
+                        b.maxDistanceGroup.check(R.id.distBtn6);
+                        break;
+                    case 10000:
+                        b.maxDistanceGroup.check(R.id.distBtn7);
+                        break;
+                    case 20000:
+                        b.maxDistanceGroup.check(R.id.distBtn8);
+                        break;
+                }
+            }
+        });
+
         addListener();
     }
 
@@ -91,32 +153,39 @@ public class TenantFilterFormFragment extends Fragment {
     }
 
     private void handleMaxDistanceBtnChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
-        int maxDist = 20000;
+        int maxDist = 0;
         if (b) {
             if (i == this.b.distBtn5.getId()) {
                 maxDist = 1000;
+                System.out.println(1000);
             } else if (i == this.b.distBtn6.getId()) {
                 maxDist = 5000;
+                System.out.println(5000);
             } else if (i == this.b.distBtn7.getId()) {
                 maxDist = 10000;
+                System.out.println(10000);
             } else if (i == this.b.distBtn8.getId()) {
                 maxDist = 20000;
             }
+            tenant.setMaxDistance(maxDist);
         }
-        tenant.setMaxDistance(maxDist);
     }
 
     private void handleMinDistanceBtnChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
-        int minDist = 100;
+        int minDist = 0;
         if (b) {
             if (i == this.b.distBtn1.getId()) {
                 minDist = 100;
+                System.out.println(100);
             } else if (i == this.b.distBtn2.getId()) {
                 minDist = 200;
+                System.out.println(200);
             } else if (i == this.b.distBtn3.getId()) {
                 minDist = 500;
+                System.out.println(500);
             } else if (i == this.b.distBtn4.getId()) {
                 minDist = 1000;
+                System.out.println(1000);
             }
             tenant.setMinDistance(minDist);
         }
@@ -169,7 +238,7 @@ public class TenantFilterFormFragment extends Fragment {
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "DocumentSnapshot added");
                     Navigation.findNavController(b.getRoot()).navigate(
-                            TenantFilterFormFragmentDirections.actionGlobalMainTenantActivity());
+                            EditFormFragmentDirections.actionEditFormFragmentToHomeTenantFragment());
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);

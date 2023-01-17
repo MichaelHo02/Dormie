@@ -35,24 +35,25 @@ import com.michael.dormie.implement.PaginationScrollingListener;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.FireBaseDBPath;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HomeTenantFragment extends Fragment {
     private static final String TAG = "HomeTenantFragment";
     private final int MAX_REQUEST = 1;
 
     FragmentHomeTenantBinding b;
-    private List<Place> places;
+    private Set<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;
     private Tenant tenantReference;
     private List<Query> queries;
-    boolean call = true;
 
     private boolean isLoading;
     private boolean isLastPage;
