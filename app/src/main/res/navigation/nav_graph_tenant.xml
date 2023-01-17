@@ -9,7 +9,14 @@
         android:id="@+id/homeTenantFragment"
         android:name="com.michael.dormie.HomeTenantFragment"
         android:label="fragment_home_tenant"
-        tools:layout="@layout/fragment_home_tenant" />
+        tools:layout="@layout/fragment_home_tenant" >
+        <action
+            android:id="@+id/action_homeTenantFragment_to_tenantDetailFragment"
+            app:destination="@id/tenantDetailFragment" />
+        <action
+            android:id="@+id/action_homeTenantFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
@@ -27,5 +34,14 @@
         <action
             android:id="@+id/action_editFormFragment_to_homeTenantFragment"
             app:destination="@id/homeTenantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tenantDetailFragment"
+        android:name="com.michael.dormie.fragment.DetailTenantFragment"
+        android:label="fragment_detail_tenant"
+        tools:layout="@layout/fragment_detail_tenant" >
+        <argument
+            android:name="Place"
+            app:argType="com.michael.dormie.model.Place" />
     </fragment>
 </navigation>

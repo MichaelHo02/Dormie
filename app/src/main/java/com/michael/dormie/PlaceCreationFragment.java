@@ -24,8 +24,6 @@ import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.PlaceTypes;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
@@ -35,7 +33,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.activity.MapsActivity;
-import com.michael.dormie.activity.PostCreationActivity;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentPlaceCreationBinding;
 import com.michael.dormie.model.Place;
@@ -50,20 +47,21 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class PlaceCreationFragment extends Fragment {
     private static final String TAG = "PostCreationActivity";
 
-    private PhotoAdapter photoAdapter;
+    private PhotoAdapter<PhotoAdapter.PhotoObject> photoAdapter;
     private Place place = new Place();
-    private PlaceCreationFragment.SubmitResultReceiver receiver =
+    private final PlaceCreationFragment.SubmitResultReceiver receiver =
             new SubmitResultReceiver(new Handler());
     FragmentPlaceCreationBinding b;
     private boolean isSubmitForm;
     private IndeterminateDrawable loadIcon;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         b = FragmentPlaceCreationBinding.inflate(inflater, container, false);
         return b.getRoot();
     }
@@ -83,8 +81,44 @@ public class PlaceCreationFragment extends Fragment {
                 com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator);
         loadIcon = IndeterminateDrawable.createCircularDrawable(this.requireContext(), spec);
 
+
+        Place p = PlaceCreationFragmentArgs.fromBundle(getArguments()).getPlace();
+        if (p != null) {
+            this.place = p;
+            List<PhotoAdapter.PhotoObject> photoObjects = new ArrayList<>();
+            for (String image : place.getImages()) {
+                photoObjects.add(new PhotoAdapter.PhotoObject(image));
+            }
+            photoAdapter = new PhotoAdapter<>(requireContext(), photoObjects);
+            b.imageCover.setVisibility(View.GONE);
+
+            b.nameEditText.setText(place.getName());
+            b.addressEditText.setText(place.getLocation().name);
+            b.descriptionEditText.setText(place.getDescription());
+
+            List<Chip> houseChips = Arrays.asList(
+                    b.apartmentChip, b.villaChip, b.houseChip,
+                    b.townhouseChip, b.mobileChip
+            );
+            for (Chip houseChip : houseChips) {
+                if (houseChip.getText().toString().equals(place.getHouseType())) {
+                    houseChip.setChecked(true);
+                    break;
+                }
+            }
+
+            List<Chip> amenitiesChips = Arrays.asList(b.washerDryerChip, b.rampChip, b.gardenChip,
+                    b.catsOKChip, b.dogsOKChip, b.smokeFreeChip);
+            for (Chip amenitiesChip : amenitiesChips) {
+                if (place.getAmenities().contains(amenitiesChip.getText().toString())) {
+                    amenitiesChip.setChecked(true);
+                }
+            }
+        } else {
+            photoAdapter = new PhotoAdapter<>(this.requireContext(), new ArrayList<>());
+        }
+
         b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(view).popBackStack());
-        photoAdapter = new PhotoAdapter(this.requireContext(), getPhotos());
         b.viewPager.setAdapter(photoAdapter);
         b.circleIndicator.setViewPager(b.viewPager);
         photoAdapter.registerAdapterDataObserver(b.circleIndicator.getAdapterDataObserver());
@@ -110,12 +144,6 @@ public class PlaceCreationFragment extends Fragment {
         Chip c = b.getRoot().findViewById(chipGroup.getCheckedChipId());
         place.setHouseType(c.getText().toString());
         Log.d(TAG, c.getText().toString());
-    }
-
-
-    private List<Bitmap> getPhotos() {
-        List<Bitmap> photos = new ArrayList<>();
-        return photos;
     }
 
     private void handleAddPhoto(View view) {
@@ -192,14 +220,20 @@ public class PlaceCreationFragment extends Fragment {
         b.submitBtn.setIcon(loadIcon);
         loadingProcess();
 
-        List<Bitmap> photos = photoAdapter.getPhotos();
-        for (Bitmap photo : photos) {
-            PostCreationService.startActionUploadImage(
-                    this.requireContext(),
-                    receiver,
-                    String.valueOf(photo.getGenerationId()),
-                    DataConverter.convertImageToByteArr(photo));
+        List<PhotoAdapter.PhotoObject> photos = photoAdapter.getPhotos();
+        boolean needUploadPhoto = false;
+        for (PhotoAdapter.PhotoObject photo : photos) {
+            if (photo.bitmap != null) {
+                needUploadPhoto = true;
+                Bitmap bitmap = photo.bitmap;
+                PostCreationService.startActionUploadImage(
+                        this.requireContext(),
+                        receiver,
+                        String.valueOf(bitmap.getGenerationId()),
+                        DataConverter.convertImageToByteArr(bitmap));
+            }
         }
+        if (!needUploadPhoto) handleSavePost();
     }
 
     @Override
@@ -220,7 +254,7 @@ public class PlaceCreationFragment extends Fragment {
                 e.printStackTrace();
             }
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-            photoAdapter.addPhoto(bitmap);
+            photoAdapter.addPhoto(new PhotoAdapter.PhotoObject(bitmap));
             b.viewPager.setCurrentItem(photoAdapter.getItemCount());
             b.imageCover.setVisibility(View.GONE);
         }
@@ -254,10 +288,7 @@ public class PlaceCreationFragment extends Fragment {
                 place.addImage(url);
 
                 if (place.getImages().size() == photoAdapter.getItemCount() && !isSubmitForm) {
-                    PostCreationService.startActionUploadPost(
-                            PlaceCreationFragment.this.requireContext(),
-                            receiver,
-                            place);
+                    handleSavePost();
                 }
             }
 
@@ -275,6 +306,15 @@ public class PlaceCreationFragment extends Fragment {
                 Navigation.findNavController(b.getRoot()).popBackStack();
             }
         }
+    }
+
+    private void handleSavePost() {
+        if (place.getUid() == null || place.getUid().isEmpty())
+            place.setUid(UUID.randomUUID().toString());
+        PostCreationService.startActionUploadPost(
+                PlaceCreationFragment.this.requireContext(),
+                receiver,
+                place);
     }
 
     private void loadingProcess() {

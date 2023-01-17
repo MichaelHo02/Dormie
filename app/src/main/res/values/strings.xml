@@ -38,6 +38,7 @@
     <string name="please_enter_your_university">Please enter your university</string>
     <string name="delete_account">Delete account</string>
     <string name="sign_out">Sign out</string>
+    <string name="place_name">Place name</string>
     <string name="role">Role</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -58,6 +59,8 @@
     <string name="distance_from_school_maximum">Distance from school (maximum)</string>
     <string name="empty_image_list">Empty Image List</string>
     <string name="please_import_image">Please import image!</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="chat_with_lessor">Chat with Lessor</string>
     <string name="promotion">Promotion</string>
     <string name="paymentURL">https://us-central1-dormie-5ad44.cloudfunctions.net/stripePayment</string>
     <string name="one_month_promotion">One Month Promotion</string>

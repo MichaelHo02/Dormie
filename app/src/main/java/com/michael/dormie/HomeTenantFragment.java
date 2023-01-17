@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -74,7 +75,7 @@ public class HomeTenantFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        places = new HashSet<>();
+        places = new ArrayList<>();
         queries = new ArrayList<>();
 
         b.toolbar.setNavigationOnClickListener(v -> {
@@ -83,17 +84,15 @@ public class HomeTenantFragment extends Fragment {
         });
 
         manager = new LinearLayoutManager(requireContext());
-        int size = places.size();
-        placeAdapter = new PlaceAdapter(this.requireContext(),
-                Arrays.asList(places.toArray(new Place[size])));
+        placeAdapter = new PlaceAdapter(this.requireContext(), places, place -> Navigation
+                .findNavController(b.getRoot()).navigate(HomeTenantFragmentDirections.actionHomeTenantFragmentToTenantDetailFragment(place)));
         b.recycleView.setLayoutManager(manager);
         b.recycleView.setHasFixedSize(true);
         b.recycleView.setAdapter(placeAdapter);
         b.recycleView.addOnScrollListener(createInfiniteScrollListener());
 
         fetchInitData(() -> {
-            int tmpSize = places.size();
-            placeAdapter.setFilteredList(Arrays.asList(places.toArray(new Place[tmpSize])));
+            placeAdapter.setFilteredList(places);
             if (currentPage < totalPage) {
                 placeAdapter.addFooterLoading();
             } else {
@@ -110,8 +109,7 @@ public class HomeTenantFragment extends Fragment {
                 currentPage++;
                 new Handler().postDelayed(() -> fetchData(() -> {
                     placeAdapter.removeFooterLoading();
-                    int tmpSize = places.size();
-                    placeAdapter.setFilteredList(Arrays.asList(places.toArray(new Place[tmpSize])));
+                    placeAdapter.setFilteredList(places);
                     isLoading = false;
                     if (currentPage < totalPage) {
                         placeAdapter.addFooterLoading();

@@ -1,8 +1,5 @@
 package com.michael.dormie.model;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.DocumentReference;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Place implements Serializable {
+    private String uid;
     private String authorId;
     private String authorRef;
     private String name;
@@ -46,6 +44,14 @@ public class Place implements Serializable {
         amenities = new ArrayList<>();
         isPromoted = false;
         expiryDate = null;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getAuthorId() {

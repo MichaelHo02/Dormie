@@ -13,12 +13,15 @@
         <action
             android:id="@+id/action_homeLessorFragment_to_placeCreationFragment"
             app:destination="@id/placeCreationFragment" />
+        <action
+            android:id="@+id/action_homeLessorFragment_to_detaiLessorlFragment"
+            app:destination="@id/detailLessorFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatLessorFragment"
         android:name="com.michael.dormie.ChatLessorFragment"
         android:label="@string/chat"
-        tools:layout="@layout/fragment_chat_lessor"/>
+        tools:layout="@layout/fragment_chat_lessor" />
     <fragment
         android:id="@+id/profileLessorFragment"
         android:name="com.michael.dormie.ProfileLessorFragment"
@@ -28,7 +31,12 @@
         android:id="@+id/placeCreationFragment"
         android:name="com.michael.dormie.PlaceCreationFragment"
         android:label="fragment_place_creation"
-        tools:layout="@layout/fragment_place_creation" />
+        tools:layout="@layout/fragment_place_creation" >
+        <argument
+            android:name="Place"
+            app:argType="com.michael.dormie.model.Place"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
@@ -39,4 +47,16 @@
         android:name="com.michael.dormie.PromotionFragment"
         android:label="fragment_promotion"
         tools:layout="@layout/fragment_promotion" />
+    <fragment
+        android:id="@+id/detailLessorFragment"
+        android:name="com.michael.dormie.fragment.DetailLessorFragment"
+        android:label="fragment_detail_lessor"
+        tools:layout="@layout/fragment_detail_lessor">
+        <argument
+            android:name="Place"
+            app:argType="com.michael.dormie.model.Place" />
+        <action
+            android:id="@+id/action_detailLessorFragment_to_placeCreationFragment"
+            app:destination="@id/placeCreationFragment" />
+    </fragment>
 </navigation>
