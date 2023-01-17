@@ -184,8 +184,8 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = Uri.parse("https://maps.googleapis.com/maps/api/directions/json?")
                 .buildUpon()
-                .appendQueryParameter("destination", originLLng)
-                .appendQueryParameter("origin", desLLng)
+                .appendQueryParameter("origin", originLLng)
+                .appendQueryParameter("destination", desLLng)
                 .appendQueryParameter("mode", "driving")
                 .appendQueryParameter("key", getString(R.string.google_api_key))
                 .toString();
@@ -208,26 +208,22 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
                             
                             for (int l = 0; l < legs.length(); l++) {
                                 JSONArray steps = legs.getJSONObject(l).getJSONArray("steps");
-                                
                                 for (int s = 0; s < steps.length(); s++) {
                                     String line = steps.getJSONObject(s).getJSONObject("polyline").getString("points");
                                     List<LatLng> latLngs = decodePoly(line);
-                                    
-                                    for (int lat = 0; lat < latLngs.size(); lat++) {
-                                        LatLng position = new LatLng((latLngs.get(lat)).latitude, (latLngs.get(lat)).longitude);
+                                    for (int t = 0; t < latLngs.size(); t++) {
+                                        LatLng position = new LatLng((latLngs.get(t)).latitude, (latLngs.get(t)).longitude);
                                         points.add(position);
                                     }
                                 }
                             }
                             polyline.addAll(points);
                             polyline.width(10);
-                            polyline.color(Color.MAGENTA);
+                            polyline.color(Color.BLUE);
                             polyline.geodesic(true);
                         }
 
-
-                        mMap.addPolyline((new PolylineOptions()).add(originLatLng, desLatLng).
-                                width(10).color(Color.RED).geodesic(true));
+                        mMap.addPolyline(polyline);
                         mMap.addMarker(new MarkerOptions().position(originLatLng).title("1"));
                         mMap.addMarker(new MarkerOptions().position(desLatLng).title("2"));
 
@@ -267,12 +263,21 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
                 result |= (b & 0x1f) << shift;
                 shift += 5;
             } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
 
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
             lng += dlng;
 
-            LatLng p = new LatLng((((double) lat/1E5)),
-                    (((double) lng /1E5)));
+            LatLng p = new LatLng(((double) lat /1E5),
+                    ((double) lng/1E5));
             poly.add(p);
         }
         return poly;
