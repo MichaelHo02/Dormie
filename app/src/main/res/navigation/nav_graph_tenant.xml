@@ -20,6 +20,11 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
+        android:id="@+id/messageTenantFragment"
+        android:name="com.michael.dormie.fragment.MessageTenantFragment"
+        android:label="fragment_message_tenant"
+        tools:layout="@layout/fragment_message_tenant" />
+    <fragment
         android:id="@+id/chatTenantFragment"
         android:name="com.michael.dormie.fragment.ChatTenantFragment"
         android:label="fragment_chat_tenant"
@@ -28,9 +33,4 @@
             android:id="@+id/action_chatTenantFragment_to_messageTenantFragment"
             app:destination="@id/messageTenantFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/messageTenantFragment"
-        android:name="com.michael.dormie.fragment.MessageTenantFragment"
-        android:label="fragment_message_tenant"
-        tools:layout="@layout/fragment_message_tenant" />
 </navigation>

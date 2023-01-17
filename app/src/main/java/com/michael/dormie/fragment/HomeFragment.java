@@ -55,7 +55,6 @@ public class HomeFragment extends Fragment {
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
-    private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
 
 
     public HomeFragment() {

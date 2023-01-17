@@ -48,15 +48,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ItemHold
     public void onBindViewHolder(@NonNull MessageAdapter.ItemHolder holder, int position) {
         Message message = messages.get(position);
         if (message == null) return;
-        holder.msg.setText(message.getContent());
-
-        if (message.getSenderId().equals(FirebaseAuth.getInstance().getUid())) {
-            holder.msg.setTextColor(context.getResources().getColor(com.stripe.android.payments.R.color.places_text_black_alpha_26));
-            holder.layout.setBackgroundColor(context.getResources().getColor(com.stripe.android.R.color.material_dynamic_neutral30));
-        } else {
-            holder.msg.setTextColor(context.getResources().getColor(com.stripe.android.R.color.material_dynamic_neutral30));
-            holder.layout.setBackgroundColor(context.getResources().getColor(com.stripe.android.payments.R.color.places_text_black_alpha_26));
-        }
+        // Add value here
     }
 
     @Override
@@ -69,9 +61,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ItemHold
         LinearLayout layout;
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
-
-            msg = itemView.findViewById(R.id.msg_content);
-            layout = itemView.findViewById(R.id.msg_layout);
         }
+
+
     }
 }

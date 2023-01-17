@@ -11,9 +11,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.michael.dormie.R;
 import com.michael.dormie.fragment.ChatFragment;
 import com.michael.dormie.fragment.HomeFragment;
-import com.michael.dormie.fragment.ProfileFragment;
-import com.michael.dormie.fragment.RentalRegistrationFragment;
-import com.michael.dormie.fragment.SettingFragment;
 import com.michael.dormie.utils.NavigationUtil;
 
 public class MasterActivity extends AppCompatActivity {
@@ -23,9 +20,7 @@ public class MasterActivity extends AppCompatActivity {
 
     private final HomeFragment homeFragment = HomeFragment.newInstance("", "");
     private final ChatFragment chatFragment = ChatFragment.newInstance("", "");
-    private final RentalRegistrationFragment rentalRegistrationFragment = RentalRegistrationFragment.newInstance("", "");
 //    private final ProfileFragment profileFragment = ProfileFragment.newInstance("", "");
-    private final SettingFragment settingFragment = SettingFragment.newInstance("", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +57,8 @@ public class MasterActivity extends AppCompatActivity {
             case R.id.chatPage:
                 NavigationUtil.changeFragment(this, R.id.activity_master_fl, chatFragment);
                 return true;
-            case R.id.rental_registration_page:
-                NavigationUtil.changeFragment(this, R.id.activity_master_fl, rentalRegistrationFragment);
-                return true;
             case R.id.profilePage:
 //                NavigationUtil.changeFragment(this, R.id.activity_master_fl, profileFragment);
-                return true;
-            case R.id.settingPage:
-                NavigationUtil.changeFragment(this, R.id.activity_master_fl, settingFragment);
                 return true;
         }
         return false;

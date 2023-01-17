@@ -1,49 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:id="@+id/chat_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/chat_contact"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="5"
-                style="@style/TextAppearance.Material3.TitleMedium"
-                android:text="@string/username"/>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/chat_profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="16dp"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/last_msg"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="italic"
-                style="@style/TextAppearance.Material3.BodyLarge"
-                android:text="last message"/>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/chat_profile_image"
+                android:layout_toStartOf="@+id/chat_time"
+                android:layout_marginStart="20dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/chat_time"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textStyle="italic"
-            style="@style/TextAppearance.Material3.BodyLarge"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:text="time"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/reiver_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:text="@string/username"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/last_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:text="last message"
+                    android:textColor="@color/chat_sender"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chat_time"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                style="@style/TextAppearance.Material3.BodySmall"
+                android:text="time"/>
+
+        </RelativeLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

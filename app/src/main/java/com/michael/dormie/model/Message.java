@@ -1,25 +1,18 @@
 package com.michael.dormie.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Message implements Serializable {
-    private String chatId;
     private String content;
     private String senderId;
-    private String timestamp;
+    private long timestamp;
 
-    public Message(String chatId, String content, String senderId) {
-        this.chatId = chatId;
+    public Message(String content, String senderId) {
         this.content = content;
         this.senderId = senderId;
-    }
+        this.timestamp = new Date().getTime();
 
-    public String getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
     }
 
     public String getContent() {
@@ -38,11 +31,11 @@ public class Message implements Serializable {
         this.senderId = senderId;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 }

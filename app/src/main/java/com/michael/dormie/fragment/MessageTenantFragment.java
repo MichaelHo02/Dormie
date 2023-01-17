@@ -97,16 +97,9 @@ public class MessageTenantFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        receiverId = getArguments().getString("receiverId");
-        senderChat = user.getUid() + receiverId;
-        receiverChat = receiverId + user.getUid();
-
         messageAdapter = new MessageAdapter(requireContext());
         b.chatRcv.setAdapter(messageAdapter);
         b.chatRcv.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-
-        senderReference = FirebaseDatabase.getInstance().getReference("chats").child( senderChat);
-        receiverReference = FirebaseDatabase.getInstance().getReference("chats").child( receiverChat);
 
         senderReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -137,7 +130,7 @@ public class MessageTenantFragment extends Fragment {
 
     private void sendMessage(String msg) {
         String msgId = UUID.randomUUID().toString();
-        Message newMsg = new Message(msgId, msg, user.getUid());
+        Message newMsg = new Message(msg, user.getUid());
         messageAdapter.add(newMsg);
         senderReference
                 .child(msgId)
