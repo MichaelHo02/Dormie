@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.michael.dormie.R;
 
@@ -20,8 +19,8 @@ import java.util.List;
 public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolder> {
     private static final String TAG = "PhotoAdapter";
 
-    private Context context;
-    private List<T> photos;
+    private final Context context;
+    private final List<T> photos;
 
     public PhotoAdapter(Context context, List<T> photos) {
         this.context = context;
@@ -45,7 +44,7 @@ public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolde
         T photo = photos.get(position);
         if (photo == null) return;
         if (photo instanceof PhotoObject) {
-            Log.e(TAG, "Object instance of PhotoObject");
+            Log.d(TAG, "Object instance of PhotoObject");
             PhotoObject photoObject = (PhotoObject) photo;
             if (photoObject.url != null) {
                 Glide.with(context).load(photoObject.url).into(holder.imageView);
@@ -53,7 +52,7 @@ public class PhotoAdapter<T> extends RecyclerView.Adapter<PhotoAdapter.ItemHolde
                 Glide.with(context).load(photoObject.bitmap).into(holder.imageView);
             }
         } else {
-            Log.e(TAG, "Any other Object");
+            Log.d(TAG, "Any other Object");
             Glide.with(context).load((String) photo).into(holder.imageView);
         }
     }

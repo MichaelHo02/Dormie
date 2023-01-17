@@ -1,6 +1,11 @@
 package com.michael.dormie.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,27 +13,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.FragmentProfileBinding;
 import com.michael.dormie.model.User;
-import com.michael.dormie.utils.NavigationUtil;
+import com.michael.dormie.utils.FireBaseDBPath;
+
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
@@ -74,9 +72,9 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        DocumentReference docRef = db.collection("users").document(user.getUid());
+        DocumentReference docRef = db.collection(FireBaseDBPath.USERS).document(user.getUid());
         docRef.get().addOnCompleteListener(task -> {
-            if (task.getResult().get("role").equals("lessor")) {
+            if (Objects.equals(task.getResult().get("role"), "lessor")) {
                 b.editFormBtn.setVisibility(View.INVISIBLE);
             } else {
                 b.editFormBtn.setVisibility(View.VISIBLE);
@@ -90,9 +88,7 @@ public class ProfileFragment extends Fragment {
 
     private void handleSignOutClick(View view) {
         auth.signOut();
-        gsc.signOut().addOnSuccessListener(task -> {
-            this.requireActivity().finish();
-        });
+        gsc.signOut().addOnSuccessListener(task -> this.requireActivity().finish());
     }
 
     private void handleDeleteAccClick(View view) {

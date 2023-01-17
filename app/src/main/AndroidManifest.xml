@@ -30,23 +30,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activity.HostActivity"
             android:exported="false">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
 
             <meta-data
                 android:name="android.app.lib_name"
@@ -68,9 +55,6 @@
 
         <service
             android:name=".service.SignUpFormService"
-            android:exported="false" />
-        <service
-            android:name=".service.DownloadService"
             android:exported="false" />
 
         <activity
