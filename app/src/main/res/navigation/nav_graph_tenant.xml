@@ -44,5 +44,23 @@
             android:name="Place"
             app:argType="com.michael.dormie.model.Place"
             app:nullable="true" />
+        <argument
+            android:name="Tenant"
+            app:argType="com.michael.dormie.model.Tenant" />
+        <action
+            android:id="@+id/action_tenantDetailFragment_to_mapsActivity"
+            app:destination="@id/mapsActivity" />
     </fragment>
+    <activity
+        android:id="@+id/mapsActivity"
+        android:name="com.michael.dormie.activity.MapsActivity"
+        android:label="activity_maps"
+        tools:layout="@layout/activity_maps" >
+        <argument
+            android:name="TenantLocation"
+            app:argType="com.michael.dormie.model.Tenant$Location" />
+        <argument
+            android:name="PlaceLocation"
+            app:argType="com.michael.dormie.model.Place$Location" />
+    </activity>
 </navigation>

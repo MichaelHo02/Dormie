@@ -1,6 +1,10 @@
 package com.michael.dormie.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -13,17 +17,31 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.Place;
@@ -44,7 +62,12 @@ import com.michael.dormie.adapter.LocationAdapter;
 import com.michael.dormie.databinding.ActivityHostBinding;
 import com.michael.dormie.databinding.ActivityMapsBinding;
 import com.michael.dormie.implement.IClickableCallback;
+import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.PlaceSearchingWatcher;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +76,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class  MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     public static final String PARAM_LOCATION_NAME = "name";
     public static final String PARAM_LOCATION_ADDRESS = "address";
     public static final String PARAM_LOCATION_LAT_LNG = "latLng";
@@ -142,6 +165,116 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        Bundle bundle = getIntent().getExtras();
+        Tenant.Location tenant = MapsActivityArgs.fromBundle(bundle).getTenantLocation();
+        com.michael.dormie.model.Place.Location place = MapsActivityArgs.fromBundle(bundle).getPlaceLocation();
+        if (tenant != null) {
+            LatLng originLatLng = new LatLng(tenant.lat, tenant.lng);
+            LatLng desLatLng = new LatLng(place.lat, place.lng);
+            direction(originLatLng, desLatLng);
+        }
+    }
+
+    private void direction(LatLng originLatLng, LatLng desLatLng) {
+        String originLLng = originLatLng.latitude + ", "  + originLatLng.longitude;
+        String desLLng = desLatLng.latitude + ", "  + desLatLng.longitude;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = Uri.parse("https://maps.googleapis.com/maps/api/directions/json?")
+                .buildUpon()
+                .appendQueryParameter("destination", originLLng)
+                .appendQueryParameter("origin", desLLng)
+                .appendQueryParameter("mode", "driving")
+                .appendQueryParameter("key", getString(R.string.google_api_key))
+                .toString();
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.e(TAG, "HELLO");
+                    String status = response.getString("status");
+                    if (status.equals("OK")) {
+                        JSONArray routes = response.getJSONArray("routes");
+                        ArrayList<LatLng> points;
+                        PolylineOptions polyline = null;
+
+                        for (int r = 0; r < routes.length(); r++) {
+                            points = new ArrayList<>();
+                            polyline = new PolylineOptions();
+                            JSONArray legs = routes.getJSONObject(r).getJSONArray("legs");
+                            
+                            for (int l = 0; l < legs.length(); l++) {
+                                JSONArray steps = legs.getJSONObject(l).getJSONArray("steps");
+                                
+                                for (int s = 0; s < steps.length(); s++) {
+                                    String line = steps.getJSONObject(s).getJSONObject("polyline").getString("points");
+                                    List<LatLng> latLngs = decodePoly(line);
+                                    
+                                    for (int lat = 0; lat < latLngs.size(); lat++) {
+                                        LatLng position = new LatLng((latLngs.get(lat)).latitude, (latLngs.get(lat)).longitude);
+                                        points.add(position);
+                                    }
+                                }
+                            }
+                            polyline.addAll(points);
+                            polyline.width(10);
+                            polyline.color(Color.MAGENTA);
+                            polyline.geodesic(true);
+                        }
+
+
+                        mMap.addPolyline((new PolylineOptions()).add(originLatLng, desLatLng).
+                                width(10).color(Color.RED).geodesic(true));
+                        mMap.addMarker(new MarkerOptions().position(originLatLng).title("1"));
+                        mMap.addMarker(new MarkerOptions().position(desLatLng).title("2"));
+
+                        LatLngBounds bounds = new LatLngBounds.Builder()
+                                .include(originLatLng)
+                                .include(desLatLng)
+                                .build();
+                        Point point = new Point();
+                        getWindowManager().getDefaultDisplay().getSize(point);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, point.x, 200, 20));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, String.valueOf(error));
+            }
+        });
+        RetryPolicy retryPolicy = new DefaultRetryPolicy(400000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonObjectRequest.setRetryPolicy(retryPolicy);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private List<LatLng> decodePoly(String encoded) {
+        List<LatLng> poly = new ArrayList<>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng p = new LatLng((((double) lat/1E5)),
+                    (((double) lng /1E5)));
+            poly.add(p);
+        }
+        return poly;
     }
 }

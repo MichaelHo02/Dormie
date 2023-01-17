@@ -1,6 +1,7 @@
 package com.michael.dormie.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,10 +20,12 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
+import com.michael.dormie.activity.MapsActivity;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
 import com.michael.dormie.model.Place;
+import com.michael.dormie.model.Tenant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +50,17 @@ public class DetailTenantFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
+        Tenant tenant = DetailTenantFragmentArgs.fromBundle(getArguments()).getTenant();
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
 
         b.placeName.setText(place.getName());
         b.placeAddress.setText(place.getLocation().address);
+        b.mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToMapActivity(tenant.getSchool(), place.getLocation());
+            }
+        });
         b.placeDescription.setText(place.getDescription());
 
         photoAdapter = new PhotoAdapter<>(requireContext(), place.getImages());
@@ -67,6 +77,12 @@ public class DetailTenantFragment extends Fragment {
         b.chatBtn.setOnClickListener(v -> {
             // Lead to chat
         });
+    }
+
+    private void navigateToMapActivity(Tenant.Location tenant, Place.Location place) {
+        DetailTenantFragmentDirections.ActionTenantDetailFragmentToMapsActivity directions =
+                DetailTenantFragmentDirections.actionTenantDetailFragmentToMapsActivity(tenant, place);
+        Navigation.findNavController(getView()).navigate(directions);
     }
 
     private void handleNavigationOnClick(View view) {
