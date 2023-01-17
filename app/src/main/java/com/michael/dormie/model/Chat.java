@@ -1,22 +1,26 @@
 package com.michael.dormie.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Chat {
-    private List<String> userIds;
+public class Chat implements Serializable {
+    private List<String> userList;
     private List<Message> messages;
 
-    public Chat(List<String> userIds, List<Message> messages) {
-        this.userIds = userIds;
+    public Chat() {
+    }
+
+    public Chat(List<String> userList, List<Message> messages) {
+        this.userList = userList;
         this.messages = messages;
     }
 
-    public List<String> getUserIds() {
-        return userIds;
+    public List<String> getUserList() {
+        return userList;
     }
 
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
+    public void setUserList(List<String> userList) {
+        this.userList = userList;
     }
 
     public List<Message> getMessages() {

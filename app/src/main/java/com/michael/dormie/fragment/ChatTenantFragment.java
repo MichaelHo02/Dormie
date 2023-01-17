@@ -137,6 +137,7 @@ public class ChatTenantFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.e(TAG, document.getData().toString());
                                 Chat chat = document.toObject(Chat.class);
                                 chats.add(chat);
                             }

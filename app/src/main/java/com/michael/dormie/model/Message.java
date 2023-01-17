@@ -8,11 +8,13 @@ public class Message implements Serializable {
     private String senderId;
     private long timestamp;
 
+    public Message() {
+    }
+
     public Message(String content, String senderId) {
         this.content = content;
         this.senderId = senderId;
         this.timestamp = new Date().getTime();
-
     }
 
     public String getContent() {

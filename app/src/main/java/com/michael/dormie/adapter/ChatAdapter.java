@@ -1,6 +1,7 @@
 package com.michael.dormie.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,17 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.michael.dormie.R;
 import com.michael.dormie.model.Chat;
 import com.michael.dormie.model.Message;
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder>{
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
+    private static final String TAG = "ChatAdapter";
+
     private Context context;
     private List<Chat> chats;
 
@@ -37,18 +43,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder>{
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ItemHolder holder, int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) return;
         Chat chat = chats.get(position);
         if (chat == null) return;
-        // add value
-        List<String> users = chat.getUserIds();
-        String receiverId = null;
-        for (String u : users) {
-            if (u != user.getUid()) {
-                holder.receiver.setText(u); // Need to recall the user information -> Create user class
-            }
-        }
+
+        List<String> users = chat.getUserList();
+        users.remove(user.getUid());
+        String receiver = users.get(0);
+
+        FirebaseStorage db = FirebaseStorage.getInstance();
+        StorageReference ref = db.getReference().child(receiver + "_avt.jpeg");
+        Log.e(TAG, ref.toString());
+
         List<Message> msg = chat.getMessages();
-        Message message = msg.get(msg.size() -1);
+        Message message = msg.get(msg.size() - 1);
         // photoId - lack of
         holder.lastMsg.setText(message.getContent());
         holder.time.setText(String.valueOf(message.getTimestamp()));
@@ -62,6 +71,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder>{
     public final static class ItemHolder extends RecyclerView.ViewHolder {
         private ShapeableImageView profile_img;
         private MaterialTextView receiver, lastMsg, time;
+
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
             profile_img = itemView.findViewById(R.id.chat_profile_image);
