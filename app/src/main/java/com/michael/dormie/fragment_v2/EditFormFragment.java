@@ -232,8 +232,7 @@ public class EditFormFragment extends Fragment {
                 })
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "DocumentSnapshot added");
-                    Navigation.findNavController(b.getRoot()).navigate(
-                            EditFormFragmentDirections.actionEditFormFragmentToHomeTenantFragment());
+                    Navigation.findNavController(b.getRoot()).popBackStack();
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);

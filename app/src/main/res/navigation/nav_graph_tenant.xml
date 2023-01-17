@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_homeTenantFragment_to_tenantDetailFragment"
             app:destination="@id/tenantDetailFragment" />
-        <action
-            android:id="@+id/action_homeTenantFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -30,11 +27,7 @@
         android:id="@+id/editFormFragment"
         android:name="com.michael.dormie.fragment_v2.EditFormFragment"
         android:label="fragment_edit_form"
-        tools:layout="@layout/fragment_edit_form" >
-        <action
-            android:id="@+id/action_editFormFragment_to_homeTenantFragment"
-            app:destination="@id/homeTenantFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_edit_form" />
     <fragment
         android:id="@+id/tenantDetailFragment"
         android:name="com.michael.dormie.fragment.DetailTenantFragment"
@@ -45,4 +38,9 @@
             app:argType="com.michael.dormie.model.Place"
             app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.michael.dormie.fragment.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
 </navigation>

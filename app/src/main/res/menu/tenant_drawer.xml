@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/homeLessorFragment"
+        android:id="@+id/homeTenantFragment"
         android:checkable="true"
         android:icon="@drawable/ic_round_home_24"
         android:title="@string/home" />
     <item
-        android:id="@+id/chatLessorFragment"
+        android:id="@+id/chatFragment"
         android:checkable="true"
         android:icon="@drawable/ic_round_chat_bubble_24"
         android:title="@string/chat" />
