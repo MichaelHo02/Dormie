@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -62,7 +63,7 @@ public class PostCreationService extends IntentService {
                 handleActionUploadImage(param1, param2, param3);
             } else if (ACTION_UPLOAD_POST.equals(action)) {
                 final ResultReceiver param1 = intent.getParcelableExtra(EXTRA_RECEIVER);
-                final Object param2 = intent.getSerializableExtra(EXTRA_PLACE);
+                final Place param2 = (Place) intent.getSerializableExtra(EXTRA_PLACE);
                 handleActionUploadPost(param1, param2);
             }
         }
@@ -94,10 +95,11 @@ public class PostCreationService extends IntentService {
                 });
     }
 
-    private void handleActionUploadPost(ResultReceiver receiver, Object place) {
+    private void handleActionUploadPost(ResultReceiver receiver, Place place) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(FireBaseDBPath.PROPERTIES)
-                .add(place)
+                .document(place.getUid())
+                .set(place, SetOptions.merge())
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Document added");
                     receiver.send(SignalCode.UPLOAD_POST_SUCCESS, null);

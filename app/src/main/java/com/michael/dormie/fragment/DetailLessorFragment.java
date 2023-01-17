@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
@@ -27,6 +28,7 @@ import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailLessorBinding;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.utils.DataConverter;
+import com.michael.dormie.utils.FireBaseDBPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ public class DetailLessorFragment extends Fragment {
     private PhotoAdapter photoAdapter;
     private AmenityAdapter amenityAdapter;
     private List<String> amenities;
+    private Place place;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class DetailLessorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
+        place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         b.topAppBar.setOnMenuItemClickListener(this::handleMenuClick);
 
@@ -81,7 +84,9 @@ public class DetailLessorFragment extends Fragment {
 
     private boolean handleMenuClick(MenuItem item) {
         if (item.getItemId() == R.id.deletePlace) {
-//            Fire
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(FireBaseDBPath.PROPERTIES).document(place.getUid()).delete().addOnSuccessListener(
+                    unused -> Navigation.findNavController(b.getRoot()).popBackStack());
             return true;
         }
         return false;

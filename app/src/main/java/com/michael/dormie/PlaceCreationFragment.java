@@ -47,6 +47,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class PlaceCreationFragment extends Fragment {
     private static final String TAG = "PostCreationActivity";
@@ -284,6 +285,7 @@ public class PlaceCreationFragment extends Fragment {
                 place.addImage(url);
 
                 if (place.getImages().size() == photoAdapter.getItemCount() && !isSubmitForm) {
+                    place.setUid(UUID.randomUUID().toString());
                     PostCreationService.startActionUploadPost(
                             PlaceCreationFragment.this.requireContext(),
                             receiver,
