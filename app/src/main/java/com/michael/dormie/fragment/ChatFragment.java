@@ -82,6 +82,8 @@ public class ChatFragment extends Fragment {
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this.requireActivity(), gso);
+
+        // Use inset to have edge-to-edge display
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
@@ -108,8 +110,13 @@ public class ChatFragment extends Fragment {
 
                 // Read the input field and push a new instance of Chat to the Firebase database
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://dormie-5ad44-default-rtdb.asia-southeast1.firebasedatabase.app");
-                DatabaseReference myRef = database.getReference("server/saved_chat");
-                myRef.push().setValue(new ChatMessage(input.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getEmail()));
+                DatabaseReference myRef = database.getReference("server/saved_chat/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                String message = input.getText().toString();
+                // Invalidate empty messages
+                if (message.matches("")) {}
+                else {
+                    myRef.push().setValue(new ChatMessage(message, FirebaseAuth.getInstance().getCurrentUser().getEmail()));
+                }
                 // Clear current input
                 input.setText("");
             }
@@ -121,7 +128,7 @@ public class ChatFragment extends Fragment {
 
         // Currently using temporary database for chat
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://dormie-5ad44-default-rtdb.asia-southeast1.firebasedatabase.app");
-        DatabaseReference myRef = database.getReference("server/saved_chat/");
+        DatabaseReference myRef = database.getReference("server/saved_chat/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         // Use FirebaseListOptions to obtain database
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
