@@ -2,13 +2,29 @@ package com.michael.dormie.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.michael.dormie.R;
+import com.michael.dormie.adapter.MessageAdapter;
+import com.michael.dormie.databinding.FragmentMessageTenantBinding;
+import com.michael.dormie.model.Message;
+
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +42,14 @@ public class MessageTenantFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    FragmentMessageTenantBinding b;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private DatabaseReference senderReference, receiverReference;
+
+    private String receiverId;
+    private String senderChat, receiverChat;
+    private MessageAdapter messageAdapter;
 
 
     public MessageTenantFragment() {
@@ -63,6 +87,70 @@ public class MessageTenantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat_content_tenant, container, false);
+        b = FragmentMessageTenantBinding.inflate(inflater, container, false);
+        return b.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
+        receiverId = getArguments().getString("receiverId");
+        senderChat = user.getUid() + receiverId;
+        receiverChat = receiverId + user.getUid();
+
+        messageAdapter = new MessageAdapter(requireContext());
+        b.chatRcv.setAdapter(messageAdapter);
+        b.chatRcv.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+
+        senderReference = FirebaseDatabase.getInstance().getReference("chats").child( senderChat);
+        receiverReference = FirebaseDatabase.getInstance().getReference("chats").child( receiverChat);
+
+        senderReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messageAdapter.clear();
+                for (DataSnapshot data :  snapshot.getChildren()) {
+                    Message message = snapshot.getValue(Message.class);
+                    messageAdapter.add(message);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        b.sendMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = b.chatMsg.getText().toString();
+                if (msg.trim().length() > 0) {
+                    sendMessage(msg);
+                }
+            }
+        });
+    }
+
+    private void sendMessage(String msg) {
+        String msgId = UUID.randomUUID().toString();
+        Message newMsg = new Message(msgId, msg, user.getUid());
+        messageAdapter.add(newMsg);
+        senderReference
+                .child(msgId)
+                .setValue(newMsg);
+
+        receiverReference
+                .child(msgId)
+                .setValue(newMsg);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        b = null;
     }
 }

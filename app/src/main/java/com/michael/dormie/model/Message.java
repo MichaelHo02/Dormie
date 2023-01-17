@@ -3,14 +3,23 @@ package com.michael.dormie.model;
 import java.io.Serializable;
 
 public class Message implements Serializable {
+    private String chatId;
     private String content;
-    private String userId;
+    private String senderId;
     private String timestamp;
 
-    public Message(String content, String userId, String timestamp) {
+    public Message(String chatId, String content, String senderId) {
+        this.chatId = chatId;
         this.content = content;
-        this.userId = userId;
-        this.timestamp = timestamp;
+        this.senderId = senderId;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 
     public String getContent() {
@@ -21,12 +30,12 @@ public class Message implements Serializable {
         this.content = content;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSenderId() {
+        return senderId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     public String getTimestamp() {
