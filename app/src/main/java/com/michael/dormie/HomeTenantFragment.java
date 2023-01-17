@@ -49,7 +49,7 @@ public class HomeTenantFragment extends Fragment {
     private final int MAX_REQUEST = 1;
 
     FragmentHomeTenantBinding b;
-    private Set<Place> places;
+    private List<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;
     private Tenant tenantReference;

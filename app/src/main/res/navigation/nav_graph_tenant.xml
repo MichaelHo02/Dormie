@@ -42,6 +42,7 @@
         tools:layout="@layout/fragment_detail_tenant" >
         <argument
             android:name="Place"
-            app:argType="com.michael.dormie.model.Place" />
+            app:argType="com.michael.dormie.model.Place"
+            app:nullable="true" />
     </fragment>
 </navigation>
