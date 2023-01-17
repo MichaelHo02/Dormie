@@ -221,8 +221,10 @@ public class PlaceCreationFragment extends Fragment {
         loadingProcess();
 
         List<PhotoAdapter.PhotoObject> photos = photoAdapter.getPhotos();
+        boolean needUploadPhoto = false;
         for (PhotoAdapter.PhotoObject photo : photos) {
             if (photo.bitmap != null) {
+                needUploadPhoto = true;
                 Bitmap bitmap = photo.bitmap;
                 PostCreationService.startActionUploadImage(
                         this.requireContext(),
@@ -231,6 +233,7 @@ public class PlaceCreationFragment extends Fragment {
                         DataConverter.convertImageToByteArr(bitmap));
             }
         }
+        if (!needUploadPhoto) handleSavePost();
     }
 
     @Override
@@ -285,11 +288,7 @@ public class PlaceCreationFragment extends Fragment {
                 place.addImage(url);
 
                 if (place.getImages().size() == photoAdapter.getItemCount() && !isSubmitForm) {
-                    place.setUid(UUID.randomUUID().toString());
-                    PostCreationService.startActionUploadPost(
-                            PlaceCreationFragment.this.requireContext(),
-                            receiver,
-                            place);
+                    handleSavePost();
                 }
             }
 
@@ -307,6 +306,15 @@ public class PlaceCreationFragment extends Fragment {
                 Navigation.findNavController(b.getRoot()).popBackStack();
             }
         }
+    }
+
+    private void handleSavePost() {
+        if (place.getUid() == null || place.getUid().isEmpty())
+            place.setUid(UUID.randomUUID().toString());
+        PostCreationService.startActionUploadPost(
+                PlaceCreationFragment.this.requireContext(),
+                receiver,
+                place);
     }
 
     private void loadingProcess() {
