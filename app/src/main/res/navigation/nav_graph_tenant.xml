@@ -48,19 +48,19 @@
             android:name="Tenant"
             app:argType="com.michael.dormie.model.Tenant" />
         <action
-            android:id="@+id/action_tenantDetailFragment_to_mapsActivity"
-            app:destination="@id/mapsActivity" />
+            android:id="@+id/action_tenantDetailFragment_to_mapTenantActivity"
+            app:destination="@id/mapTenantActivity" />
     </fragment>
     <activity
-        android:id="@+id/mapsActivity"
-        android:name="com.michael.dormie.activity.MapsActivity"
-        android:label="activity_maps"
-        tools:layout="@layout/activity_maps" >
+        android:id="@+id/mapTenantActivity"
+        android:name="com.michael.dormie.activity.MapTenantActivity"
+        android:label="activity_map_tenant"
+        tools:layout="@layout/activity_map_tenant" >
         <argument
-            android:name="TenantLocation"
+            android:name="Tenant"
             app:argType="com.michael.dormie.model.Tenant$Location" />
         <argument
-            android:name="PlaceLocation"
+            android:name="Place"
             app:argType="com.michael.dormie.model.Place$Location" />
     </activity>
 </navigation>

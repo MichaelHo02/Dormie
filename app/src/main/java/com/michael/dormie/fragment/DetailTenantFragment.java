@@ -94,8 +94,8 @@ public class DetailTenantFragment extends Fragment {
 
 
     private void navigateToMapActivity(Tenant.Location tenant, Place.Location place) {
-        DetailTenantFragmentDirections.ActionTenantDetailFragmentToMapsActivity directions =
-                DetailTenantFragmentDirections.actionTenantDetailFragmentToMapsActivity(tenant, place);
+        DetailTenantFragmentDirections.ActionTenantDetailFragmentToMapTenantActivity directions =
+                DetailTenantFragmentDirections.actionTenantDetailFragmentToMapTenantActivity(tenant, place);
         Navigation.findNavController(getView()).navigate(directions);
     }
 
