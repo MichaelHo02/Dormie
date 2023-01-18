@@ -1,4 +1,4 @@
-package com.michael.dormie;
+package com.michael.dormie.fragment_v2;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,12 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
@@ -19,6 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
@@ -56,7 +55,7 @@ public class PlaceCreationFragment extends Fragment {
     private Place place = new Place();
     private final PlaceCreationFragment.SubmitResultReceiver receiver =
             new SubmitResultReceiver(new Handler());
-    FragmentPlaceCreationBinding b;
+    private FragmentPlaceCreationBinding b;
     private boolean isSubmitForm;
     private IndeterminateDrawable loadIcon;
 

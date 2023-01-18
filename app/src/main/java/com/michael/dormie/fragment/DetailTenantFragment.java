@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,14 +76,14 @@ public class DetailTenantFragment extends Fragment {
         b.placeAddress.setText(place.getLocation().address);
         b.placeDescription.setText(place.getDescription());
 
-        photoAdapter = new PhotoAdapter<>(requireContext(), place.getImages());
+        PhotoAdapter<String> photoAdapter = new PhotoAdapter<>(requireContext(), place.getImages());
         b.viewPager.setAdapter(photoAdapter);
         b.circleIndicator.setViewPager(b.viewPager);
         photoAdapter.registerAdapterDataObserver(b.circleIndicator.getAdapterDataObserver());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
-        amenities = place.getAmenities();
-        amenityAdapter = new AmenityAdapter(requireContext(), amenities);
+        List<String> amenities = place.getAmenities();
+        AmenityAdapter amenityAdapter = new AmenityAdapter(requireContext(), amenities);
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
 

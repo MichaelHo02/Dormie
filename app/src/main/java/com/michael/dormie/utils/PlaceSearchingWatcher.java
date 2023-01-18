@@ -14,11 +14,8 @@ import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.michael.dormie.R;
-import com.michael.dormie.activity.MapsActivity;
 import com.michael.dormie.adapter.LocationAdapter;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

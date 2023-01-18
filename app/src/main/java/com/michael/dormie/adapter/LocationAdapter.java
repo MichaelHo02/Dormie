@@ -25,7 +25,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ItemHo
     }
 
     public void setData(List<AutocompletePrediction> autocompletePredictions) {
-        int size = autocompletePredictions.size();
         this.autocompletePredictions = autocompletePredictions;
         notifyDataSetChanged();
     }

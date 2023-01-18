@@ -10,5 +10,6 @@
         android:id="@+id/deletePlace"
         android:icon="@drawable/ic_round_delete_24"
         android:title="Delete"
+        android:iconTint="?attr/colorOnSurface"
         app:showAsAction="always" />
 </menu>

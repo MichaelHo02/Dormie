@@ -3,22 +3,20 @@ package com.michael.dormie.fragment_v2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.PlaceTypes;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
@@ -45,7 +43,7 @@ public class EditFormFragment extends Fragment {
     private static final String TAG = "EditFormFragment";
     private FragmentTenentFilterFormBinding b;
     private IndeterminateDrawable loadIcon;
-    Tenant  tenant;
+    private Tenant  tenant;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,59 +69,56 @@ public class EditFormFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("tenants").document(user.getUid());
 
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                tenant = documentSnapshot.toObject(Tenant.class);
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            tenant = documentSnapshot.toObject(Tenant.class);
 
-                for (String s : tenant.getHouseTypes()) {
-                    if (s.equals("Apartment")) b.apartmentChip.setChecked(true);
-                    if (s.equals("Villa")) b.villaChip.setChecked(true);
-                    if (s.equals("House")) b.houseChip.setChecked(true);
-                    if (s.equals("Townhouse")) b.townhouseChip.setChecked(true);
-                    if (s.equals("Mobile")) b.mobileChip.setChecked(true);
-                }
+            for (String s : tenant.getHouseTypes()) {
+                if (s.equals("Apartment")) b.apartmentChip.setChecked(true);
+                if (s.equals("Villa")) b.villaChip.setChecked(true);
+                if (s.equals("House")) b.houseChip.setChecked(true);
+                if (s.equals("Townhouse")) b.townhouseChip.setChecked(true);
+                if (s.equals("Mobile")) b.mobileChip.setChecked(true);
+            }
 
-                for (String s : tenant.getAmenities()) {
-                    if (s.equals("Washer/Dryer")) b.washerDryerChip.setChecked(true);
-                    if (s.equals("Ramp access")) b.rampChip.setChecked(true);
-                    if (s.equals("Garden")) b.gardenChip.setChecked(true);
-                    if (s.equals("Cats OK")) b.catsOKChip.setChecked(true);
-                    if (s.equals("Dogs OK")) b.dogsOKChip.setChecked(true);
-                    if (s.equals("Smoke-free")) b.smokeFreeChip.setChecked(true);
-                }
+            for (String s : tenant.getAmenities()) {
+                if (s.equals("Washer/Dryer")) b.washerDryerChip.setChecked(true);
+                if (s.equals("Ramp access")) b.rampChip.setChecked(true);
+                if (s.equals("Garden")) b.gardenChip.setChecked(true);
+                if (s.equals("Cats OK")) b.catsOKChip.setChecked(true);
+                if (s.equals("Dogs OK")) b.dogsOKChip.setChecked(true);
+                if (s.equals("Smoke-free")) b.smokeFreeChip.setChecked(true);
+            }
 
-                b.schoolEditText.setText(tenant.getSchool().name);
+            b.schoolEditText.setText(tenant.getSchool().name);
 
-                switch (tenant.getMinDistance()) {
-                    case 100:
-                        b.minDistanceGroup.check(R.id.distBtn1);
-                        break;
-                    case 200:
-                        b.minDistanceGroup.check(R.id.distBtn2);
-                        break;
-                    case 500:
-                        b.minDistanceGroup.check(R.id.distBtn3);
-                        break;
-                    case 1000:
-                        b.minDistanceGroup.check(R.id.distBtn4);
-                        break;
-                }
+            switch (tenant.getMinDistance()) {
+                case 100:
+                    b.minDistanceGroup.check(R.id.distBtn1);
+                    break;
+                case 200:
+                    b.minDistanceGroup.check(R.id.distBtn2);
+                    break;
+                case 500:
+                    b.minDistanceGroup.check(R.id.distBtn3);
+                    break;
+                case 1000:
+                    b.minDistanceGroup.check(R.id.distBtn4);
+                    break;
+            }
 
-                switch (tenant.getMaxDistance()) {
-                    case 1000:
-                        b.maxDistanceGroup.check(R.id.distBtn5);
-                        break;
-                    case 5000:
-                        b.maxDistanceGroup.check(R.id.distBtn6);
-                        break;
-                    case 10000:
-                        b.maxDistanceGroup.check(R.id.distBtn7);
-                        break;
-                    case 20000:
-                        b.maxDistanceGroup.check(R.id.distBtn8);
-                        break;
-                }
+            switch (tenant.getMaxDistance()) {
+                case 1000:
+                    b.maxDistanceGroup.check(R.id.distBtn5);
+                    break;
+                case 5000:
+                    b.maxDistanceGroup.check(R.id.distBtn6);
+                    break;
+                case 10000:
+                    b.maxDistanceGroup.check(R.id.distBtn7);
+                    break;
+                case 20000:
+                    b.maxDistanceGroup.check(R.id.distBtn8);
+                    break;
             }
         });
 

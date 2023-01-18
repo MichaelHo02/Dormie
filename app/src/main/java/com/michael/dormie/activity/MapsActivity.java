@@ -6,22 +6,13 @@ import android.graphics.Point;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -45,23 +36,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.LocationAdapter;
-import com.michael.dormie.databinding.ActivityHostBinding;
 import com.michael.dormie.databinding.ActivityMapsBinding;
-import com.michael.dormie.implement.IClickableCallback;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.PlaceSearchingWatcher;
 
@@ -73,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class  MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -85,8 +63,6 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
     private static final String TAG = "MapsActivity";
 
     private GoogleMap mMap;
-    private SupportMapFragment mapFragment;
-    private LocationAdapter locationAdapter;
     private ActivityMapsBinding b;
 
     private final Map<String, List<AutocompletePrediction>> cache = new HashMap<>();
@@ -97,11 +73,12 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
         b = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
 
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(b.map.getId());
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(b.map.getId());
         mapFragment.getMapAsync(this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        locationAdapter = new LocationAdapter(new ArrayList<>(), (pos, autocompletePrediction) -> {
+        // TODO: Handle error with given status code.
+        LocationAdapter locationAdapter = new LocationAdapter(new ArrayList<>(), (pos, autocompletePrediction) -> {
             b.searchBar.setText(autocompletePrediction.getPrimaryText(null));
             b.searchView.hide();
 
