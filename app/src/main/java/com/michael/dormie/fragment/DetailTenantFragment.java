@@ -1,33 +1,31 @@
 package com.michael.dormie.fragment;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
-import com.michael.dormie.activity.MapsActivity;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.Tenant;
+import com.michael.dormie.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DetailTenantFragment extends Fragment {
@@ -38,6 +36,7 @@ public class DetailTenantFragment extends Fragment {
     private List<String> photos;
     private AmenityAdapter amenityAdapter;
     private List<String> amenities;
+    private DocumentReference doc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,16 +50,31 @@ public class DetailTenantFragment extends Fragment {
 
         Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
         Tenant tenant = DetailTenantFragmentArgs.fromBundle(getArguments()).getTenant();
+
+        doc = FirebaseFirestore.getInstance().collection("users").document(place.getAuthorId());
+        doc.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot != null) {
+                User user = documentSnapshot.toObject(User.class);
+                Glide.with(b.getRoot()).load(user.getAvatar()).into(b.avatarImageView);
+                b.lessorName.setText(user.getName());
+                b.lessorEmail.setText(user.getEmail());
+            }
+        });
+
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
+        b.topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.map) {
+                    navigateToMapActivity(tenant.getSchool(), place.getLocation());
+                    return true;
+                }
+                return false;
+            }
+        });
 
         b.placeName.setText(place.getName());
         b.placeAddress.setText(place.getLocation().address);
-        b.mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToMapActivity(tenant.getSchool(), place.getLocation());
-            }
-        });
         b.placeDescription.setText(place.getDescription());
 
         photoAdapter = new PhotoAdapter<>(requireContext(), place.getImages());
@@ -78,6 +92,7 @@ public class DetailTenantFragment extends Fragment {
             // Lead to chat
         });
     }
+
 
     private void navigateToMapActivity(Tenant.Location tenant, Place.Location place) {
         DetailTenantFragmentDirections.ActionTenantDetailFragmentToMapsActivity directions =

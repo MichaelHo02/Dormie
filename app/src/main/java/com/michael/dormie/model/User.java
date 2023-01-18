@@ -2,8 +2,13 @@ package com.michael.dormie.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class User {
+    private String uid;
+    private String name;
+    private String avatar;
+    private String email;
     private String role;
     private String dob;
     private boolean isPromoted;
@@ -19,6 +24,49 @@ public class User {
         this.dob = dob;
         this.isPromoted = isPromoted;
         this.expiryDate = expiryDate;
+    }
+
+    public User(String uid, String name, String avatar, String email, String role, String dob, boolean isPromoted, Date expiryDate) {
+        this.uid = uid;
+        this.name = name;
+        this.avatar = avatar;
+        this.email = email;
+        this.role = role;
+        this.dob = dob;
+        this.isPromoted = isPromoted;
+        this.expiryDate = expiryDate;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getRole() {

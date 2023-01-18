@@ -42,7 +42,7 @@
                     android:layout_height="140dp"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_round_account_circle_24"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="?attr/colorPrimary"/>
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/avatarImageView"
