@@ -64,5 +64,13 @@
             app:argType="com.michael.dormie.model.Place"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_chatFragment_to_chatDetailFragment"
+            app:destination="@id/chatDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chatDetailFragment"
+        android:name="com.michael.dormie.ChatDetailFragment"
+        android:label="fragment_chat_detail"
+        tools:layout="@layout/fragment_chat_detail" />
 </navigation>

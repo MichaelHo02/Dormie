@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +38,13 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ChatFragment extends Fragment {
+    private static final String TAG = "ChatFragment";
+
     private FragmentChatBinding b;
     private ChatRoomAdapter adapter;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
     private List<ChatRoom> chatRooms;
-    //    private List<User> users;
     private Map<String, User> userMap;
 
     @Override
@@ -88,7 +90,6 @@ public class ChatFragment extends Fragment {
 
     private void handleQueryChatRoomSuccess(QuerySnapshot queryDocumentSnapshots) {
         chatRooms = queryDocumentSnapshots.toObjects(ChatRoom.class);
-
         boolean isFromDetailFragment = ChatFragmentArgs.fromBundle(getArguments()).getIsFromDetailFragment();
         if (isFromDetailFragment) {
             Place place = ChatFragmentArgs.fromBundle(getArguments()).getPlace();
