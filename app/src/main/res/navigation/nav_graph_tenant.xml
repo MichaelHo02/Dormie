@@ -9,7 +9,7 @@
         android:id="@+id/homeTenantFragment"
         android:name="com.michael.dormie.fragment_v2.HomeTenantFragment"
         android:label="fragment_home_tenant"
-        tools:layout="@layout/fragment_home_tenant" >
+        tools:layout="@layout/fragment_home_tenant">
         <action
             android:id="@+id/action_homeTenantFragment_to_tenantDetailFragment"
             app:destination="@id/tenantDetailFragment" />
@@ -18,7 +18,7 @@
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_editFormFragment"
             app:destination="@id/editFormFragment" />
@@ -32,15 +32,37 @@
         android:id="@+id/tenantDetailFragment"
         android:name="com.michael.dormie.fragment.DetailTenantFragment"
         android:label="fragment_detail_tenant"
-        tools:layout="@layout/fragment_detail_tenant" >
+        tools:layout="@layout/fragment_detail_tenant">
         <argument
             android:name="Place"
             app:argType="com.michael.dormie.model.Place"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_tenantDetailFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:popUpTo="@id/nav_graph_tenant"
+            app:popUpToInclusive="true">
+            <argument
+                android:name="isFromDetailFragment"
+                app:argType="boolean" />
+            <argument
+                android:name="Place"
+                app:argType="com.michael.dormie.model.Place" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.michael.dormie.fragment.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="isFromDetailFragment"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="Place"
+            app:argType="com.michael.dormie.model.Place"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

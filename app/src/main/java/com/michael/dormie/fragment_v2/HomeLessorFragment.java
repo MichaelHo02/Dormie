@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class HomeLessorFragment extends Fragment {
-    FragmentHomeLessorBinding b;
+    private FragmentHomeLessorBinding b;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
 

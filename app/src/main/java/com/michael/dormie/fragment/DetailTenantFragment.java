@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
@@ -51,9 +52,9 @@ public class DetailTenantFragment extends Fragment {
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
 
-        b.chatBtn.setOnClickListener(v -> {
-            // Lead to chat
-        });
+        b.chatBtn.setOnClickListener(v -> Navigation.findNavController(b.getRoot()).navigate(
+                DetailTenantFragmentDirections.actionTenantDetailFragmentToChatFragment(true,
+                        place)));
     }
 
     private void handleNavigationOnClick(View view) {

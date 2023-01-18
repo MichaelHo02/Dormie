@@ -1,9 +1,14 @@
 package com.michael.dormie.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
+    private String uid;
+    private String name;
+    private String email;
+    private String avatar;
     private String role;
     private String dob;
     private boolean isPromoted;
@@ -14,11 +19,47 @@ public class User {
         expiryDate = null;
     }
 
-    public User(String role, String dob, boolean isPromoted, Date expiryDate) {
+    public User(String uid, String name, String email, String avatar, String role, String dob, boolean isPromoted, Date expiryDate) {
+        this.uid = uid;
+        this.name = name;
+        this.email = email;
+        this.avatar = avatar;
         this.role = role;
         this.dob = dob;
         this.isPromoted = isPromoted;
         this.expiryDate = expiryDate;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getRole() {

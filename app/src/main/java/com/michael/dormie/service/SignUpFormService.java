@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.model.User;
+import com.michael.dormie.utils.FireBaseDBPath;
 import com.michael.dormie.utils.SignalCode;
 
 public class SignUpFormService extends IntentService {
@@ -77,10 +78,6 @@ public class SignUpFormService extends IntentService {
                 final String param2 = intent.getStringExtra(EXTRA_ROLE);
                 final String param3 = intent.getStringExtra(EXTRA_DOB);
                 handleActionUpdateUser(param1, param2, param3);
-            } else if (ACTION_UPDATE_TENANT.equals(action)) {
-                final ResultReceiver param1 = intent.getParcelableExtra(EXTRA_RECEIVER);
-                final Tenant param2 = (Tenant) intent.getSerializableExtra(EXTRA_TENANT);
-                handleActionUpdateTenant(param1, param2);
             }
         }
     }
@@ -142,11 +139,10 @@ public class SignUpFormService extends IntentService {
             return;
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        User user = new User(role, dob, false, null);
-//        Map<String, Object> user = new HashMap<>();
-//        user.put("role", role);
-//        user.put("dob", dob);
-        db.collection("users")
+        User user = new User(currentUser.getUid(), currentUser.getDisplayName(),
+                currentUser.getEmail(),
+                currentUser.getPhotoUrl().toString(), role, dob, false, null);
+        db.collection(FireBaseDBPath.USERS)
                 .document(currentUser.getUid())
                 .set(user, SetOptions.merge())
                 .addOnSuccessListener(unused -> {
@@ -156,28 +152,6 @@ public class SignUpFormService extends IntentService {
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);
                     receiver.send(SignalCode.UPDATE_USER_ERROR, null);
-                });
-    }
-
-    private void handleActionUpdateTenant(ResultReceiver receiver, Tenant tenant) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            Log.e(TAG, "Cannot get user");
-            receiver.send(SignalCode.UPDATE_USER_ERROR, null);
-            return;
-        }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("tenants")
-                .document(currentUser.getUid())
-                .set(tenant, SetOptions.merge())
-                .addOnSuccessListener(unused -> {
-                    Log.d(TAG, "DocumentSnapshot added");
-                    receiver.send(SignalCode.UPDATE_TENANT_SUCCESS, null);
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error adding document", e);
-                    receiver.send(SignalCode.UPDATE_TENANT_ERROR, null);
                 });
     }
 }
