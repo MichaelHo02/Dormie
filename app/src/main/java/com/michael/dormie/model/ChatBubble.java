@@ -9,6 +9,9 @@ public class ChatBubble {
     private String personId;
     private Date timestamp;
 
+    public ChatBubble() {
+    }
+
     public ChatBubble(String chatBubbleId, String content, String chatRoomId, String personId, Date timestamp) {
         this.chatBubbleId = chatBubbleId;
         this.content = content;

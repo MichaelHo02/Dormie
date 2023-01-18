@@ -15,11 +15,7 @@ import com.michael.dormie.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.ItemHolder> {
@@ -61,7 +57,7 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.It
     }
 
     public void setData(List<ChatBubble> chatBubbles) {
-        this.chatBubbles = chatBubbles;
+        this.chatBubbles.addAll(chatBubbles);
         notifyDataSetChanged();
     }
 
