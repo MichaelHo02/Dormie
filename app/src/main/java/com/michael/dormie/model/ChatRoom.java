@@ -1,8 +1,9 @@
-package com.michael.dormie.adapter;
+package com.michael.dormie.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ChatRoom {
+public class ChatRoom implements Serializable {
     private String uid;
     private boolean didNotify;
     private String latestMessage;

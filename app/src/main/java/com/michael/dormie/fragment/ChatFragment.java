@@ -1,6 +1,9 @@
 package com.michael.dormie.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,12 +11,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,9 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.R;
-import com.michael.dormie.adapter.ChatRoom;
 import com.michael.dormie.adapter.ChatRoomAdapter;
 import com.michael.dormie.databinding.FragmentChatBinding;
+import com.michael.dormie.model.ChatRoom;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.User;
 import com.michael.dormie.utils.FireBaseDBPath;

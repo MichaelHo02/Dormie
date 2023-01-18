@@ -1,8 +1,6 @@
 package com.michael.dormie.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.michael.dormie.databinding.ChatRoomHolderItemBinding;
 import com.michael.dormie.fragment.ChatFragmentDirections;
+import com.michael.dormie.model.ChatRoom;
 import com.michael.dormie.model.User;
 
 import java.util.ArrayList;
@@ -44,7 +43,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ItemHo
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         ChatRoom chatRoom = chatRooms.get(position);
-        Log.e(TAG, "Hello");
         if (chatRoom == null) return;
         List<String> userIds = chatRoom.getUserIds();
         userIds.remove(currentUser.getUid());
@@ -53,7 +51,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ItemHo
         Glide.with(holder.itemView).load(receiver.getAvatar()).into(holder.b.avatarImageView);
         holder.b.nameView.setText(receiver.getName());
         holder.b.getRoot().setOnClickListener(v -> Navigation.findNavController(holder.itemView)
-                .navigate(ChatFragmentDirections.actionChatFragmentToChatDetailFragment()));
+                .navigate(ChatFragmentDirections
+                        .actionChatFragmentToChatDetailFragment(receiver, chatRoom)));
     }
 
     @Override

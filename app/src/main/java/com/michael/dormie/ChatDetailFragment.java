@@ -1,64 +1,88 @@
 package com.michael.dormie;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChatDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.michael.dormie.adapter.ChatBubbleAdapter;
+import com.michael.dormie.databinding.FragmentChatDetailBinding;
+import com.michael.dormie.model.ChatBubble;
+import com.michael.dormie.model.ChatRoom;
+import com.michael.dormie.model.User;
+import com.michael.dormie.utils.FireBaseDBPath;
+import com.michael.dormie.utils.ValidationUtil;
+
+import java.util.Calendar;
+import java.util.UUID;
+
 public class ChatDetailFragment extends Fragment {
+    private static final String TAG = "ChatDetailFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private FragmentChatDetailBinding b;
+    private ChatBubbleAdapter adapter;
+    private FirebaseUser currentUser;
+    private FirebaseFirestore db;
+    private User receiver;
+    private ChatRoom chatRoom;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ChatDetailFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatDetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChatDetailFragment newInstance(String param1, String param2) {
-        ChatDetailFragment fragment = new ChatDetailFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        b = FragmentChatDetailBinding.inflate(inflater, container, false);
+        return b.getRoot();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        b = null;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat_detail, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+
+        receiver = ChatDetailFragmentArgs.fromBundle(getArguments()).getReceiver();
+        chatRoom = ChatDetailFragmentArgs.fromBundle(getArguments()).getChatRoom();
+
+        b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(b.getRoot()).popBackStack());
+        b.sendBtn.setOnClickListener(this::handleSendMessage);
+
+
+        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
+        manager.setReverseLayout(true);
+        b.recycleView.setLayoutManager(manager);
+        adapter = new ChatBubbleAdapter(receiver);
+        b.recycleView.setAdapter(adapter);
+
+    }
+
+    private void handleSendMessage(View view) {
+        String msg = b.chatEditText.getText().toString();
+        if (msg.isEmpty()) return;
+        msg = msg.trim();
+        String uid = UUID.randomUUID().toString();
+        ChatBubble chatBubble = new ChatBubble(uid, msg, chatRoom.getUid(), currentUser.getUid(),
+                Calendar.getInstance().getTime());
+        db.collection(FireBaseDBPath.CHAT_BUBBLE)
+                .document(uid)
+                .set(chatBubble, SetOptions.merge())
+                .addOnCompleteListener(task -> adapter.addData(chatBubble));
     }
 }

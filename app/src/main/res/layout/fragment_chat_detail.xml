@@ -35,21 +35,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:clipToPadding="true"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/chatGroup"
-                android:layout_alignParentTop="true"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                android:layout_alignParentTop="true">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycleView"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_height="match_parent" />
             </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
@@ -57,11 +58,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:clipToPadding="false"
+                android:fitsSystemWindows="true"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/descriptionLayout"
+                    android:id="@+id/chatLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -72,7 +74,7 @@
                     app:placeholderText="Type here ...">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/descriptionEditText"
+                        android:id="@+id/chatEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
