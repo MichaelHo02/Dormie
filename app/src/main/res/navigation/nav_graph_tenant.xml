@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_tenantDetailFragment_to_mapTenantActivity"
             app:destination="@id/mapTenantActivity" />
+        <action
+            android:id="@+id/action_tenantDetailFragment_to_homeTenantFragment"
+            app:destination="@id/homeTenantFragment" />
     </fragment>
     <activity
         android:id="@+id/mapTenantActivity"

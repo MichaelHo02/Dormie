@@ -218,7 +218,6 @@ public class HomeTenantFragment extends Fragment {
                     for (Task<QuerySnapshot> task : tasks) {
                         QuerySnapshot snap = task.getResult();
                         Log.e(TAG, "D");
-                        DocumentSnapshot lastDoc = null;
                         for (DocumentSnapshot doc : snap.getDocuments()) {
                             Log.e(TAG, "E");
                             if (!doc.exists()) continue;
@@ -230,17 +229,8 @@ public class HomeTenantFragment extends Fragment {
                             double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
                             if (distanceInM <= tenantReference.getMaxDistance()) {
                                 Log.e(TAG, "F");
-                                lastDoc = doc;
                                 places.add(place);
                             }
-                        }
-                        Query query = snap.getQuery();
-                        int idx = queries.indexOf(query);
-                        if (lastDoc != null) query.startAfter(lastDoc);
-                        if (idx == -1) {
-                            queries.add(query);
-                        } else {
-                            queries.add(idx, query);
                         }
                     }
                     callBack.onCallback();
