@@ -71,10 +71,8 @@ public class MapTenantActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();
-        Tenant tenantReference = MapTenantActivityArgs.fromBundle(bundle).getTenant();
-        Place placeReference =  MapTenantActivityArgs.fromBundle(bundle).getPlace();
-        Tenant.Location tenant = tenantReference.getSchool();
-        com.michael.dormie.model.Place.Location place = placeReference.getLocation();
+        Tenant.Location tenant = MapTenantActivityArgs.fromBundle(bundle).getTenant().getSchool();
+        com.michael.dormie.model.Place.Location place = MapTenantActivityArgs.fromBundle(bundle).getPlace().getLocation();
 
         if (tenant != null && place != null) {
             b.placeCard.setVisibility(View.VISIBLE);
