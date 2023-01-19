@@ -25,7 +25,7 @@ import com.michael.dormie.utils.FireBaseDBPath;
 import java.util.List;
 
 public class DetailLessorFragment extends Fragment {
-    private static final String TAG = "DetailFragment";
+    private static final String TAG = "DetailLessorFragment";
 
     private FragmentDetailLessorBinding b;
     private Place place;
@@ -40,7 +40,7 @@ public class DetailLessorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
+        place = DetailLessorFragmentArgs.fromBundle(getArguments()).getPlace();
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         b.topAppBar.setOnMenuItemClickListener(this::handleMenuClick);
 

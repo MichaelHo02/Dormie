@@ -2,13 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/home_bottom_search"
+        android:id="@+id/home_top_search"
         android:icon="@drawable/ic_round_search_24"
         android:title="search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
-    <item
-        android:id="@+id/home_bottom_select_items"
-        android:title="Delete All" />
 </menu>

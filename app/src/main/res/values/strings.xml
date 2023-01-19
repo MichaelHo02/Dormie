@@ -60,6 +60,7 @@
     <string name="empty_image_list">Empty Image List</string>
     <string name="please_import_image">Please import image!</string>
     <string name="edit_post">Edit Post</string>
+    <string name="create_new_post">Create new post</string>
     <string name="chat_with_lessor">Chat with Lessor</string>
     <string name="promotion">Promotion</string>
     <string name="paymentURL">https://us-central1-dormie-5ad44.cloudfunctions.net/stripePayment</string>

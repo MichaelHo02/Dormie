@@ -31,10 +31,6 @@ public class DetailTenantFragment extends Fragment {
 
     FragmentDetailTenantBinding b;
 
-    private PhotoAdapter<String> photoAdapter;
-    private List<String> photos;
-    private AmenityAdapter amenityAdapter;
-    private List<String> amenities;
     private DocumentReference doc;
 
     @Override
