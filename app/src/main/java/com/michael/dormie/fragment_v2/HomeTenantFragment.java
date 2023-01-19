@@ -79,7 +79,7 @@ public class HomeTenantFragment extends Fragment {
 
         manager = new LinearLayoutManager(requireContext());
         placeAdapter = new PlaceAdapter(this.requireContext(), places, place -> Navigation
-                .findNavController(b.getRoot()).navigate(HomeTenantFragmentDirections.actionHomeTenantFragmentToTenantDetailFragment(place)));
+                .findNavController(b.getRoot()).navigate(HomeTenantFragmentDirections.actionHomeTenantFragmentToTenantDetailFragment(place, tenantReference)));
         b.recycleView.setLayoutManager(manager);
         b.recycleView.setHasFixedSize(true);
         b.recycleView.setAdapter(placeAdapter);

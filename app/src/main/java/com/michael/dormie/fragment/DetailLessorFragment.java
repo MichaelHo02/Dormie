@@ -19,6 +19,7 @@ import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailLessorBinding;
 import com.michael.dormie.model.Place;
+
 import com.michael.dormie.utils.FireBaseDBPath;
 
 import java.util.List;
@@ -57,10 +58,6 @@ public class DetailLessorFragment extends Fragment {
         AmenityAdapter amenityAdapter = new AmenityAdapter(requireContext(), amenities);
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
-
-        b.mapBtn.setOnClickListener(v -> {
-
-        });
 
         b.editBtn.setOnClickListener(v -> {
             Navigation.findNavController(b.getRoot()).navigate(DetailLessorFragmentDirections
