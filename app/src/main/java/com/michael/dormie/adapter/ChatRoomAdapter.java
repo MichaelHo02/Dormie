@@ -64,7 +64,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ItemHo
             holder.b.lastMsgView.setText(lastMsg);
             holder.b.timeLastMsgView.setText(date);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
     }

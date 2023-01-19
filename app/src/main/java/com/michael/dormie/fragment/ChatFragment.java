@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -75,6 +76,10 @@ public class ChatFragment extends Fragment {
         adapter = new ChatRoomAdapter();
         b.recycleView.setAdapter(adapter);
 
+        b.refreshLayout.setOnRefreshListener(() -> {
+            handleQueryChatRoom();
+            b.refreshLayout.setRefreshing(false);
+        });
         handleQueryChatRoom();
     }
 

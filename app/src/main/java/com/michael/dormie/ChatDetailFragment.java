@@ -69,6 +69,7 @@ public class ChatDetailFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         ChatBubble chatBubble = adapter.getLatestChatBubble();
+        if (chatBubble == null) return;
         chatRoom.setLatestMessage(chatBubble.getContent());
         if (chatBubble.getPersonId().equals(currentUser.getUid())) {
             chatRoom.setLatestMessageSender(currentUser.getDisplayName());
