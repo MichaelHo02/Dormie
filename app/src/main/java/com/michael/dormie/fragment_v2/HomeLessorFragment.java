@@ -2,6 +2,7 @@ package com.michael.dormie.fragment_v2;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -13,7 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,8 +29,12 @@ import java.util.Locale;
 
 public class HomeLessorFragment extends Fragment {
     private FragmentHomeLessorBinding b;
+    private static final String TAG = "HomeLessorFragment";
+
+    FragmentHomeLessorBinding b;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
+    private LinearLayoutManager manager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,56 +51,62 @@ public class HomeLessorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-        b.recycleView.setLayoutManager(manager);
+        places = new ArrayList<>();
 
-        placeAdapter = new PlaceAdapter(this.requireContext(), new ArrayList<>(), place -> Navigation
+        manager = new LinearLayoutManager(requireContext());
+        placeAdapter = new PlaceAdapter(this.requireContext(), places, place -> Navigation
                 .findNavController(b.getRoot()).navigate(HomeLessorFragmentDirections.actionHomeLessorFragmentToDetaiLessorlFragment(place)));
+        b.recycleView.setLayoutManager(manager);
         b.recycleView.setAdapter(placeAdapter);
+
         fetchNewData();
 
         b.refreshLayout.setOnRefreshListener(this::fetchNewData);
 
-        b.toolbar.setNavigationOnClickListener(v -> {
-            DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.drawerLayout);
-            drawerLayout.open();
-        });
+        b.toolbar.setNavigationOnClickListener(this::handleNavigationOnClick);
+        b.toolbar.setOnMenuItemClickListener(this::handleMenuOnClick);
         b.fab.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(
                     HomeLessorFragmentDirections.actionHomeLessorFragmentToPlaceCreationFragment(null));
         });
 
-        SearchView searchView = (SearchView) b.bottomAppBar.getMenu().findItem(R.id.home_bottom_search).getActionView();
-        searchView.setQueryHint("Search place name here...");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        b.refreshLayout.setOnRefreshListener(this::fetchNewData);
+    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                String searchText = newText.toLowerCase();
-                List<Place> temp = new ArrayList<>();
-                for (Place place : places) {
-                    if (place.getName().toLowerCase(Locale.ROOT).contains(searchText)) {
-                        temp.add(place);
+    private void handleNavigationOnClick(View view) {
+        DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.drawerLayout);
+        drawerLayout.open();
+    }
+
+    private boolean handleMenuOnClick(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.home_top_search) {
+            SearchView searchView = (SearchView) b.toolbar.getMenu().findItem(R.id.home_top_search).getActionView();
+            searchView.setQueryHint("Search place name here");
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    String searchText = newText.toLowerCase();
+                    List<Place> temp = new ArrayList<>();
+                    for (Place place : places) {
+                        if (place.getName().toLowerCase(Locale.ROOT).contains(searchText)) {
+                            temp.add(place);
+                        }
                     }
-                }
-                if (temp.isEmpty()) {
-                    Toast.makeText(getContext(), "No places found.", Toast.LENGTH_SHORT).show();
-                } else {
-                    placeAdapter.setFilteredList(temp);
-                }
-                b.bottomAppBar.setOnMenuItemClickListener(item -> {
-                    if (item.getItemId() == R.id.home_bottom_search) {
-
+                    if (temp.isEmpty()) {
+                        Toast.makeText(getContext(), "No places found.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        placeAdapter.setFilteredList(temp);
                     }
                     return false;
-                });
-                return false;
-            }
-        });
+                }
+            });
+        }
+        return false;
     }
 
     private void fetchNewData() {

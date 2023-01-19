@@ -17,6 +17,13 @@
         android:theme="@style/Theme.Dormie"
         tools:targetApi="31">
         <activity
+            android:name=".activity.MapTenantActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.MainTenantActivity"
             android:exported="false">
             <meta-data
@@ -29,12 +36,10 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
         <activity
             android:name=".activity.HostActivity"
             android:exported="false">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

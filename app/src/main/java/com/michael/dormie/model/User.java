@@ -3,6 +3,7 @@ package com.michael.dormie.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class User implements Serializable {
     private String uid;

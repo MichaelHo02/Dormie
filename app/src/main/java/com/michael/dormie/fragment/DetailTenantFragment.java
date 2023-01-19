@@ -1,28 +1,38 @@
 package com.michael.dormie.fragment;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.michael.dormie.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
 import com.michael.dormie.model.Place;
+import com.michael.dormie.model.Tenant;
+import com.michael.dormie.model.User;
 
 import java.util.List;
 
 public class DetailTenantFragment extends Fragment {
 
-    private FragmentDetailTenantBinding b;
+    FragmentDetailTenantBinding b;
+
+    private DocumentReference doc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +45,29 @@ public class DetailTenantFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
+        Tenant tenant = DetailTenantFragmentArgs.fromBundle(getArguments()).getTenant();
+
+        doc = FirebaseFirestore.getInstance().collection("users").document(place.getAuthorId());
+        doc.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot != null) {
+                User user = documentSnapshot.toObject(User.class);
+                Glide.with(b.getRoot()).load(user.getAvatar()).into(b.avatarImageView);
+                b.lessorName.setText(user.getName());
+                b.lessorEmail.setText(user.getEmail());
+            }
+        });
+
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
+        b.topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.map) {
+                    navigateToMapActivity(tenant, place);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         b.placeName.setText(place.getName());
         b.placeAddress.setText(place.getLocation().address);
@@ -55,6 +87,12 @@ public class DetailTenantFragment extends Fragment {
         b.chatBtn.setOnClickListener(v -> Navigation.findNavController(b.getRoot()).navigate(
                 DetailTenantFragmentDirections.actionTenantDetailFragmentToChatFragment(true,
                         place)));
+    }
+
+    private void navigateToMapActivity(Tenant tenant, Place place) {
+        DetailTenantFragmentDirections.ActionTenantDetailFragmentToMapTenantActivity directions =
+                DetailTenantFragmentDirections.actionTenantDetailFragmentToMapTenantActivity(tenant, place);
+        Navigation.findNavController(getView()).navigate(directions);
     }
 
     private void handleNavigationOnClick(View view) {

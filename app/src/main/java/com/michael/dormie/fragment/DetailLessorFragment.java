@@ -19,12 +19,13 @@ import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailLessorBinding;
 import com.michael.dormie.model.Place;
+
 import com.michael.dormie.utils.FireBaseDBPath;
 
 import java.util.List;
 
 public class DetailLessorFragment extends Fragment {
-    private static final String TAG = "DetailFragment";
+    private static final String TAG = "DetailLessorFragment";
 
     private FragmentDetailLessorBinding b;
     private Place place;
@@ -39,7 +40,7 @@ public class DetailLessorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
+        place = DetailLessorFragmentArgs.fromBundle(getArguments()).getPlace();
         b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
         b.topAppBar.setOnMenuItemClickListener(this::handleMenuClick);
 
@@ -57,10 +58,6 @@ public class DetailLessorFragment extends Fragment {
         AmenityAdapter amenityAdapter = new AmenityAdapter(requireContext(), amenities);
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
-
-        b.mapBtn.setOnClickListener(v -> {
-
-        });
 
         b.editBtn.setOnClickListener(v -> {
             Navigation.findNavController(b.getRoot()).navigate(DetailLessorFragmentDirections

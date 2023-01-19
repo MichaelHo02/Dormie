@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -37,6 +40,7 @@ import com.michael.dormie.utils.FireBaseDBPath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeTenantFragment extends Fragment {
     private static final String TAG = "HomeTenantFragment";
@@ -72,14 +76,12 @@ public class HomeTenantFragment extends Fragment {
         places = new ArrayList<>();
         queries = new ArrayList<>();
 
-        b.toolbar.setNavigationOnClickListener(v -> {
-            DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.drawerLayout);
-            drawerLayout.open();
-        });
+        b.toolbar.setNavigationOnClickListener(this::handleNavigationOnClick);
+        b.toolbar.setOnMenuItemClickListener(this::handleMenuOnClick);
 
         manager = new LinearLayoutManager(requireContext());
         placeAdapter = new PlaceAdapter(this.requireContext(), places, place -> Navigation
-                .findNavController(b.getRoot()).navigate(HomeTenantFragmentDirections.actionHomeTenantFragmentToTenantDetailFragment(place)));
+                .findNavController(b.getRoot()).navigate(HomeTenantFragmentDirections.actionHomeTenantFragmentToTenantDetailFragment(place, tenantReference)));
         b.recycleView.setLayoutManager(manager);
         b.recycleView.setHasFixedSize(true);
         b.recycleView.setAdapter(placeAdapter);
@@ -93,6 +95,42 @@ public class HomeTenantFragment extends Fragment {
                 isLastPage = true;
             }
         });
+    }
+
+    private void handleNavigationOnClick(View view) {
+        DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.drawerLayout);
+        drawerLayout.open();
+    }
+
+    private boolean handleMenuOnClick(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.home_top_search) {
+            SearchView searchView = (SearchView) b.toolbar.getMenu().findItem(R.id.home_top_search).getActionView();
+            searchView.setQueryHint("Search place name here");
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    String searchText = newText.toLowerCase();
+                    List<Place> temp = new ArrayList<>();
+                    for (Place place : places) {
+                        if (place.getName().toLowerCase(Locale.ROOT).contains(searchText)) {
+                            temp.add(place);
+                        }
+                    }
+                    if (temp.isEmpty()) {
+                        Toast.makeText(getContext(), "No places found.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        placeAdapter.setFilteredList(temp);
+                    }
+                    return false;
+                }
+            });
+        }
+        return false;
     }
 
     private RecyclerView.OnScrollListener createInfiniteScrollListener() {
@@ -180,7 +218,6 @@ public class HomeTenantFragment extends Fragment {
                     for (Task<QuerySnapshot> task : tasks) {
                         QuerySnapshot snap = task.getResult();
                         Log.e(TAG, "D");
-                        DocumentSnapshot lastDoc = null;
                         for (DocumentSnapshot doc : snap.getDocuments()) {
                             Log.e(TAG, "E");
                             if (!doc.exists()) continue;
@@ -192,17 +229,8 @@ public class HomeTenantFragment extends Fragment {
                             double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
                             if (distanceInM <= tenantReference.getMaxDistance()) {
                                 Log.e(TAG, "F");
-                                lastDoc = doc;
                                 places.add(place);
                             }
-                        }
-                        Query query = snap.getQuery();
-                        int idx = queries.indexOf(query);
-                        if (lastDoc != null) query.startAfter(lastDoc);
-                        if (idx == -1) {
-                            queries.add(query);
-                        } else {
-                            queries.add(idx, query);
                         }
                     }
                     callBack.onCallback();
