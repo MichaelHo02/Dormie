@@ -143,6 +143,7 @@ public class ChatDetailFragment extends Fragment {
                 Log.e(TAG, "Remove");
             }
         }
+        if (!isSendBtnClick) isSendBtnClick = true;
     }
 
     private void handleFetchChat() {
