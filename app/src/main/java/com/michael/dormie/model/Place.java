@@ -13,7 +13,6 @@ public class Place implements Serializable {
     private String authorRef;
     private String name;
     private Location location;
-    //    public Integer rating;
     private String description;
     private List<String> images;
     private String houseType;
@@ -28,7 +27,8 @@ public class Place implements Serializable {
         public Double lng;
         public String geoHash;
 
-        public Location() {}
+        public Location() {
+        }
 
         public Location(String name, String address, Double lat, Double lng, String geoHash) {
             this.name = name;
@@ -144,5 +144,13 @@ public class Place implements Serializable {
 
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Place place = (Place) o;
+        return place.getUid().equals(this.uid);
     }
 }
