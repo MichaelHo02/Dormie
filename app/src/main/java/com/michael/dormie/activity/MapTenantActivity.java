@@ -10,6 +10,7 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELL
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
@@ -79,6 +80,13 @@ public class MapTenantActivity extends FragmentActivity implements OnMapReadyCal
             b.desName.setText(place.name);
             b.desAddress.setText(place.address);
         }
+
+        b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
+
+    }
+
+    private void handleNavigationOnClick(View view) {
+        Navigation.findNavController(b.getRoot()).navigate(MapTenantActivity);
     }
 
     @Override
@@ -152,7 +160,6 @@ public class MapTenantActivity extends FragmentActivity implements OnMapReadyCal
                                 .position(originLatLng).title("School"));
 
                         mMap.addMarker(new MarkerOptions()
-                                        .icon(BitmapDescriptorFactory.defaultMarker(HUE_ROSE))
                                         .position(desLatLng).title("Rental Location"));
 
                         LatLngBounds bounds = new LatLngBounds.Builder()

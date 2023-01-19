@@ -151,7 +151,7 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/placeAddress"
                     style="@style/TextAppearance.Material3.BodyMedium"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <com.google.android.material.divider.MaterialDivider
