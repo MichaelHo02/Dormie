@@ -17,10 +17,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -48,7 +45,6 @@ public class ChatFragment extends Fragment {
     private FirebaseUser currentUser;
     private List<ChatRoom> chatRooms;
     private Map<String, User> userMap;
-//    private ListenerRegistration registration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +55,6 @@ public class ChatFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        registration.remove();
         b = null;
     }
 
@@ -87,33 +82,18 @@ public class ChatFragment extends Fragment {
         chatRooms = new ArrayList<>();
         userMap = new HashMap<>();
 
-        Query query = db.collection(FireBaseDBPath.CHAT_ROOM)
-                .whereArrayContains("userIds", currentUser.getUid());
-
-//        registration = query.addSnapshotListener((value, error) -> {
-//            if (error != null) {
-//                Log.e(TAG, "Cannot listen: ", error);
-//                return;
-//            }
-//
-//
-//        });
-
-        query.get().addOnSuccessListener(this::handleQueryChatRoomSuccess);
-    }
-
-    private void handleQueryChatRoomSuccess(QuerySnapshot queryDocumentSnapshots) {
-        chatRooms = queryDocumentSnapshots.toObjects(ChatRoom.class);
         boolean isFromDetailFragment = ChatFragmentArgs.fromBundle(getArguments()).getIsFromDetailFragment();
+        Log.e(TAG, String.valueOf(isFromDetailFragment));
         if (isFromDetailFragment) {
             Place place = ChatFragmentArgs.fromBundle(getArguments()).getPlace();
             String receiverId = place.getAuthorId();
             if (!chatRooms.stream().anyMatch(chatRoom -> chatRoom.getUserIds().contains(receiverId))) {
                 handleCreateNewChat(place);
+                return;
             }
-        } else {
-            handleFetchAndRenderChatRooms();
         }
+
+        queryChatRoom();
     }
 
     private void handleCreateNewChat(Place place) {
@@ -123,8 +103,19 @@ public class ChatFragment extends Fragment {
                 .document(uid)
                 .set(chatRoom, SetOptions.merge())
                 .addOnCompleteListener(t -> {
-                    handleFetchAndRenderChatRooms();
+                    queryChatRoom();
                 });
+    }
+
+    private void queryChatRoom() {
+        Query query = db.collection(FireBaseDBPath.CHAT_ROOM)
+                .whereArrayContains("userIds", currentUser.getUid());
+        query.get().addOnSuccessListener(this::handleQueryChatRoomSuccess);
+    }
+
+    private void handleQueryChatRoomSuccess(QuerySnapshot queryDocumentSnapshots) {
+        chatRooms = queryDocumentSnapshots.toObjects(ChatRoom.class);
+        handleFetchAndRenderChatRooms();
     }
 
     private void handleFetchAndRenderChatRooms() {

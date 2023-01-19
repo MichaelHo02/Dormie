@@ -1,6 +1,7 @@
 package com.michael.dormie.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class ChatRoom implements Serializable {
@@ -8,7 +9,7 @@ public class ChatRoom implements Serializable {
     private boolean didNotify;
     private String latestMessage;
     private String latestMessageSender;
-    private String timeStamp;
+    private Date timeStamp;
     private boolean isUnread;
     private List<String> userIds;
 
@@ -17,11 +18,6 @@ public class ChatRoom implements Serializable {
 
     public ChatRoom(String uid, List<String> userIds) {
         this.uid = uid;
-        this.didNotify = didNotify;
-        this.latestMessage = latestMessage;
-        this.latestMessageSender = latestMessageSender;
-        this.timeStamp = timeStamp;
-        this.isUnread = isUnread;
         this.userIds = userIds;
     }
 
@@ -57,11 +53,11 @@ public class ChatRoom implements Serializable {
         this.latestMessageSender = latestMessageSender;
     }
 
-    public String getTimeStamp() {
+    public Date getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
     }
 

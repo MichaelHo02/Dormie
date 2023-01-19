@@ -62,9 +62,8 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.It
         return chatBubbles == null ? 0 : chatBubbles.size();
     }
 
-    public void setData(List<ChatBubble> chatBubbles) {
-        this.chatBubbles.addAll(chatBubbles);
-        notifyDataSetChanged();
+    public ChatBubble getLatestChatBubble() {
+        return chatBubbles.get(0);
     }
 
     public void appendTop(ChatBubble chatBubble) {

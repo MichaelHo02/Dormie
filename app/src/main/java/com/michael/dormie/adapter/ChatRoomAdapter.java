@@ -1,5 +1,6 @@
 package com.michael.dormie.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,7 +16,9 @@ import com.michael.dormie.fragment.ChatFragmentDirections;
 import com.michael.dormie.model.ChatRoom;
 import com.michael.dormie.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +56,17 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ItemHo
         holder.b.getRoot().setOnClickListener(v -> Navigation.findNavController(holder.itemView)
                 .navigate(ChatFragmentDirections
                         .actionChatFragmentToChatDetailFragment(receiver, chatRoom)));
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm-MM/dd");
+            String date = simpleDateFormat.format(chatRoom.getTimeStamp());
+            String lastMsg = chatRoom.getLatestMessageSender() + ": " + chatRoom.getLatestMessage();
+            holder.b.lastMsgView.setText(lastMsg);
+            holder.b.timeLastMsgView.setText(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

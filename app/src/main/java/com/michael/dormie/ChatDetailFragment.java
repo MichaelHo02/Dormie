@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.adapter.ChatBubbleAdapter;
 import com.michael.dormie.databinding.FragmentChatDetailBinding;
 import com.michael.dormie.model.ChatBubble;
@@ -28,6 +29,7 @@ import com.michael.dormie.model.ChatRoom;
 import com.michael.dormie.model.User;
 import com.michael.dormie.utils.FireBaseDBPath;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +40,7 @@ public class ChatDetailFragment extends Fragment {
     private FragmentChatDetailBinding b;
     private ChatBubbleAdapter adapter;
     private FirebaseUser currentUser;
+    private User receiver;
     private FirebaseFirestore db;
     private ChatRoom chatRoom;
     private Query topQuery;
@@ -63,13 +66,30 @@ public class ChatDetailFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ChatBubble chatBubble = adapter.getLatestChatBubble();
+        chatRoom.setLatestMessage(chatBubble.getContent());
+        if (chatBubble.getPersonId().equals(currentUser.getUid())) {
+            chatRoom.setLatestMessageSender(currentUser.getDisplayName());
+        } else {
+            chatRoom.setLatestMessageSender(receiver.getName());
+        }
+        chatRoom.setTimeStamp(chatBubble.getTimestamp());
+        chatRoom.setUserIds(Arrays.asList(currentUser.getUid(), receiver.getUid()));
+        db.collection(FireBaseDBPath.CHAT_ROOM)
+                .document(chatRoom.getUid())
+                .set(chatRoom, SetOptions.merge());
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-        User receiver = ChatDetailFragmentArgs.fromBundle(getArguments()).getReceiver();
+        receiver = ChatDetailFragmentArgs.fromBundle(getArguments()).getReceiver();
         chatRoom = ChatDetailFragmentArgs.fromBundle(getArguments()).getChatRoom();
 
         b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(b.getRoot()).popBackStack());
@@ -137,12 +157,8 @@ public class ChatDetailFragment extends Fragment {
                 if (adapter.getChatBubbles().contains(chatBubble)) continue;
                 adapter.appendTop(chatBubble);
             }
-            if (b.refreshLayout.isRefreshing()) {
-                b.refreshLayout.setRefreshing(false);
-                b.recycleView.smoothScrollBy(0, -300);
-                return;
-            }
-            b.recycleView.smoothScrollToPosition(0);
+            b.refreshLayout.setRefreshing(false);
+            b.recycleView.smoothScrollBy(0, -300);
         });
     }
 
