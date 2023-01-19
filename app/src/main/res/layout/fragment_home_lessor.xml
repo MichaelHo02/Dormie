@@ -25,14 +25,6 @@
                 app:navigationIcon="@drawable/ic_round_dehaze_24"
                 app:title="@string/home"
                 app:titleCentered="true" />
-
-            <com.google.android.material.search.SearchView
-                android:id="@+id/home_lessor_searchView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/please_enter_your_university"
-                app:layout_anchor="@id/searchBar">
-            </com.google.android.material.search.SearchView>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

@@ -21,17 +21,10 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:menu="@menu/master_top_bar"
+                app:menu="@menu/home_top_bar"
                 app:navigationIcon="@drawable/ic_round_dehaze_24"
                 app:title="@string/home"
                 app:titleCentered="true" />
-
-            <!--            <com.google.android.material.search.SearchBar-->
-            <!--                android:id="@+id/search_bar"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_gravity="bottom"-->
-            <!--                android:hint="Hello" />-->
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -55,12 +48,5 @@
             </androidx.core.widget.NestedScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <!--        <com.google.android.material.search.SearchView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:hint="Hello"-->
-        <!--            app:layout_anchor="@id/search_bar">-->
-        <!--            &lt;!&ndash; Search suggestions/results go here (ScrollView, RecyclerView, etc.). &ndash;&gt;-->
-        <!--        </com.google.android.material.search.SearchView>-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </FrameLayout>

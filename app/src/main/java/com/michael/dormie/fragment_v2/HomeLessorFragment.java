@@ -1,8 +1,6 @@
 package com.michael.dormie.fragment_v2;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.michael.dormie.R;
 import com.michael.dormie.adapter.PlaceAdapter;
 import com.michael.dormie.databinding.FragmentHomeLessorBinding;
 import com.michael.dormie.model.Place;
-import com.michael.dormie.model.Tenant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +34,7 @@ public class HomeLessorFragment extends Fragment {
     private List<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;
-    private Tenant tenantReference;
-    private List<Query> queries;
 
-    private boolean isLoading;
-    private boolean isLastPage;
-    private int totalPage = 2;
-    private int currentPage = 1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         b = FragmentHomeLessorBinding.inflate(inflater, container, false);
@@ -61,10 +51,9 @@ public class HomeLessorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         places = new ArrayList<>();
-        queries = new ArrayList<>();
 
         manager = new LinearLayoutManager(requireContext());
-        placeAdapter = new PlaceAdapter(this.requireContext(), new ArrayList<>(), place -> Navigation
+        placeAdapter = new PlaceAdapter(this.requireContext(), places, place -> Navigation
                 .findNavController(b.getRoot()).navigate(HomeLessorFragmentDirections.actionHomeLessorFragmentToDetaiLessorlFragment(place)));
         b.recycleView.setLayoutManager(manager);
         b.recycleView.setAdapter(placeAdapter);
