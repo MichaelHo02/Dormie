@@ -15,7 +15,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
@@ -164,10 +163,27 @@ public class HomeTenantFragment extends Fragment {
                             double lat = place.getLocation().lat;
                             double lng = place.getLocation().lng;
 
+                            boolean hasAtLeastOneMatchAmenity = tenantReference.getAmenities().isEmpty();
+                            for (String amenity : tenantReference.getAmenities()) {
+                                if (place.getAmenities().contains(amenity)) {
+                                    hasAtLeastOneMatchAmenity = true;
+                                    break;
+                                }
+                            }
+
+                            boolean hasAtLeastOneMatchHouseType =
+                                    tenantReference.getHouseTypes().isEmpty() ||
+                                            tenantReference.getHouseTypes().contains(place.getHouseType());
+
                             GeoLocation docLocation = new GeoLocation(lat, lng);
                             double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
-                            if (distanceInM <= tenantReference.getMaxDistance() && !places.contains(place)) {
-                                places.add(place);
+                            if (distanceInM <= tenantReference.getMaxDistance() && !places.contains(place)
+                                    && hasAtLeastOneMatchAmenity && hasAtLeastOneMatchHouseType) {
+                                if (place.beforeExpiredDate()) {
+                                    places.add(0, place);
+                                } else {
+                                    places.add(place);
+                                }
                             }
                         }
                     }

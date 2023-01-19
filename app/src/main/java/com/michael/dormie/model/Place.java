@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class Place implements Serializable {
     private String uid;
@@ -144,6 +143,10 @@ public class Place implements Serializable {
 
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public boolean beforeExpiredDate() {
+        return isPromoted && Calendar.getInstance().getTime().before(expiryDate);
     }
 
     @Override
