@@ -116,7 +116,7 @@
                     android:layout_centerVertical="true"
                     android:id="@+id/marker_2"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_baseline_rental_location_24"
+                    android:src="@drawable/ic_baseline_location_on_24"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None" />
 
                 <LinearLayout

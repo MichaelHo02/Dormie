@@ -58,9 +58,9 @@
         tools:layout="@layout/activity_map_tenant" >
         <argument
             android:name="Tenant"
-            app:argType="com.michael.dormie.model.Tenant$Location" />
+            app:argType="com.michael.dormie.model.Tenant" />
         <argument
             android:name="Place"
-            app:argType="com.michael.dormie.model.Place$Location" />
+            app:argType="com.michael.dormie.model.Place" />
     </activity>
 </navigation>

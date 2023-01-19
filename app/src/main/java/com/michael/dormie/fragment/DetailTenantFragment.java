@@ -65,7 +65,7 @@ public class DetailTenantFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.map) {
-                    navigateToMapActivity(tenant.getSchool(), place.getLocation());
+                    navigateToMapActivity(tenant, place);
                     return true;
                 }
                 return false;
@@ -92,8 +92,7 @@ public class DetailTenantFragment extends Fragment {
         });
     }
 
-
-    private void navigateToMapActivity(Tenant.Location tenant, Place.Location place) {
+    private void navigateToMapActivity(Tenant tenant, Place place) {
         DetailTenantFragmentDirections.ActionTenantDetailFragmentToMapTenantActivity directions =
                 DetailTenantFragmentDirections.actionTenantDetailFragmentToMapTenantActivity(tenant, place);
         Navigation.findNavController(getView()).navigate(directions);

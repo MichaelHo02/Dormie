@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.michael.dormie.R;
 import com.michael.dormie.databinding.ActivityMapTenantBinding;
+import com.michael.dormie.model.Place;
 import com.michael.dormie.model.Tenant;
 
 import org.json.JSONArray;
@@ -70,8 +71,10 @@ public class MapTenantActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();
-        Tenant.Location tenant = MapTenantActivityArgs.fromBundle(bundle).getTenant();
-        com.michael.dormie.model.Place.Location place = MapTenantActivityArgs.fromBundle(bundle).getPlace();
+        Tenant tenantReference = MapTenantActivityArgs.fromBundle(bundle).getTenant();
+        Place placeReference =  MapTenantActivityArgs.fromBundle(bundle).getPlace();
+        Tenant.Location tenant = tenantReference.getSchool();
+        com.michael.dormie.model.Place.Location place = placeReference.getLocation();
 
         if (tenant != null && place != null) {
             b.placeCard.setVisibility(View.VISIBLE);
@@ -81,12 +84,9 @@ public class MapTenantActivity extends FragmentActivity implements OnMapReadyCal
             b.desAddress.setText(place.address);
         }
 
-        b.topAppBar.setNavigationOnClickListener(this::handleNavigationOnClick);
-
-    }
-
-    private void handleNavigationOnClick(View view) {
-        Navigation.findNavController(b.getRoot()).navigate(MapTenantActivity);
+        b.topAppBar.setNavigationOnClickListener(v -> {
+            finish();
+        });
     }
 
     @Override
@@ -96,8 +96,8 @@ public class MapTenantActivity extends FragmentActivity implements OnMapReadyCal
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
-        Tenant.Location tenant = MapTenantActivityArgs.fromBundle(bundle).getTenant();
-        com.michael.dormie.model.Place.Location place = MapTenantActivityArgs.fromBundle(bundle).getPlace();
+        Tenant.Location tenant = MapTenantActivityArgs.fromBundle(bundle).getTenant().getSchool();
+        com.michael.dormie.model.Place.Location place = MapTenantActivityArgs.fromBundle(bundle).getPlace().getLocation();
         if (tenant != null && place != null) {
             LatLng originLatLng = new LatLng(tenant.lat, tenant.lng);
             LatLng desLatLng = new LatLng(place.lat, place.lng);
