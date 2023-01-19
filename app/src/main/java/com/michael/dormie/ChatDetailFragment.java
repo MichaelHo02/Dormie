@@ -17,9 +17,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.michael.dormie.adapter.ChatBubbleAdapter;
 import com.michael.dormie.databinding.FragmentChatDetailBinding;
 import com.michael.dormie.model.ChatBubble;
@@ -38,11 +39,15 @@ public class ChatDetailFragment extends Fragment {
     private ChatBubbleAdapter adapter;
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
-    private User receiver;
     private ChatRoom chatRoom;
-    private Query query;
-    private DocumentSnapshot lastDoc;
+    private Query topQuery;
+    private Query bottomQuery;
+    private DocumentSnapshot topDoc;
     private ListenerRegistration registration;
+
+    int limit = 5;
+    final int increaseSize = 5;
+    private boolean isSendBtnClick = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,22 +69,20 @@ public class ChatDetailFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-        receiver = ChatDetailFragmentArgs.fromBundle(getArguments()).getReceiver();
+        User receiver = ChatDetailFragmentArgs.fromBundle(getArguments()).getReceiver();
         chatRoom = ChatDetailFragmentArgs.fromBundle(getArguments()).getChatRoom();
 
         b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(b.getRoot()).popBackStack());
         b.topAppBar.setTitle(receiver.getName());
         b.sendBtn.setOnClickListener(this::handleSendMessage);
         b.refreshLayout.setOnRefreshListener(() -> {
-            if (lastDoc == null) return;
-            query = db.collection(FireBaseDBPath.CHAT_BUBBLE)
+            if (topDoc == null) return;
+            topQuery = db.collection(FireBaseDBPath.CHAT_BUBBLE)
                     .whereEqualTo("chatRoomId", chatRoom.getUid())
                     .orderBy("timestamp", Query.Direction.DESCENDING)
-                    .startAfter(lastDoc)
-                    .limit(10);
+                    .startAfter(topDoc);
             handleFetchChat();
         });
-
 
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
         manager.setReverseLayout(true);
@@ -87,40 +90,53 @@ public class ChatDetailFragment extends Fragment {
         adapter = new ChatBubbleAdapter(receiver);
         b.recycleView.setAdapter(adapter);
 
-        query = db.collection(FireBaseDBPath.CHAT_BUBBLE)
+        bottomQuery = db.collection(FireBaseDBPath.CHAT_BUBBLE)
                 .whereEqualTo("chatRoomId", chatRoom.getUid())
                 .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(10);
+                .limit(limit);
 
-        registration = query.addSnapshotListener((value, error) -> {
-            if (error != null) {
-                Log.w(TAG, "Cannot listen: ", error);
-                return;
-            }
-            if (value == null) return;
-            String source = value.getMetadata().hasPendingWrites() ? "Local" : "Server";
-            for (DocumentChange dc : value.getDocumentChanges()) {
-                if (dc.getType() == DocumentChange.Type.ADDED) {
-                    ChatBubble chatBubble = dc.getDocument().toObject(ChatBubble.class);
-                    adapter.addData(chatBubble);
-                    b.recycleView.smoothScrollToPosition(0);
-                    Log.d(TAG, source + " " + dc.getDocument().getData());
+        registration = bottomQuery.addSnapshotListener(this::handleSnapshotListener);
+    }
+
+    private void handleSnapshotListener(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+        if (e != null) {
+            Log.w(TAG, "Cannot listen: ", e);
+            return;
+        }
+        if (queryDocumentSnapshots == null) return;
+        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+            if (dc.getType() == DocumentChange.Type.ADDED) {
+                ChatBubble chatBubble = dc.getDocument().toObject(ChatBubble.class);
+                Log.e(TAG, String.valueOf(adapter.getChatBubbles().contains(chatBubble)));
+                if (adapter.getChatBubbles().contains(chatBubble)) return;
+                Log.e(TAG, dc.getDocument().toString());
+                if (isSendBtnClick) {
+                    adapter.appendBottom(chatBubble);
+                } else {
+                    adapter.appendTop(chatBubble);
+                    topDoc = dc.getDocument();
                 }
+                b.recycleView.smoothScrollToPosition(0);
+            } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                Log.e(TAG, "Modify");
+            } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                Log.e(TAG, "Remove");
             }
-        });
-
-        handleFetchChat();
+        }
     }
 
     private void handleFetchChat() {
-        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+        topQuery.limit(increaseSize).get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots.isEmpty()) {
                 b.refreshLayout.setRefreshing(false);
                 return;
             }
-            lastDoc = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+            topDoc = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
             List<ChatBubble> chatBubbles = queryDocumentSnapshots.toObjects(ChatBubble.class);
-            adapter.setData(chatBubbles);
+            for (ChatBubble chatBubble : chatBubbles) {
+                if (adapter.getChatBubbles().contains(chatBubble)) continue;
+                adapter.appendTop(chatBubble);
+            }
             if (b.refreshLayout.isRefreshing()) {
                 b.refreshLayout.setRefreshing(false);
                 b.recycleView.smoothScrollBy(0, -300);
@@ -131,15 +147,24 @@ public class ChatDetailFragment extends Fragment {
     }
 
     private void handleSendMessage(View view) {
+        isSendBtnClick = true;
         String msg = b.chatEditText.getText().toString();
         if (msg.isEmpty()) return;
         b.chatEditText.setText(null);
         msg = msg.trim();
         String uid = UUID.randomUUID().toString();
+        Log.e(TAG, "Current User: " + currentUser.getUid() + " " + currentUser.getDisplayName());
         ChatBubble chatBubble = new ChatBubble(uid, msg, chatRoom.getUid(), currentUser.getUid(),
                 Calendar.getInstance().getTime());
         db.collection(FireBaseDBPath.CHAT_BUBBLE)
-                .document(uid)
-                .set(chatBubble, SetOptions.merge());
+                .add(chatBubble);
+
+        if (adapter.getItemCount() >= limit) {
+            limit += increaseSize;
+            Log.e(TAG, String.valueOf(limit));
+            bottomQuery = bottomQuery.limit(limit);
+            registration.remove();
+            registration = bottomQuery.addSnapshotListener(this::handleSnapshotListener);
+        }
     }
 }

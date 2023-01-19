@@ -1,5 +1,6 @@
 package com.michael.dormie.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -7,8 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.michael.dormie.databinding.ChatBubbleHolderItemBinding;
 import com.michael.dormie.model.ChatBubble;
 import com.michael.dormie.model.User;
@@ -16,17 +15,20 @@ import com.michael.dormie.model.User;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.ItemHolder> {
     private static final String TAG = "ChatBubbleAdapter";
 
-    List<ChatBubble> chatBubbles;
-    User receiver;
+    private final List<ChatBubble> chatBubbles;
+    private final User receiver;
 
     public ChatBubbleAdapter(User receiver) {
         chatBubbles = new ArrayList<>();
         this.receiver = receiver;
+    }
+
+    public List<ChatBubble> getChatBubbles() {
+        return chatBubbles;
     }
 
     @NonNull
@@ -39,12 +41,16 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.It
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         ChatBubble chatBubble = chatBubbles.get(position);
         if (chatBubble == null) return;
-        if (!Objects.equals(chatBubble.getPersonId(), currentUser.getUid())) {
+        if (chatBubble.getPersonId().equals(receiver.getUid())) {
+            Log.e("ChatDetailFragment", chatBubble.getPersonId() + " " + receiver.getUid());
+//            Log.e("ChatDetailFragment", String.valueOf(chatBubble.getPersonId().equals(receiver.getUid())));
             Glide.with(holder.itemView).load(receiver.getAvatar()).into(holder.b.avatarImageView);
+        } else {
+            Glide.with(holder.itemView).clear(holder.b.avatarImageView);
         }
+
         holder.b.textBody.setText(chatBubble.getContent());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm-MM/dd/yy");
         String date = simpleDateFormat.format(chatBubble.getTimestamp());
@@ -61,7 +67,12 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.It
         notifyDataSetChanged();
     }
 
-    public void addData(ChatBubble chatBubble) {
+    public void appendTop(ChatBubble chatBubble) {
+        chatBubbles.add(chatBubble);
+        notifyItemInserted(chatBubbles.size() - 1);
+    }
+
+    public void appendBottom(ChatBubble chatBubble) {
         chatBubbles.add(0, chatBubble);
         notifyItemInserted(0);
     }

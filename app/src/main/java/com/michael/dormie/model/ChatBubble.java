@@ -1,8 +1,10 @@
 package com.michael.dormie.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
-public class ChatBubble {
+public class ChatBubble implements Serializable {
     private String chatBubbleId;
     private String content;
     private String chatRoomId;
@@ -58,5 +60,18 @@ public class ChatBubble {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChatBubble that = (ChatBubble) o;
+        return this.getChatBubbleId().equals(that.chatBubbleId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chatBubbleId, content, chatRoomId, personId, timestamp);
     }
 }
