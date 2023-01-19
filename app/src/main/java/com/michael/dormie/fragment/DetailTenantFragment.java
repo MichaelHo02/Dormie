@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.michael.dormie.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
@@ -83,9 +84,9 @@ public class DetailTenantFragment extends Fragment {
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
 
-        b.chatBtn.setOnClickListener(v -> {
-            // Lead to chat
-        });
+        b.chatBtn.setOnClickListener(v -> Navigation.findNavController(b.getRoot()).navigate(
+                DetailTenantFragmentDirections.actionTenantDetailFragmentToChatFragment(true,
+                        place)));
     }
 
     private void navigateToMapActivity(Tenant tenant, Place place) {

@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class HomeLessorFragment extends Fragment {
+    private FragmentHomeLessorBinding b;
     private static final String TAG = "HomeLessorFragment";
 
-    FragmentHomeLessorBinding b;
     private List<Place> places;
     private PlaceAdapter placeAdapter;
     private LinearLayoutManager manager;

@@ -59,7 +59,7 @@ public class SignUpFormFragment extends Fragment {
     private Bitmap bitmap;
     private boolean isCompleteUpdateAccount;
     private boolean isCompleteUpdateUser;
-
+    private SubmitResultReceiver receiver;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         b = FragmentSignUpFormBinding.inflate(inflater, container, false);
@@ -169,11 +169,8 @@ public class SignUpFormFragment extends Fragment {
 
         b.savedBtn.setIcon(loadIcon);
         loadingProcess();
-        SubmitResultReceiver receiver = new SubmitResultReceiver(new Handler());
+        receiver = new SubmitResultReceiver(new Handler());
         SignUpFormService.startActionUpdateAccount(this.requireContext(), receiver, nameStr, bytes);
-
-        String dob = b.dobEditText.getText().toString();
-        SignUpFormService.startActionUpdateUser(this.requireContext(), receiver, accountType, dob);
     }
 
     private void handleOpenDatePicker(View view) {
@@ -257,8 +254,13 @@ public class SignUpFormFragment extends Fragment {
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
-            if (resultCode == SignalCode.UPDATE_ACCOUNT_SUCCESS)
+            if (resultCode == SignalCode.UPDATE_ACCOUNT_SUCCESS) {
                 isCompleteUpdateAccount = true;
+                String dob = b.dobEditText.getText().toString();
+                SignUpFormService.startActionUpdateUser(
+                        SignUpFormFragment.this.requireContext(),
+                        receiver, accountType, dob);
+            }
             if (resultCode == SignalCode.UPDATE_USER_SUCCESS)
                 isCompleteUpdateUser = true;
             if (isCompleteUpdateUser && isCompleteUpdateAccount && accountType.equals("lessor")) {
