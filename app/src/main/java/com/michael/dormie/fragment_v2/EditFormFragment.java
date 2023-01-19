@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.PlaceTypes;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
@@ -25,12 +24,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.R;
 import com.michael.dormie.activity.MapsActivity;
-import com.michael.dormie.databinding.FragmentTenentFilterFormBinding;
+import com.michael.dormie.databinding.FragmentEditFormBinding;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
@@ -41,13 +39,13 @@ import java.util.List;
 
 public class EditFormFragment extends Fragment {
     private static final String TAG = "EditFormFragment";
-    private FragmentTenentFilterFormBinding b;
+    private FragmentEditFormBinding b;
     private IndeterminateDrawable loadIcon;
-    private Tenant  tenant;
+    private Tenant tenant;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        b = FragmentTenentFilterFormBinding.inflate(inflater, container, false);
+        b = FragmentEditFormBinding.inflate(inflater, container, false);
         return b.getRoot();
     }
 
@@ -89,23 +87,6 @@ public class EditFormFragment extends Fragment {
                 if (s.equals("Smoke-free")) b.smokeFreeChip.setChecked(true);
             }
 
-            b.schoolEditText.setText(tenant.getSchool().name);
-
-            switch (tenant.getMinDistance()) {
-                case 100:
-                    b.minDistanceGroup.check(R.id.distBtn1);
-                    break;
-                case 200:
-                    b.minDistanceGroup.check(R.id.distBtn2);
-                    break;
-                case 500:
-                    b.minDistanceGroup.check(R.id.distBtn3);
-                    break;
-                case 1000:
-                    b.minDistanceGroup.check(R.id.distBtn4);
-                    break;
-            }
-
             switch (tenant.getMaxDistance()) {
                 case 1000:
                     b.maxDistanceGroup.check(R.id.distBtn5);
@@ -143,7 +124,6 @@ public class EditFormFragment extends Fragment {
             chip.setOnCheckedChangeListener(this::handleAmenitiesChipCheckedChange);
         }
 
-        b.minDistanceGroup.addOnButtonCheckedListener(this::handleMinDistanceBtnChecked);
         b.maxDistanceGroup.addOnButtonCheckedListener(this::handleMaxDistanceBtnChecked);
     }
 
@@ -163,26 +143,6 @@ public class EditFormFragment extends Fragment {
                 maxDist = 20000;
             }
             tenant.setMaxDistance(maxDist);
-        }
-    }
-
-    private void handleMinDistanceBtnChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
-        int minDist = 0;
-        if (b) {
-            if (i == this.b.distBtn1.getId()) {
-                minDist = 100;
-                System.out.println(100);
-            } else if (i == this.b.distBtn2.getId()) {
-                minDist = 200;
-                System.out.println(200);
-            } else if (i == this.b.distBtn3.getId()) {
-                minDist = 500;
-                System.out.println(500);
-            } else if (i == this.b.distBtn4.getId()) {
-                minDist = 1000;
-                System.out.println(1000);
-            }
-            tenant.setMinDistance(minDist);
         }
     }
 
@@ -258,8 +218,8 @@ public class EditFormFragment extends Fragment {
 
     private void loadingProcess() {
         b.linearProgressIndicator.setVisibility(View.VISIBLE);
-        List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup, b.schoolLayout,
-                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn,
+        List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup,
+                b.schoolLayout, b.maxDistanceGroup, b.savedBtn,
                 b.washerDryerChip, b.rampChip, b.gardenChip,
                 b.catsOKChip, b.dogsOKChip, b.smokeFreeChip,
                 b.apartmentChip, b.villaChip, b.houseChip,
@@ -271,8 +231,8 @@ public class EditFormFragment extends Fragment {
 
     private void completeLoadingProcess() {
         b.linearProgressIndicator.setVisibility(View.INVISIBLE);
-        List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup, b.schoolLayout,
-                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn,
+        List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup,
+                b.schoolLayout, b.maxDistanceGroup, b.savedBtn,
                 b.washerDryerChip, b.rampChip, b.gardenChip,
                 b.catsOKChip, b.dogsOKChip, b.smokeFreeChip,
                 b.apartmentChip, b.villaChip, b.houseChip,
