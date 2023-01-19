@@ -1,6 +1,7 @@
 package com.michael.dormie.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,11 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.R;
@@ -43,6 +48,7 @@ public class ChatFragment extends Fragment {
     private FirebaseUser currentUser;
     private List<ChatRoom> chatRooms;
     private Map<String, User> userMap;
+//    private ListenerRegistration registration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class ChatFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+//        registration.remove();
         b = null;
     }
 
@@ -79,10 +86,20 @@ public class ChatFragment extends Fragment {
     private void handleQueryChatRoom() {
         chatRooms = new ArrayList<>();
         userMap = new HashMap<>();
-        db.collection(FireBaseDBPath.CHAT_ROOM)
-                .whereArrayContains("userIds", currentUser.getUid())
-                .get()
-                .addOnSuccessListener(this::handleQueryChatRoomSuccess);
+
+        Query query = db.collection(FireBaseDBPath.CHAT_ROOM)
+                .whereArrayContains("userIds", currentUser.getUid());
+
+//        registration = query.addSnapshotListener((value, error) -> {
+//            if (error != null) {
+//                Log.e(TAG, "Cannot listen: ", error);
+//                return;
+//            }
+//
+//
+//        });
+
+        query.get().addOnSuccessListener(this::handleQueryChatRoomSuccess);
     }
 
     private void handleQueryChatRoomSuccess(QuerySnapshot queryDocumentSnapshots) {

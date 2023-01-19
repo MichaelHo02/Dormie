@@ -1,6 +1,7 @@
 package com.michael.dormie;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.adapter.ChatBubbleAdapter;
@@ -39,6 +42,7 @@ public class ChatDetailFragment extends Fragment {
     private ChatRoom chatRoom;
     private Query query;
     private DocumentSnapshot lastDoc;
+    private ListenerRegistration registration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class ChatDetailFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         b = null;
+        registration.remove();
     }
 
     @Override
@@ -87,6 +92,23 @@ public class ChatDetailFragment extends Fragment {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(10);
 
+        registration = query.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.w(TAG, "Cannot listen: ", error);
+                return;
+            }
+            if (value == null) return;
+            String source = value.getMetadata().hasPendingWrites() ? "Local" : "Server";
+            for (DocumentChange dc : value.getDocumentChanges()) {
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    ChatBubble chatBubble = dc.getDocument().toObject(ChatBubble.class);
+                    adapter.addData(chatBubble);
+                    b.recycleView.smoothScrollToPosition(0);
+                    Log.d(TAG, source + " " + dc.getDocument().getData());
+                }
+            }
+        });
+
         handleFetchChat();
     }
 
@@ -118,10 +140,6 @@ public class ChatDetailFragment extends Fragment {
                 Calendar.getInstance().getTime());
         db.collection(FireBaseDBPath.CHAT_BUBBLE)
                 .document(uid)
-                .set(chatBubble, SetOptions.merge())
-                .addOnCompleteListener(task -> {
-                    adapter.addData(chatBubble);
-                    b.recycleView.smoothScrollToPosition(0);
-                });
+                .set(chatBubble, SetOptions.merge());
     }
 }

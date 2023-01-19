@@ -18,20 +18,10 @@
             app:destination="@id/detailLessorFragment" />
     </fragment>
     <fragment
-        android:id="@+id/chatLessorFragment"
-        android:name="com.michael.dormie.ChatLessorFragment"
-        android:label="@string/chat"
-        tools:layout="@layout/fragment_chat_lessor" />
-    <fragment
-        android:id="@+id/profileLessorFragment"
-        android:name="com.michael.dormie.ProfileLessorFragment"
-        android:label="@string/profile"
-        tools:layout="@layout/fragment_profile_lessor" />
-    <fragment
         android:id="@+id/placeCreationFragment"
         android:name="com.michael.dormie.fragment_v2.PlaceCreationFragment"
         android:label="fragment_place_creation"
-        tools:layout="@layout/fragment_place_creation" >
+        tools:layout="@layout/fragment_place_creation">
         <argument
             android:name="Place"
             app:argType="com.michael.dormie.model.Place"
@@ -63,5 +53,30 @@
         android:id="@+id/chatFragment"
         android:name="com.michael.dormie.fragment.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="isFromDetailFragment"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="Place"
+            android:defaultValue="@null"
+            app:argType="com.michael.dormie.model.Place"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_chatFragment_to_chatDetailFragment"
+            app:destination="@id/chatDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatDetailFragment"
+        android:name="com.michael.dormie.ChatDetailFragment"
+        android:label="fragment_chat_detail"
+        tools:layout="@layout/fragment_chat_detail">
+        <argument
+            android:name="Receiver"
+            app:argType="com.michael.dormie.model.User" />
+        <argument
+            android:name="ChatRoom"
+            app:argType="com.michael.dormie.model.ChatRoom" />
+    </fragment>
 </navigation>
