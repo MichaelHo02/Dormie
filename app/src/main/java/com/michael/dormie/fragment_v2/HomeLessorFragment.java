@@ -112,7 +112,7 @@ public class HomeLessorFragment extends Fragment {
         places = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+        if (user == null) return;
         db.collection("properties")
                 .whereEqualTo("authorId", user.getUid())
                 .get()

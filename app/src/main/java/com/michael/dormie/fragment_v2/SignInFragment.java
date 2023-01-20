@@ -154,6 +154,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signUp(View view) {
+        this.requireActivity().finish();
         Navigation.findNavController(b.getRoot()).navigate(
                 SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
         );
@@ -214,14 +215,16 @@ public class SignInFragment extends Fragment {
     }
 
     private void handleNavigation(GoogleSignInAccount googleSignInAccount) {
-        if (googleSignInAccount.getId() == null) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (googleSignInAccount.getId() == null || user.getUid() == null) {
             handleQueryFail(new Exception());
             return;
         }
-        handleUserInfoQuery(googleSignInAccount.getId());
+        handleUserInfoQuery(user.getUid());
     }
 
     private void handleUserInfoQuery(String id) {
+        Log.e(TAG, id);
         mDB.collection(FireBaseDBPath.USERS)
                 .document(id)
                 .get()
@@ -253,14 +256,15 @@ public class SignInFragment extends Fragment {
     private void handleNavigationOnExistingUser(String role) {
         if (role.equals("tenant")) {
             Log.d(TAG, "Navigate tenant home page");
+            this.requireActivity().finish();
             Navigation.findNavController(b.getRoot()).navigate(
                     SignInFragmentDirections.actionGlobalMainTenantActivity());
             return;
         }
         if (role.equals("lessor")) {
             Log.d(TAG, "Navigate lessor home page");
-            Navigation.findNavController(b.getRoot()).navigate(
-                    SignInFragmentDirections.actionGlobalMainLessorActivity());
+            this.requireActivity().finish();
+            Navigation.findNavController(b.getRoot()).navigate(R.id.action_global_mainLessorActivity);
         }
     }
 

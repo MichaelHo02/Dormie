@@ -88,7 +88,10 @@ public class ProfileFragment extends Fragment {
 
     private void handleSignOutClick(View view) {
         auth.signOut();
-        gsc.signOut().addOnSuccessListener(task -> this.requireActivity().finish());
+        gsc.signOut().addOnSuccessListener(task -> {
+            Navigation.findNavController(b.getRoot()).popBackStack();
+            this.requireActivity().finish();
+        });
     }
 
     private void handleDeleteAccClick(View view) {
@@ -97,6 +100,7 @@ public class ProfileFragment extends Fragment {
         user.delete()
                 .addOnSuccessListener(unused -> {
                     Log.d(TAG, "User account deleted.");
+                    Navigation.findNavController(b.getRoot()).popBackStack();
                     this.requireActivity().finish();
                     Toast.makeText(this.getContext(), "Successfully delete the account!",
                             Toast.LENGTH_SHORT).show();
