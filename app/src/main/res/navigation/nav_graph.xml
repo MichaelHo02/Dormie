@@ -48,10 +48,14 @@
         </navigation>
         <action
             android:id="@+id/action_global_mainLessorActivity"
-            app:destination="@id/mainLessorActivity" />
+            app:destination="@id/mainLessorActivity"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_global_mainTenantActivity"
-            app:destination="@id/mainTenantActivity" />
+            app:destination="@id/mainTenantActivity"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </navigation>
     <activity
         android:id="@+id/mainLessorActivity"
