@@ -76,7 +76,7 @@ Pham Thanh Nam - s3878413
 - Detail post view (Thach & Duong)
 
 Number of task person name appear on a task / Total number of person involve in a task.
-Thach 11/23 = 47.8%
-Quan 6/23 = 26.1%
-Duong 5/23 = 21.8%
-Nam 1/23 = 4.3%
+Thach 11/22 = 50%
+Quan 5/22 = 22.7%
+Duong 5/22 = 22.7%
+Nam 1/22 = 4.5%
