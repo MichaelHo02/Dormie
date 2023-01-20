@@ -48,9 +48,10 @@
 - Boardcast receiver (notify low batery and no wifi connection)
 - Chat (realtime database) (event listener) using Firebase
 
-5. Open issues and known bugs: 
+5. Limitation, Open issues and known bugs: 
 - Might have issue related to navigation between pages.
 - Chat room cannot update last message when still on the same page (but will be fine when refresh)
+- Could not handle images greater than 2642980 bytes.
 
 6. Team Members:
 Ho Le Minh Thach - s3877980
