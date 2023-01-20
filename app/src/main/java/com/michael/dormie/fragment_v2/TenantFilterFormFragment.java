@@ -81,7 +81,6 @@ public class TenantFilterFormFragment extends Fragment {
             chip.setOnCheckedChangeListener(this::handleAmenitiesChipCheckedChange);
         }
 
-        b.minDistanceGroup.addOnButtonCheckedListener(this::handleMinDistanceBtnChecked);
         b.maxDistanceGroup.addOnButtonCheckedListener(this::handleMaxDistanceBtnChecked);
     }
 
@@ -99,22 +98,6 @@ public class TenantFilterFormFragment extends Fragment {
             }
         }
         tenant.setMaxDistance(maxDist);
-    }
-
-    private void handleMinDistanceBtnChecked(MaterialButtonToggleGroup materialButtonToggleGroup, int i, boolean b) {
-        int minDist = 100;
-        if (b) {
-            if (i == this.b.distBtn1.getId()) {
-                minDist = 100;
-            } else if (i == this.b.distBtn2.getId()) {
-                minDist = 200;
-            } else if (i == this.b.distBtn3.getId()) {
-                minDist = 500;
-            } else if (i == this.b.distBtn4.getId()) {
-                minDist = 1000;
-            }
-            tenant.setMinDistance(minDist);
-        }
     }
 
     private void handleHouseChipCheckedChange(CompoundButton compoundButton, boolean b) {
@@ -191,7 +174,7 @@ public class TenantFilterFormFragment extends Fragment {
     private void loadingProcess() {
         b.linearProgressIndicator.setVisibility(View.VISIBLE);
         List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup, b.schoolLayout,
-                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn,
+                b.maxDistanceGroup, b.savedBtn,
                 b.washerDryerChip, b.rampChip, b.gardenChip,
                 b.catsOKChip, b.dogsOKChip, b.smokeFreeChip,
                 b.apartmentChip, b.villaChip, b.houseChip,
@@ -204,7 +187,7 @@ public class TenantFilterFormFragment extends Fragment {
     private void completeLoadingProcess() {
         b.linearProgressIndicator.setVisibility(View.INVISIBLE);
         List<View> views = Arrays.asList(b.houseTypesGroup, b.amenitiesGroup, b.schoolLayout,
-                b.minDistanceGroup, b.maxDistanceGroup, b.savedBtn,
+                b.maxDistanceGroup, b.savedBtn,
                 b.washerDryerChip, b.rampChip, b.gardenChip,
                 b.catsOKChip, b.dogsOKChip, b.smokeFreeChip,
                 b.apartmentChip, b.villaChip, b.houseChip,

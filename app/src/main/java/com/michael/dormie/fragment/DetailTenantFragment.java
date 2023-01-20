@@ -14,25 +14,36 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.michael.dormie.adapter.AmenityAdapter;
 import com.michael.dormie.adapter.PhotoAdapter;
 import com.michael.dormie.databinding.FragmentDetailTenantBinding;
+import com.michael.dormie.model.ChatRoom;
 import com.michael.dormie.model.Place;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.model.User;
+import com.michael.dormie.utils.FireBaseDBPath;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class DetailTenantFragment extends Fragment {
 
     FragmentDetailTenantBinding b;
 
     private DocumentReference doc;
+    private Place place;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +55,7 @@ public class DetailTenantFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Place place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
+        place = DetailTenantFragmentArgs.fromBundle(getArguments()).getPlace();
         Tenant tenant = DetailTenantFragmentArgs.fromBundle(getArguments()).getTenant();
 
         doc = FirebaseFirestore.getInstance().collection("users").document(place.getAuthorId());
@@ -84,9 +95,45 @@ public class DetailTenantFragment extends Fragment {
         b.amenities.setLayoutManager(linearLayoutManager);
         b.amenities.setAdapter(amenityAdapter);
 
-        b.chatBtn.setOnClickListener(v -> Navigation.findNavController(b.getRoot()).navigate(
-                DetailTenantFragmentDirections.actionTenantDetailFragmentToChatFragment(true,
-                        place)));
+        b.chatBtn.setOnClickListener(v -> {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(FireBaseDBPath.CHAT_ROOM)
+                    .whereArrayContains("userIds", currentUser.getUid())
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots == null || queryDocumentSnapshots.isEmpty()) {
+                            createChatRoom();
+                            return;
+                        }
+
+                        List<ChatRoom> chatRooms = queryDocumentSnapshots.toObjects(ChatRoom.class);
+                        for (ChatRoom chatRoom : chatRooms) {
+                            if (chatRoom.getUserIds().containsAll(Arrays.asList(currentUser.getUid()
+                                    , place.getAuthorId()))) {
+                                Navigation.findNavController(b.getRoot()).navigate(
+                                        DetailTenantFragmentDirections.actionTenantDetailFragmentToChatFragment());
+                                return;
+                            }
+                        }
+                        createChatRoom();
+                    });
+
+        });
+    }
+
+    private void createChatRoom() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = UUID.randomUUID().toString();
+        ChatRoom chatRoom = new ChatRoom(uid, Arrays.asList(currentUser.getUid(), place.getAuthorId()));
+        db.collection(FireBaseDBPath.CHAT_ROOM)
+                .document(uid)
+                .set(chatRoom, SetOptions.merge())
+                .addOnSuccessListener(t -> {
+                    Navigation.findNavController(b.getRoot()).navigate(
+                            DetailTenantFragmentDirections.actionTenantDetailFragmentToChatFragment());
+                });
     }
 
     private void navigateToMapActivity(Tenant tenant, Place place) {

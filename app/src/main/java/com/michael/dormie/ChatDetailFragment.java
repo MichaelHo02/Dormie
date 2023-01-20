@@ -66,23 +66,6 @@ public class ChatDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ChatBubble chatBubble = adapter.getLatestChatBubble();
-        chatRoom.setLatestMessage(chatBubble.getContent());
-        if (chatBubble.getPersonId().equals(currentUser.getUid())) {
-            chatRoom.setLatestMessageSender(currentUser.getDisplayName());
-        } else {
-            chatRoom.setLatestMessageSender(receiver.getName());
-        }
-        chatRoom.setTimeStamp(chatBubble.getTimestamp());
-        chatRoom.setUserIds(Arrays.asList(currentUser.getUid(), receiver.getUid()));
-        db.collection(FireBaseDBPath.CHAT_ROOM)
-                .document(chatRoom.getUid())
-                .set(chatRoom, SetOptions.merge());
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -182,6 +165,22 @@ public class ChatDetailFragment extends Fragment {
             bottomQuery = bottomQuery.limit(limit);
             registration.remove();
             registration = bottomQuery.addSnapshotListener(this::handleSnapshotListener);
+        }
+
+        try {
+            chatRoom.setLatestMessage(chatBubble.getContent());
+            if (chatBubble.getPersonId().equals(currentUser.getUid())) {
+                chatRoom.setLatestMessageSender(currentUser.getDisplayName());
+            } else {
+                chatRoom.setLatestMessageSender(receiver.getName());
+            }
+            chatRoom.setTimeStamp(chatBubble.getTimestamp());
+            chatRoom.setUserIds(Arrays.asList(currentUser.getUid(), receiver.getUid()));
+            db.collection(FireBaseDBPath.CHAT_ROOM)
+                    .document(chatRoom.getUid())
+                    .set(chatRoom, SetOptions.merge());
+        } catch (Exception e) {
+            Log.w(TAG, "No message to be saved");
         }
     }
 }

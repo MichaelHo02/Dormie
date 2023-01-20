@@ -63,7 +63,7 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.It
     }
 
     public ChatBubble getLatestChatBubble() {
-        return chatBubbles.get(0);
+        return chatBubbles == null || chatBubbles.isEmpty() ? null : chatBubbles.get(0);
     }
 
     public void appendTop(ChatBubble chatBubble) {
