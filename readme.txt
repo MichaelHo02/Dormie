@@ -66,7 +66,7 @@ Pham Thanh Nam - s3878413
 - Tenant can see the list of properties (base on filters) (Thach)
 - Tenant can create a filter (Thach & Quan)
 - User will be notify if baterry is low & wifi is not connected (Quan)
-- User can chat to each other (real-time) (Thach & Quan & Duong & Nam)
+- User can chat to each other (real-time) (Thach & Duong & Nam)
 - User can see the location, and search for auto-complete location (Thach)
 - User can see the distance and direction between 2 locations  (Duong)
 - Lessor can paid to be promoted (which means posted will be display prior if it is in the tenant search result) (Thach)
