@@ -44,6 +44,7 @@ public class SignInFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDB;
     private IndeterminateDrawable loadIcon;
+    private boolean isSignInByGoogle = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,6 +148,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signInWithGoogle(View view) {
+        isSignInByGoogle = true;
         Intent intent = gsc.getSignInIntent();
         startActivityForResult(intent, SignalCode.SIGN_IN_WITH_GOOGLE);
     }
@@ -195,7 +197,6 @@ public class SignInFragment extends Fragment {
                     .addOnSuccessListener(authResult -> {
                         Log.d(TAG, "Sign in with credential success");
                         handleNavigation(googleSignInAccount);
-
                     })
                     .addOnFailureListener(e -> {
                         Log.w(TAG,
@@ -235,7 +236,9 @@ public class SignInFragment extends Fragment {
             handleNavigationOnExistingUser(role);
             return;
         }
-//        handleNavigationOnNewUser();
+        if (isSignInByGoogle && !documentSnapshot.exists()) {
+            handleNavigationOnNewUser();
+        }
     }
 
     private void handleQueryFail(Exception e) {
