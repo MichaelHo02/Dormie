@@ -18,11 +18,6 @@
             app:destination="@id/detailLessorFragment" />
     </fragment>
     <fragment
-        android:id="@+id/chatLessorFragment"
-        android:name="com.michael.dormie.ChatLessorFragment"
-        android:label="@string/chat"
-        tools:layout="@layout/fragment_chat_lessor" />
-    <fragment
         android:id="@+id/placeCreationFragment"
         android:name="com.michael.dormie.fragment_v2.PlaceCreationFragment"
         android:label="fragment_place_creation"
@@ -59,15 +54,6 @@
         android:name="com.michael.dormie.fragment.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
-        <argument
-            android:name="isFromDetailFragment"
-            android:defaultValue="false"
-            app:argType="boolean" />
-        <argument
-            android:name="Place"
-            android:defaultValue="@null"
-            app:argType="com.michael.dormie.model.Place"
-            app:nullable="true" />
         <action
             android:id="@+id/action_chatFragment_to_chatDetailFragment"
             app:destination="@id/chatDetailFragment" />

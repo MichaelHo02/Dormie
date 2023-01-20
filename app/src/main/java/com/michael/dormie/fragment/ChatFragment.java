@@ -11,14 +11,17 @@ import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -46,6 +49,8 @@ public class ChatFragment extends Fragment {
     private FirebaseUser currentUser;
     private List<ChatRoom> chatRooms;
     private Map<String, User> userMap;
+    private ListenerRegistration roomRegistration;
+    private ListenerRegistration userRegistration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class ChatFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         b = null;
+        roomRegistration.remove();
+        userRegistration.remove();
     }
 
     @Override
@@ -76,71 +83,54 @@ public class ChatFragment extends Fragment {
         adapter = new ChatRoomAdapter();
         b.recycleView.setAdapter(adapter);
 
-        b.refreshLayout.setOnRefreshListener(() -> {
-            handleQueryChatRoom();
-            b.refreshLayout.setRefreshing(false);
-        });
-        handleQueryChatRoom();
-    }
-
-    private void handleQueryChatRoom() {
-        chatRooms = new ArrayList<>();
-        userMap = new HashMap<>();
-
-        boolean isFromDetailFragment = ChatFragmentArgs.fromBundle(getArguments()).getIsFromDetailFragment();
-        Log.e(TAG, String.valueOf(isFromDetailFragment));
-        if (isFromDetailFragment) {
-            Place place = ChatFragmentArgs.fromBundle(getArguments()).getPlace();
-            String receiverId = place.getAuthorId();
-            if (!chatRooms.stream().anyMatch(chatRoom -> chatRoom.getUserIds().contains(receiverId))) {
-                handleCreateNewChat(place);
-                return;
-            }
-        }
-
         queryChatRoom();
     }
 
-    private void handleCreateNewChat(Place place) {
-        String uid = UUID.randomUUID().toString();
-        ChatRoom chatRoom = new ChatRoom(uid, Arrays.asList(currentUser.getUid(), place.getAuthorId()));
-        db.collection(FireBaseDBPath.CHAT_ROOM)
-                .document(uid)
-                .set(chatRoom, SetOptions.merge())
-                .addOnCompleteListener(t -> {
-                    queryChatRoom();
-                });
-    }
-
     private void queryChatRoom() {
-        Query query = db.collection(FireBaseDBPath.CHAT_ROOM)
+        Query roomQuery = db.collection(FireBaseDBPath.CHAT_ROOM)
                 .whereArrayContains("userIds", currentUser.getUid());
-        query.get().addOnSuccessListener(this::handleQueryChatRoomSuccess);
-    }
-
-    private void handleQueryChatRoomSuccess(QuerySnapshot queryDocumentSnapshots) {
-        chatRooms = queryDocumentSnapshots.toObjects(ChatRoom.class);
-        handleFetchAndRenderChatRooms();
-    }
-
-    private void handleFetchAndRenderChatRooms() {
-        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
-        for (ChatRoom chatRoom : chatRooms) {
-            List<String> userIds = chatRoom.getUserIds();
-            userIds.remove(currentUser.getUid());
-            String receiverId = userIds.get(0);
-            Task<DocumentSnapshot> query = db.collection(FireBaseDBPath.USERS)
-                    .document(receiverId).get();
-            tasks.add(query);
-        }
-
-        Tasks.whenAllComplete(tasks).addOnCompleteListener(t -> {
-            for (Task<DocumentSnapshot> task : tasks) {
-                DocumentSnapshot doc = task.getResult();
-                User user = doc.toObject(User.class);
-                userMap.put(user.getUid(), user);
+        roomRegistration = roomQuery.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.w(TAG, "Cannot listen: ", error);
+                return;
             }
-            adapter.setData(chatRooms, userMap);
+            if (value == null) return;
+            for (DocumentChange dc : value.getDocumentChanges()) {
+                ChatRoom chatRoom = dc.getDocument().toObject(ChatRoom.class);
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    if (adapter.getChatRooms().contains(chatRoom)) return;
+                    adapter.append(chatRoom);
+                } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                    Log.e(TAG, "Modify");
+                    adapter.modify(chatRoom);
+                } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                    Log.e(TAG, "Remove");
+                    adapter.remove(chatRoom);
+                }
+            }
+            b.recycleView.smoothScrollToPosition(0);
+        });
+
+        Query userQuery = db.collection(FireBaseDBPath.USERS);
+        userRegistration = userQuery.addSnapshotListener((value, error) -> {
+            Log.e(TAG, "User registration");
+            if (error != null) {
+                Log.w(TAG, "Cannot listen: ", error);
+                return;
+            }
+            if (value == null) return;
+            for (DocumentChange dc : value.getDocumentChanges()) {
+                User user = dc.getDocument().toObject(User.class);
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    adapter.append(user);
+                } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                    Log.e(TAG, "Modify");
+                    adapter.modify(user);
+                } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                    Log.e(TAG, "Remove");
+                    adapter.remove(user);
+                }
+            }
         });
     }
 }

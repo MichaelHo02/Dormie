@@ -18,6 +18,7 @@ import com.michael.dormie.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +52,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ItemHo
         userIds.remove(currentUser.getUid());
         String receiverId = userIds.get(0);
         User receiver = userMap.get(receiverId);
+        Log.e(TAG, userMap.toString());
+        Log.e(TAG, receiverId);
+        if (receiver == null) return;
         Glide.with(holder.itemView).load(receiver.getAvatar()).into(holder.b.avatarImageView);
         holder.b.nameView.setText(receiver.getName());
         holder.b.getRoot().setOnClickListener(v -> Navigation.findNavController(holder.itemView)
@@ -74,9 +78,43 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ItemHo
         return chatRooms == null ? 0 : chatRooms.size();
     }
 
-    public void setData(List<ChatRoom> chatRooms, Map<String, User> userMap) {
-        this.chatRooms = chatRooms;
-        this.userMap = userMap;
+    public List<ChatRoom> getChatRooms() {
+        return chatRooms;
+    }
+
+    public void append(ChatRoom chatRoom) {
+        chatRooms.add(chatRoom);
+        notifyItemInserted(chatRooms.size() - 1);
+    }
+
+    public void modify(ChatRoom chatRoom) {
+        int idx = chatRooms.indexOf(chatRoom);
+        Log.e(TAG, String.valueOf(idx));
+        if (idx == -1) return;
+        chatRooms.add(idx, chatRoom);
+        notifyItemChanged(idx);
+    }
+
+    public void remove(ChatRoom chatRoom) {
+        int idx = chatRooms.indexOf(chatRoom);
+        Log.e(TAG, String.valueOf(idx));
+        if (idx == -1) return;
+        chatRooms.remove(chatRoom);
+        notifyItemRemoved(idx);
+    }
+
+    public void append(User user) {
+        userMap.put(user.getUid(), user);
+        notifyDataSetChanged();
+    }
+
+    public void modify(User user) {
+        userMap.put(user.getUid(), user);
+        notifyDataSetChanged();
+    }
+
+    public void remove(User user) {
+        userMap.remove(user.getUid());
         notifyDataSetChanged();
     }
 

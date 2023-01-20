@@ -42,12 +42,6 @@
             app:destination="@id/chatFragment"
             app:popUpTo="@id/nav_graph_tenant"
             app:popUpToInclusive="true">
-            <argument
-                android:name="isFromDetailFragment"
-                app:argType="boolean" />
-            <argument
-                android:name="Place"
-                app:argType="com.michael.dormie.model.Place" />
         </action>
         <argument
             android:name="Tenant"
@@ -61,15 +55,6 @@
         android:name="com.michael.dormie.fragment.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
-        <argument
-            android:name="isFromDetailFragment"
-            android:defaultValue="false"
-            app:argType="boolean" />
-        <argument
-            android:name="Place"
-            android:defaultValue="@null"
-            app:argType="com.michael.dormie.model.Place"
-            app:nullable="true" />
         <action
             android:id="@+id/action_chatFragment_to_chatDetailFragment"
             app:destination="@id/chatDetailFragment" />
