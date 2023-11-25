@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dormie</string>
+    <string name="app_name">✨ Dormie ✨</string>
     <string name="sign_in">Sign In</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -7,11 +7,11 @@
     <string name="sign_up">Sign Up</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="you_already_have_an_account_click_here_to_sign_in">You already have an account? Click here to sign in.</string>
-    <string name="home">Home</string>
-    <string name="chat">Chat</string>
+    <string name="home">Home 🌆</string>
+    <string name="chat">Chat 📣</string>
     <string name="rental_registration">Rental Registration</string>
     <string name="others">Others</string>
-    <string name="profile">Profile</string>
+    <string name="profile">Profile 😄</string>
     <string name="setting">Setting</string>
     <string name="welcome_to_dormie">Welcome to Dormie</string>
     <string name="sign_in_with_google">Sign In With Google</string>
@@ -56,13 +56,13 @@
     <string name="smoke_free">Smoke-free</string>
     <string name="school">School</string>
     <string name="distance_from_school_minimum">Distance from school (minimum)</string>
-    <string name="distance_from_school_maximum">Distance from school (maximum)</string>
+    <string name="distance_from_school_maximum">Distance from school (maximum in KM unit)</string>
     <string name="empty_image_list">Empty Image List</string>
     <string name="please_import_image">Please import image!</string>
     <string name="edit_post">Edit Post</string>
     <string name="create_new_post">Create new post</string>
     <string name="chat_with_lessor">Chat with Lessor</string>
-    <string name="promotion">Promotion</string>
+    <string name="promotion">Promotion 🚀</string>
     <string name="paymentURL">https://us-central1-dormie-5ad44.cloudfunctions.net/stripePayment</string>
     <string name="one_month_promotion">One Month Promotion</string>
     <string name="_10_for_duration_of_1_month">$9.99 for duration of 1 month</string>
@@ -72,4 +72,21 @@
     <string name="one_year_promotion">One Year Promotion</string>
     <string name="_100_for_duration_of_12_months">$99.99 for duration of 12 months</string>
     <string name="your_account_is_promoted">Your account is promoted</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter 👀</string>
+    <string name="distance_btn_1">1</string>
+    <string name="distance_btn_2">5</string>
+    <string name="distance_btn_3">10</string>
+    <string name="distance_btn_4">20</string>
+    <string name="about_the_author">About the author ✌️</string>
+    <string name="about_me">
+👉 Thach Ho Le Minh, a proactive Fresher Platform Engineer based in HCMC.\n
+👉 Pursuing a Bachelor\'s degree in Computer Software Engineering at RMIT Vietnam.\n
+👉 Collaborates in a dynamic team at NAB, contributing to infrastructure development in the business domain.\n
+👉 Starcamp Software Engineer Intern with expertise in CI/CD, Jenkins, AWS Cloud, React, and more.\n
+👉 Achievements include Starcamp MVP and Academic Achievement Scholarship at RMIT Vietnam.\n
+    </string>
+    <string name="michael_ho">Michael Ho 🇻🇳</string>
+    <string name="thach_holeminh_gmail_com">thach.holeminh@gmail.com</string>
+    <string name="_07_04_2002">07/04/2002</string>
 </resources>

@@ -18,16 +18,12 @@
         android:id="@+id/profileFragment"
         android:name="com.michael.dormie.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile">
-        <action
-            android:id="@+id/action_profileFragment_to_editFormFragment"
-            app:destination="@id/editFormFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_profile"/>
     <fragment
-        android:id="@+id/editFormFragment"
-        android:name="com.michael.dormie.fragment_v2.EditFormFragment"
-        android:label="fragment_edit_form"
-        tools:layout="@layout/fragment_edit_form" />
+        android:id="@+id/filterFormFragment"
+        android:name="com.michael.dormie.fragment_v2.FilterFormFragment"
+        android:label="fragment_filter_form"
+        tools:layout="@layout/fragment_filter_form" />
     <fragment
         android:id="@+id/tenantDetailFragment"
         android:name="com.michael.dormie.fragment.DetailTenantFragment"
@@ -83,4 +79,10 @@
             android:name="Place"
             app:argType="com.michael.dormie.model.Place" />
     </activity>
+    <fragment
+        android:id="@+id/aboutMeFragment"
+        android:name="com.michael.dormie.fragment.AboutMeFragment"
+        android:label="fragment_about_me"
+        tools:layout="@layout/fragment_about_me">
+    </fragment>
 </navigation>

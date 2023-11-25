@@ -62,28 +62,8 @@ public class ProfileFragment extends Fragment {
             drawerLayout.open();
         });
 
-        initEditFormBtn();
         b.signOutBtn.setOnClickListener(this::handleSignOutClick);
         b.delAccBtn.setOnClickListener(this::handleDeleteAccClick);
-        b.editFormBtn.setOnClickListener(this::handleEditFormClick);
-    }
-
-    private void initEditFormBtn() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        DocumentReference docRef = db.collection(FireBaseDBPath.USERS).document(user.getUid());
-        docRef.get().addOnCompleteListener(task -> {
-            if (Objects.equals(task.getResult().get("role"), "lessor")) {
-                b.editFormBtn.setVisibility(View.INVISIBLE);
-            } else {
-                b.editFormBtn.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-    private void handleEditFormClick(View view) {
-        Navigation.findNavController(b.getRoot()).navigate(ProfileFragmentDirections.actionProfileFragmentToEditFormFragment());
     }
 
     private void handleSignOutClick(View view) {

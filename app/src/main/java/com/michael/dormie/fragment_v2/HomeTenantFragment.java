@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.SearchEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQueryBounds;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.search.SearchBar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -88,8 +90,8 @@ public class HomeTenantFragment extends Fragment {
     }
 
     private boolean handleMenuOnClick(MenuItem menuItem) {
+        SearchView searchView = (SearchView) b.toolbar.getMenu().findItem(R.id.home_top_search).getActionView();
         if (menuItem.getItemId() == R.id.home_top_search) {
-            SearchView searchView = (SearchView) b.toolbar.getMenu().findItem(R.id.home_top_search).getActionView();
             searchView.setQueryHint("Search place name here");
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override

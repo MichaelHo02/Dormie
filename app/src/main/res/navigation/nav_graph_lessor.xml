@@ -70,4 +70,10 @@
             android:name="ChatRoom"
             app:argType="com.michael.dormie.model.ChatRoom" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutMeFragment"
+        android:name="com.michael.dormie.fragment.AboutMeFragment"
+        android:label="fragment_about_me"
+        tools:layout="@layout/fragment_about_me">
+    </fragment>
 </navigation>

@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec;
 import com.google.android.material.progressindicator.IndeterminateDrawable;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,6 +37,7 @@ import com.michael.dormie.utils.ValidationUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class SignInFragment extends Fragment {
     private static final String TAG = "SignInFragment";
@@ -60,7 +62,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+//        super.onViewCreated(view, savedInstanceState);
 
         CircularProgressIndicatorSpec spec = new CircularProgressIndicatorSpec(this.requireContext(), null, 0,
                 com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator);
@@ -70,6 +72,8 @@ public class SignInFragment extends Fragment {
         mDB = FirebaseFirestore.getInstance();
         googleSignInInit();
         addListener();
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void googleSignInInit() {
@@ -167,10 +171,14 @@ public class SignInFragment extends Fragment {
         ValidationUtil.resetValidation(b.emailLayout);
         ValidationUtil.resetValidation(b.passwordLayout);
 
+        b.coordinator.setVisibility(View.INVISIBLE);
+
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             handleUserInfoQuery(user.getUid());
+            return;
         }
+        b.coordinator.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -246,6 +254,7 @@ public class SignInFragment extends Fragment {
 
     private void handleQueryFail(Exception e) {
         Log.e(TAG, "Fail to query user because " + e.getLocalizedMessage());
+        b.coordinator.setVisibility(View.VISIBLE);
     }
 
     private void handleNavigationOnNewUser() {

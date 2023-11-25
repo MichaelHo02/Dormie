@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -28,7 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.michael.dormie.R;
 import com.michael.dormie.activity.MapsActivity;
-import com.michael.dormie.databinding.FragmentEditFormBinding;
+import com.michael.dormie.databinding.FragmentFilterFormBinding;
 import com.michael.dormie.model.Tenant;
 import com.michael.dormie.utils.NavigationUtil;
 import com.michael.dormie.utils.SignalCode;
@@ -37,15 +38,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EditFormFragment extends Fragment {
-    private static final String TAG = "EditFormFragment";
-    private FragmentEditFormBinding b;
+public class FilterFormFragment extends Fragment {
+    private static final String TAG = "FilterFormFragment";
+    private FragmentFilterFormBinding b;
     private IndeterminateDrawable loadIcon;
     private Tenant tenant;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        b = FragmentEditFormBinding.inflate(inflater, container, false);
+        b = FragmentFilterFormBinding.inflate(inflater, container, false);
         return b.getRoot();
     }
 
@@ -109,7 +110,10 @@ public class EditFormFragment extends Fragment {
     }
 
     private void addListener() {
-        b.topAppBar.setNavigationOnClickListener(v -> Navigation.findNavController(b.getRoot()).popBackStack());
+        b.topAppBar.setNavigationOnClickListener(v -> {
+            DrawerLayout drawerLayout = v.getRootView().findViewById(R.id.drawerLayout);
+            drawerLayout.open();
+        });
         b.savedBtn.setOnClickListener(this::handleSavedBtn);
         b.schoolLayout.setEndIconOnClickListener(this::handleOpenSchoolMap);
         b.schoolEditText.setOnClickListener(this::handleOpenSchoolMap);
