@@ -154,7 +154,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signUp(View view) {
-        this.requireActivity().finish();
+//        this.requireActivity().finish();
         Navigation.findNavController(b.getRoot()).navigate(
                 SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
         );
@@ -256,7 +256,7 @@ public class SignInFragment extends Fragment {
     private void handleNavigationOnExistingUser(String role) {
         if (role.equals("tenant")) {
             Log.d(TAG, "Navigate tenant home page");
-            this.requireActivity().finish();
+//            this.requireActivity().finish();
             Navigation.findNavController(b.getRoot()).navigate(
                     SignInFragmentDirections.actionGlobalMainTenantActivity());
             return;
