@@ -257,14 +257,16 @@ public class SignInFragment extends Fragment {
         if (role.equals("tenant")) {
             Log.d(TAG, "Navigate tenant home page");
 //            this.requireActivity().finish();
-            Navigation.findNavController(b.getRoot()).navigate(
-                    SignInFragmentDirections.actionGlobalMainTenantActivity());
+            Navigation.findNavController(requireView()).navigate(R.id.mainTenantActivity);
+//            Navigation.findNavController(b.getRoot()).navigate(
+//                    SignInFragmentDirections.actionGlobalMainTenantActivity());
             return;
         }
         if (role.equals("lessor")) {
             Log.d(TAG, "Navigate lessor home page");
-            this.requireActivity().finish();
-            Navigation.findNavController(b.getRoot()).navigate(R.id.action_global_mainLessorActivity);
+//            this.requireActivity().finish();
+            Navigation.findNavController(requireView()).navigate(R.id.mainLessorActivity);
+//            Navigation.findNavController(b.getRoot()).navigate(R.id.action_global_mainLessorActivity);
         }
     }
 
